@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <title>首頁</title>
+  <link rel="shortcut icon" href=./favicon.ico type=image/x-icon>
+  <link href="static/css/public1.css" rel="stylesheet">
+  <script type="text/javascript">
+    // 设置跟元素字体
+    document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px'
+    // var styleName = window.localStorage.getItem('styleName')
+    // if(styleName == 'black'){
+    //   document.getElementsByTagName('body')[0].className = 'black-bg'
+    // }else{
+    //   document.getElementsByTagName('body')[0].className = 'red-bg'
+    // }
+    //步骤一:创建异步对象
+    var ajax = new XMLHttpRequest()
+    //步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数,动态的传递参数starName到服务端
+    ajax.open('get', 'https://api.2v.com/api/site/getInfo.do');
+    // ajax.open('get', 'http://localhost:8080/stock2c1/api/site/getInfo.do')
+    //步骤三:发送请求
+    ajax.send()
+    //步骤四:注册事件 onreadystatechange 状态改变就会调用
+    ajax.onreadystatechange = function () {
+      if (ajax.readyState == 4 && ajax.status == 200) {
+        //步骤五 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+        // 　　　　console.log(JSON.parse(ajax.responseText).data);//输入相应的内容
+        var styleName = JSON.parse(ajax.responseText).data.siteColor
+        // var styleName = window.localStorage.getItem('styleName')
+        if (styleName == 'black') {
+          window.localStorage.setItem('styleName', 'black')
+          document.getElementsByTagName('body')[0].className = 'black-bg'
+        } else if (styleName == 'yellow') {
+          window.localStorage.setItem('styleName', 'red')
+          document.getElementsByTagName('body')[0].className = 'yellow-bg'
+        } else {
+          window.localStorage.setItem('styleName', 'red')
+          document.getElementsByTagName('body')[0].className = 'red-bg'
+        }
+      }
+    }
+  </script>
+</head>
+<body style="height: 100%; position: absolute; width: 100%;">
+<div id="app"></div>
+<!-- built files will be auto injected -->
+</body>
+</html>

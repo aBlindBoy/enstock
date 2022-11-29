@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.dao.UserStockSubscribeMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.pojo.UserStockSubscribe" >
+        <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="real_name" property="realName" />
+        <result column="phone" property="phone" />
+        <result column="admin_id" property="adminId" />
+        <result column="admin_name" property="adminName" />
+        <result column="submit_amount" property="submitAmount" />
+        <result column="trade_amount" property="tradeAmount" />
+        <result column="status" property="status" />
+        <result column="add_time" property="addTime" />
+        <result column="end_time" property="endTime" />
+        <result column="submit_time" property="submitTime" />
+        <result column="submit_sheets" property="submitSheets" />
+        <result column="trade_sheets" property="tradeSheets" />
+        <result column="draw_date" property="drawDate" />
+        <result column="stock_code" property="stockCode" />
+        <result column="stock_name" property="stockName" />
+        <result column="stock_plate" property="stockPlate" />
+        <result column="subscription_time" property="subscriptionTime" />
+        <result column="ticketing_date" property="ticketingDate" />
+        <result column="underwriting_sheet" property="underwritingSheet" />
+        <result column="underwriting_price" property="underwritingPrice" />
+        <result column="market_price" property="marketPrice" />
+        <result column="remarks" property="remarks" />
+        <result column="deduction_status" property="deductionStatus" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                user_id,
+                real_name,
+                phone,
+                admin_id,
+                admin_name,
+                submit_amount,
+                trade_amount,
+                status,
+                add_time,
+                submit_time,
+                end_time,
+                submit_sheets,
+                trade_sheets,
+                draw_date,
+                stock_code,
+                stock_name,
+                stock_plate,
+                subscription_time,
+                ticketing_date,
+                underwriting_sheet,
+                underwriting_price,
+                market_price,
+                remarks,
+                deduction_status
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.xc.pojo.UserStockSubscribe">
+        INSERT INTO user_stock_subscribe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != userId'>
+                user_id,
+            </if>
+            <if test ='null != realName'>
+                real_name,
+            </if>
+            <if test ='null != phone'>
+                phone,
+            </if>
+            <if test ='null != adminId'>
+                admin_id,
+            </if>
+            <if test ='null != adminName'>
+                admin_name,
+            </if>
+            <if test ='null != submitAmount'>
+                submit_amount,
+            </if>
+            <if test ='null != tradeAmount'>
+                trade_amount,
+            </if>
+            <if test ='null != status'>
+                status,
+            </if>
+            <if test ='null != addTime'>
+                add_time,
+            </if>
+            <if test ='null != submitTime'>
+                submit_time,
+            </if>
+            <if test ='null != submitSheets'>
+                submit_sheets,
+            </if>
+            <if test ='null != tradeSheets'>
+                trade_sheets,
+            </if>
+            <if test ='null != drawDate'>
+                draw_date,
+            </if>
+            <if test ='null != stockCode'>
+                stock_code,
+            </if>
+            <if test ='null != stockName'>
+                stock_name,
+            </if>
+            <if test ='null != stockPlate'>
+                stock_plate,
+            </if>
+            <if test ='null != subscriptionTime'>
+                subscription_time,
+            </if>
+            <if test ='null != ticketingDate'>
+                ticketing_date,
+            </if>
+            <if test ='null != underwritingSheet'>
+                underwriting_sheet,
+            </if>
+            <if test ='null != underwritingPrice'>
+                underwriting_price,
+            </if>
+
+            <if test ='null != marketPrice'>
+                market_price,
+            </if>
+            <if test ='null != remarks'>
+                remarks
+            </if>
+            <if test ='null != deductionStatus'>
+                deduction_status
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != userId'>
+                #{userId},
+            </if>
+            <if test ='null != realName'>
+                #{realName},
+            </if>
+            <if test ='null != phone'>
+                #{phone},
+            </if>
+            <if test ='null != adminId'>
+                #{adminId},
+            </if>
+            <if test ='null != adminName'>
+                #{adminName},
+            </if>
+            <if test ='null != submitAmount'>
+                #{submitAmount},
+            </if>
+            <if test ='null != tradeAmount'>
+                #{tradeAmount},
+            </if>
+            <if test ='null != status'>
+                #{status},
+            </if>
+            <if test ='null != addTime'>
+                #{addTime},
+            </if>
+            <if test ='null != submitTime'>
+                #{submitTime},
+            </if>
+            <if test ='null != endTime'>
+                #{endTime},
+            </if>
+            <if test ='null != submitSheets'>
+                #{submitSheets},
+            </if>
+            <if test ='null != tradeSheets'>
+                #{tradeSheets},
+            </if>
+            <if test ='null != drawDate'>
+                #{drawDate},
+            </if>
+            <if test ='null != stockCode'>
+                #{stockCode},
+            </if>
+            <if test ='null != stockName'>
+                #{stockName},
+            </if>
+            <if test ='null != stockPlate'>
+                #{stockPlate},
+            </if>
+            <if test ='null != subscriptionTime'>
+                #{subscriptionTime},
+            </if>
+            <if test ='null != ticketingDate'>
+                #{ticketingDate},
+            </if>
+            <if test ='null != underwritingSheet'>
+                #{underwritingSheet},
+            </if>
+            <if test ='null != underwritingPrice'>
+                #{underwritingPrice},
+            </if>
+
+            <if test ='null != marketPrice'>
+                #{marketPrice},
+            </if>
+            <if test ='null != remarks'>
+                #{remarks}
+            </if>
+            <if test ='null != deductionStatus'>
+                #{deductionStatus}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM user_stock_subscribe
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.xc.pojo.UserStockSubscribe">
+        UPDATE user_stock_subscribe
+        <set>
+            <if test ='null != userId'>user_id = #{userId},</if>
+            <if test ='null != realName'>real_name = #{realName},</if>
+            <if test ='null != phone'>phone = #{phone},</if>
+            <if test ='null != adminId'>admin_id = #{adminId},</if>
+            <if test ='null != adminName'>admin_name = #{adminName},</if>
+            <if test ='null != submitAmount'>submit_amount = #{submitAmount},</if>
+            <if test ='null != tradeAmount'>trade_amount = #{tradeAmount},</if>
+            <if test ='null != status'>status = #{status},</if>
+            <if test ='null != addTime'>add_time = #{addTime},</if>
+            <if test ='null != submitTime'>submit_time = #{submitTime},</if>
+            <if test ='null != endTime'>end_time = #{endTime},</if>
+            <if test ='null != submitSheets'>submit_sheets = #{submitSheets},</if>
+            <if test ='null != tradeSheets'>trade_sheets = #{tradeSheets},</if>
+            <if test ='null != drawDate'>draw_date = #{drawDate},</if>
+            <if test ='null != stockCode'>stock_code = #{stockCode},</if>
+            <if test ='null != stockName'>stock_name = #{stockName},</if>
+            <if test ='null != stockPlate'>stock_plate = #{stockPlate},</if>
+            <if test ='null != subscriptionTime'>subscription_time = #{subscriptionTime},</if>
+            <if test ='null != ticketingDate'>ticketing_date = #{ticketingDate},</if>
+            <if test ='null != underwritingSheet'>underwriting_price = #{underwritingSheet},</if>
+            <if test ='null != marketPrice'>market_price = #{marketPrice},</if>
+            <if test ='null != remarks'>remarks = #{remarks}</if>
+            <if test ='null != deductionStatus'>deduction_status = #{deductionStatus}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM user_stock_subscribe
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM user_stock_subscribe
+        where 1=1
+        <if test="keyword != null and keyword != ''">
+            and user_id = #{keyword}
+        </if>
+        order by id desc
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM user_stock_subscribe
+    </select>
+
+    <!--查询用戶最新新股申购数据-->
+    <select id="getOneSubscribeByUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM user_stock_subscribe
+        WHERE user_id = #{userId}  order by id desc limit 1
+    </select>
+    <select id="getStockSubscribeHistoryList" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM user_stock_subscribe
+        where
+        user_id = #{userId}
+        order by id desc
+    </select>
+    <select id="selectUserSubscribeByDrawDate" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM user_stock_subscribe
+        where
+            draw_date = #{date} and deduction_status = 1
+    </select>
+    <select id="getById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM user_stock_subscribe
+        where
+        id = #{id}
+    </select>
+
+</mapper>

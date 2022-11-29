@@ -1,0 +1,340 @@
+.red-bg .goog-te-gadget-simple {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 25px;
+  background: #fff;
+  border: none;
+  color: #fff;
+  text-align: center;
+  height: 22px;
+  line-height: 25px;
+  opacity: 1;
+}
+.red-bg .goog-te-gadget-simple a {
+  color: #000 !important;
+}
+.red-bg .nav-menu .el-menu-item {
+  font-size: 15px;
+}
+.red-bg .table-cont-box .table .page-box {
+  background: #fff;
+}
+.red-bg .el-pagination .el-select .el-input .el-input__inner,
+.red-bg .el-pagination__editor.el-input .el-input__inner {
+  background-color: #959191;
+  color: #fff;
+  border: none;
+}
+.red-bg .table-cont-box .el-pagination button:disabled {
+  background-color: #E6003E;
+  color: #fff;
+}
+.red-bg .table-cont-box .page-box .el-pagination .btn-prev {
+  background-color: #E6003E;
+  color: #fff;
+}
+.red-bg .table-cont-box .page-box .el-pagination .btn-next {
+  background-color: #E6003E;
+  color: #fff;
+}
+.red-bg .table-cont-box .el-pager li {
+  background: none;
+}
+.red-bg .jiaoyi-000 {
+  color: #000;
+}
+.red-bg .jiaoyi-000 .baozheng {
+  font-size: 10px;
+  color: #000;
+}
+.red-bg .jiaoyi-000 .el-tabs__item {
+  color: #000000;
+}
+.red-bg .jiaoyi-000 .el-form-item__label {
+  color: #000;
+  font-size: 10px;
+}
+.red-bg .jiaoyi-000 .el-form-item.is-required .el-form-item__label:before {
+  content: "";
+  margin: 0;
+}
+.red-bg .jiaoyi-000 .el-radio__label {
+  color: #000;
+  font-size: 10px;
+}
+.red-bg .jiaoyi-000 .buy-item .price {
+  color: #000;
+  font-size: 10px !important;
+}
+.red-bg .jiaoyi-000 .keyong {
+  font-size: 10px;
+  color: #000;
+}
+.red-bg .buy-top-box .buy-item-name {
+  font-size: 12px;
+}
+.red-bg .buy-top-box .price {
+  font-size: 12px;
+}
+.red-bg .transaction-table .page-box .more-btn {
+  font-size: 12px;
+}
+.red-bg .transaction-table .page-box i {
+  font-size: 12px;
+}
+.red-bg .transaction-table .el-table tr {
+  background-color: #fff;
+  color: #000;
+  font-size: 12px;
+}
+.red-bg .transaction-table .el-table tr .table .code {
+  font-size: 12px;
+}
+.red-bg .buy-box .el-input-group__prepend {
+  border: 1px solid #ccc;
+  border-right: 0;
+  background: #ffffff;
+}
+.red-bg .buy-box-cont .el-tabs__nav-scroll {
+  display: none;
+}
+.red-bg .el-table thead {
+  color: #222222;
+  background-color: #e5e5e5;
+}
+.red-bg .table-search .el-input__inner {
+  color: #000;
+  border: 1px solid #ccc;
+}
+.red-bg .search-chi-cont {
+  position: relative;
+}
+.red-bg .table-search .el-input__inner {
+  background-color: #fff;
+}
+.red-bg .stock-show {
+  display: flex;
+  align-items: center;
+  color: #000;
+  justify-content: space-evenly;
+  width: 106px;
+  height: 30px;
+  background: #FFF;
+  border-radius: 16px;
+  position: relative;
+  left: -20px;
+}
+.red-bg .market-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 140px;
+  height: 30px;
+  background: #FFF;
+  color: #000;
+  left: -35px;
+  border-radius: 16px;
+  border: none !important;
+}
+.red-bg .language {
+  width: 30px;
+  height: 30px;
+  color: #000;
+  text-align: center;
+  line-height: 30px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: relative;
+  left: -10px;
+}
+.red-bg .header-btn {
+  width: 80px;
+  color: #fff;
+  line-height: 30px;
+}
+.red-bg .fat {
+  width: 100%;
+  background-color: #e9e9e9;
+  position: relative;
+  top: -90px;
+}
+.red-bg .fat .table-cont-box {
+  background: url('../assets/image/gu-bg.png');
+  height: 100%;
+}
+.red-bg .stock-title {
+  font-size: 23px;
+  color: #000;
+}
+.red-bg .stock-title-en {
+  color: #ce053e;
+  margin-left: 10px;
+}
+.red-bg .search-public .el-input__inner {
+  border: 1px solid #bababa;
+  border-radius: 50px;
+}
+.red-bg .search-stock {
+  color: #7a7a7a;
+}
+.red-bg .table-chart2-cont {
+  border: 1px solid #c11815;
+}
+.red-bg .tab-bg {
+  width: 100%;
+  height: 40px;
+  background-color: #000;
+  color: #c4c4c4 !important;
+  display: flex;
+  font-size: 12px;
+}
+.red-bg .tab-bg .transaction-red-bg {
+  margin-left: 8px;
+  background-color: #9f211f;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.red-bg .tab-bg .transaction-red-bg .transaction-hangqing {
+  font-size: 20px;
+}
+.red-bg .tab-bg .optional {
+  width: 20px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  margin-left: 10px;
+  padding-top: 1%;
+  margin-right: 5px;
+}
+.red-bg .tab-bg .top,
+.red-bg .tab-bg .bottom {
+  display: flex;
+  align-items: center;
+}
+.red-bg .tab-bg .top > div,
+.red-bg .tab-bg .bottom > div {
+  width: 70px;
+  text-align: center;
+  line-height: 19.5px;
+  border-bottom: 0.5px solid #4e4e4e;
+  border-right: 0.5px solid #4e4e4e;
+  cursor: pointer;
+}
+.red-bg .tab-bg .bottom > div {
+  border-bottom: none;
+}
+.red-bg .tab-bg .optional-list {
+  width: 283px;
+  background-color: #181818;
+}
+.red-bg .tab-bg .transaction-information {
+  font-size: 15px;
+}
+.red-bg .news-cont {
+  overflow: hidden;
+  height: 270px;
+  width: 50%;
+  padding: 10px;
+}
+.red-bg .news-cont .heng {
+  margin-left: 10px;
+}
+.red-bg .news-cont .news-title {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #C11815;
+}
+.red-bg .news-cont .news-list {
+  display: flex;
+  width: 80%;
+}
+.red-bg .news-cont .news-list p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-left: 2px;
+  cursor: pointer;
+}
+.red-bg .news-cont .news-list .red {
+  color: #C11815;
+  margin-right: 2px;
+}
+.red-bg .black-style.el-tabs {
+  margin-top: 3px;
+  border: 1px solid #C11815;
+}
+.red-bg .black-style.el-tabs .el-tabs__active-bar {
+  background: #c11815;
+}
+.red-bg .news-cont::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 5px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.red-bg .news-cont::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(199, 14, 14, 0.2);
+  background: #c11815;
+}
+.red-bg .news-cont::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: #ededed;
+}
+.red-bg .news-cont::-webkit-scrollbar {
+  display: none;
+}
+.red-bg .buy-name1 {
+  font-weight: bold;
+  color: #000;
+}
+.red-bg .buy-code1 {
+  color: #fff;
+  font-size: 10px;
+  background-color: #C11815;
+  padding: 1px;
+  border-right: 10px;
+  margin-right: 10px;
+  margin-left: 11px;
+}
+.red-bg .current {
+  background: #C11815;
+}
+.red-bg .currentNone {
+  background: #222222;
+}
+.red-bg .buy-box .el-input__inner {
+  background: #fff;
+  border-color: #ccc;
+}
+.red-bg .detail {
+  margin: 40px;
+}
+.red-bg .detail .detail-cont {
+  border-bottom: 1px solid #ccc;
+}
+.red-bg .detail .detail-box {
+  display: flex;
+  line-height: 25px;
+  flex-direction: column;
+  margin-top: 30px;
+  color: #888888;
+}
+.red-bg .detail .detail-title {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+}
+.red-bg .detail .detail-explain {
+  display: flex;
+  justify-content: center;
+}
+.red-bg .detail .detail-explain div {
+  margin: 20px 25px;
+}

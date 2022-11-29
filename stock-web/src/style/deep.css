@@ -1,0 +1,525 @@
+.el-menu-item {
+  padding: 0 15px;
+}
+/*解决问题3*/
+body {
+  top: 0px!important;
+  min-height: 0px!important;
+}
+/*解决问题2*/
+.goog-text-highlight {
+  background-color: transparent!important;
+  -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
+  -moz-box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
+}
+/*解决问题1*/
+.goog-te-banner-frame {
+  display: none;
+}
+.header-nav .user {
+  align-items: center;
+}
+.goog-te-menu-value span {
+  letter-spacing: 8px;
+}
+.goog-te-gadget-simple img {
+  background-image: none !important;
+  width: 0;
+  height: 0;
+}
+.black-bg .goog-te-gadget-simple {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 25px;
+  background: red;
+  border: none;
+  color: #fff;
+  text-align: center;
+  height: 22px;
+  line-height: 25px;
+}
+.black-bg .goog-te-gadget-simple a {
+  color: #fff !important;
+}
+.black-bg .nav-menu .el-menu-item {
+  font-size: 15px;
+}
+.black-bg .buy-box .zi .el-input__inner {
+  height: 16px;
+  width: 100%;
+}
+.black-bg .zi .el-input__suffix {
+  top: 13px;
+}
+.black-bg .el-table th.is-leaf {
+  border-bottom: none !important;
+}
+.black-bg .el-tabs__nav-wrap:after {
+  background: none;
+}
+.black-bg .notice .el-pagination__total {
+  color: #fff;
+}
+.black-bg .notice .page-box .el-pagination button:disabled {
+  color: #fff;
+  background-color: #e6003e;
+}
+.black-bg .notice .el-pager li {
+  color: #fff;
+  background: none;
+}
+.black-bg .notice .page-box .el-pagination .btn-next {
+  background-color: #e6003e;
+}
+.black-bg .notice .el-pagination__jump {
+  color: #fff;
+}
+.black-bg .notice .page-box .el-pagination .btn-prev {
+  background-color: #e6003e;
+  text-align: center;
+}
+.black-bg .notice .el-pager .el-icon {
+  color: #fff;
+}
+.black-bg .table-cont-box .page-box {
+  background: #06151e;
+}
+.black-bg .wrapper .el-table__header-wrapper {
+  background: #191e2b;
+}
+.black-bg .el-table__body-wrapper {
+  background-color: #000 !important;
+}
+.black-bg .buy-box .el-input-group__prepend {
+  border: 1px solid #138eb4;
+  border-right: 0;
+  background: #000000;
+}
+.black-bg .jiaoyi-000 {
+  background-color: #000 !important;
+}
+.black-bg .el-header {
+  padding: 0 !important;
+}
+.black-bg .el-dropdown {
+  position: relative;
+  color: #606266;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+.black-bg .el-dropdown span {
+  display: flex;
+  align-items: center;
+}
+.black-bg .el-form-item__label {
+  text-align: left;
+  color: #fff;
+}
+.black-bg .wrapper .el-card {
+  background-color: #1f2636;
+}
+.black-bg .wrapper .el-card.is-always-shadow {
+  box-shadow: none;
+}
+.black-bg .wrapper .el-tabs__nav-wrap:after {
+  background-color: #2a3350;
+}
+.black-bg .el-pagination .el-select .el-input .el-input__inner,
+.black-bg .el-pagination__editor.el-input .el-input__inner {
+  background-color: #052030;
+  color: #fff;
+  border: none;
+}
+.black-bg .table-cont-box .el-pagination button:disabled {
+  background-color: #E6003E;
+  color: #fff;
+}
+.black-bg .table-cont-box .page-box .el-pagination .btn-prev {
+  background-color: #E6003E;
+  color: #fff;
+}
+.black-bg .table-cont-box .page-box .el-pagination .btn-next {
+  background-color: #E6003E;
+  color: #fff;
+}
+.black-bg .table-cont-box .el-pager li {
+  background: none;
+}
+.black-bg td,
+.black-bg th {
+  border-bottom: 1px solid #191E2B;
+}
+.black-bg .user-center .el-pager li {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+}
+.black-bg /deep/ .el-pager li.active {
+  color: #E6003E;
+}
+.black-bg /deep/ .el-table__empty-block {
+  background-color: #1b1c22;
+}
+.black-bg /deep/ .el-upload--picture-card {
+  background-color: #1b1c22;
+}
+.black-bg .transaction-table .table-search .el-input__inner {
+  background: none;
+  border: 1px solid #234B6E;
+  box-shadow: none;
+}
+.black-bg .transaction-table .page-box .more-btn {
+  font-size: 12px;
+}
+.black-bg .transaction-table .page-box i {
+  font-size: 12px;
+}
+.black-bg .transaction-table .el-table tr {
+  background-color: #08080D;
+  color: #fff;
+  font-size: 12px;
+}
+.black-bg .transaction-table .el-table tr .table .code {
+  font-size: 12px;
+}
+.black-bg .transaction-table .el-table__body tr.el-table__row--striped td {
+  background-color: #08080D !important;
+}
+.black-bg .buy-top-box .buy-item-name {
+  font-size: 12px;
+}
+.black-bg .buy-top-box .price {
+  font-size: 12px;
+}
+.black-bg .jiaoyi-000 .black-style.el-tabs .el-tabs__nav-wrap:after {
+  content: "";
+}
+.black-bg .jiaoyi-000 .black-style.el-tabs .el-tabs__nav-wrap:after {
+  background: none;
+}
+.black-bg .jiaoyi-000 .baozheng {
+  font-size: 10px;
+}
+.black-bg .jiaoyi-000 .el-tabs__item {
+  color: #FFFFFF;
+}
+.black-bg .jiaoyi-000 .el-form-item__label {
+  font-size: 10px;
+}
+.black-bg .jiaoyi-000 .el-form-item.is-required .el-form-item__label:before {
+  content: "";
+  margin: 0;
+}
+.black-bg .jiaoyi-000 .el-radio__label {
+  font-size: 10px;
+}
+.black-bg .jiaoyi-000 .buy-item .price {
+  font-size: 10px !important;
+}
+.black-bg .jiaoyi-000 .keyong {
+  font-size: 10px;
+}
+.black-bg .el-table th,
+.black-bg .el-table tr {
+  background-color: #1c2130;
+  color: #fff;
+}
+.black-bg .search-chi-cont {
+  position: relative;
+}
+.black-bg .stock-show {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  justify-content: space-evenly;
+  width: 106px;
+  height: 30px;
+  background: #024DA1;
+  border-radius: 16px;
+  position: relative;
+  left: -20px;
+}
+.black-bg .market-data {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  justify-content: space-evenly;
+  width: 140px;
+  height: 30px;
+  border-radius: 16px;
+  position: relative;
+  background-color: #024da1;
+  border: none !important;
+}
+.black-bg .language {
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  background-color: #c11815;
+  border-radius: 50% ;
+  position: relative;
+  left: -10px;
+}
+.black-bg .header-btn {
+  width: 80px;
+  color: #fff;
+  line-height: 30px;
+}
+.black-bg .fat {
+  width: 100%;
+  background-color: #041e2e;
+  position: relative;
+  overflow: hidden;
+  margin-top: 20px;
+}
+.black-bg .stock-title {
+  font-size: 23px;
+  color: #fff;
+}
+.black-bg .stock-title-en {
+  color: #ce053e;
+  margin-left: 10px;
+}
+.black-bg .search-public .el-input__inner {
+  border: 1px solid #00304c;
+  border-radius: 50px;
+}
+.black-bg .search-stock {
+  color: #ffffff;
+}
+.black-bg .buy-box-cont .el-tabs__nav-scroll {
+  display: none;
+}
+.black-bg .tab-bg {
+  width: 100%;
+  height: 40px;
+  background-color: #000;
+  color: #c4c4c4 !important;
+  display: flex;
+  border-top: 1px solid #4e4e4e;
+  font-size: 12px;
+}
+.black-bg .tab-bg .transaction-red-bg {
+  margin-left: 8px;
+  background-color: #138EB4;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.black-bg .tab-bg .transaction-red-bg .transaction-hangqing {
+  font-size: 20px;
+}
+.black-bg .tab-bg .zixun {
+  background-color: #7266BA !important;
+}
+.black-bg .tab-bg .zhibo {
+  background-color: #009C4D;
+}
+.black-bg .tab-bg .optional {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100px;
+  margin-left: 10px;
+  margin-right: 5px;
+  background-color: #534074;
+}
+.black-bg .tab-bg .top,
+.black-bg .tab-bg .bottom {
+  display: flex;
+  align-items: center;
+}
+.black-bg .tab-bg .new-list-jiaoyi {
+  margin-top: 4px;
+}
+.black-bg .tab-bg .top > div,
+.black-bg .tab-bg .bottom > div {
+  width: 70px;
+  text-align: center;
+  line-height: 19.5px;
+  border-bottom: 0.5px solid #4e4e4e;
+  border-right: 0.5px solid #4e4e4e;
+  cursor: pointer;
+}
+.black-bg .tab-bg .bottom > div {
+  border-bottom: none;
+}
+.black-bg .tab-bg .optional-list {
+  width: 283px;
+}
+.black-bg .tab-bg .transaction-information {
+  font-size: 15px;
+}
+.black-bg .news-cont {
+  overflow: hidden;
+  height: 270px;
+  width: 50%;
+  padding: 10px;
+}
+.black-bg .news-cont .heng {
+  margin-left: 10px;
+}
+.black-bg .news-cont .news-title {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+.black-bg .news-cont .news-list {
+  display: flex;
+  color: #fff;
+  width: 80%;
+}
+.black-bg .news-cont .news-list p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-left: 2px;
+  cursor: pointer;
+}
+.black-bg .news-cont .news-list span {
+  color: #138EB4;
+  margin-right: 2px;
+}
+.black-bg .showTime {
+  color: #138EB4;
+}
+.black-bg .black-style.el-tabs .el-tabs__active-bar {
+  background: #c11815;
+}
+.black-bg .black-style.el-tabs .el-tabs__active-bar {
+  background: #138EB4;
+}
+.black-bg .news-cont::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 5px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.black-bg .news-cont::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(199, 14, 14, 0.2);
+  background: #138EB4;
+}
+.black-bg .news-cont::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: #ccc;
+}
+.black-bg .buy-name1 {
+  font-weight: bold;
+  color: #000;
+}
+.black-bg .chongzhi-type-item .el-radio__inner {
+  background-color: #ccc;
+}
+.black-bg .el-radio__input.is-checked .el-radio__inner {
+  border-color: #409EFF;
+  background: #409EFF;
+}
+.black-bg .buy-code1 {
+  color: #fff;
+  font-size: 10px;
+  background-color: #C11815;
+  padding: 1px;
+  border-right: 10px;
+  margin-right: 10px;
+  margin-left: 11px;
+}
+.black-bg .current {
+  background: #138eb4;
+}
+.black-bg .currentNone {
+  background: #3d4456;
+}
+.black-bg .buy-box .el-input__inner {
+  background: #fff;
+  border-color: #ccc;
+}
+.black-bg .buy-name1 {
+  color: #fff;
+}
+.black-bg .buy-box .el-input__inner {
+  background: none;
+  border: 1px solid #138eb4;
+  color: #fff;
+}
+.black-bg .ru {
+  background-color: #7266ba !important;
+  border: none;
+}
+.black-bg .chu {
+  background-color: #138eb4 !important;
+  border: none;
+}
+.black-bg .detail {
+  margin: 40px;
+}
+.black-bg .detail .detail-cont {
+  border-bottom: 1px solid #222222;
+}
+.black-bg .detail .detail-box {
+  display: flex;
+  line-height: 25px;
+  flex-direction: column;
+  margin-top: 30px;
+  color: #888888;
+}
+.black-bg .detail .detail-title {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  color: #fff;
+}
+.black-bg .detail .detail-explain {
+  color: #888888;
+  display: flex;
+  justify-content: center;
+}
+.black-bg .detail .detail-explain div {
+  margin: 20px 25px;
+}
+.black-bg .chongzhi-input .el-input__inner {
+  background: none;
+  border: 1px solid #244C6E;
+  color: #ccc;
+  display: flex;
+  justify-content: center;
+}
+.black-bg .chongzhi-input1 .el-input__inner {
+  background: none !important;
+  border: 1px solid #244C6E !important;
+  color: #7e7e7e !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+.black-bg .el-main {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.black-bg .table-box-cont .table .el-table tr {
+  font-size: 12px;
+  font-weight: 400;
+  height: 70px;
+  background-color: #050F16;
+}
+.black-bg .table-box-cont .table .el-table th.is-leaf {
+  background-color: #040B10;
+}
+.black-bg .table-box-cont .table .el-table--striped .el-table__body tr.el-table__row--striped td {
+  background-color: #0A161D;
+}
+.black-bg .table-box .tab-name {
+  display: flex;
+}
+.black-bg .more {
+  color: #fff !important;
+  background: #353537 !important;
+}

@@ -1,0 +1,85 @@
+<html >
+<head>
+    <title>支付通知邮件</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body{
+            font-size: 10pt;
+        }
+        .header,.content,.footer{
+            /*width: 600px;*/
+            /*height: 180px;*/
+        }
+        .footer{
+            text-align: right;
+        }
+        #name{
+            color: grey;
+        }
+        #message{
+            color: grey;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <!--<img src="http://www.zhku.edu.cn/images/logo.jpg" alt="zhkulogo"/>-->
+</div>
+
+<div class="content">
+    <h2 id="noticeName">你好，管理员</h2>
+
+    <div style="line-height: 2em;font-size: 15px;color: blue;">
+        <h2>有新的支付訂單,尽快处理，當前凭证五分鐘之内有效，未处理token失效</h2>
+
+        <br/>
+        客戶ID：<span id="userid"> </span>
+        <br/>
+        客戶姓名：<span id="realname"> </span>
+        <br/>
+        訂單金额 ： <span style="color: red;font-size: 16px;"  id="amt"> </span>
+        <br/>
+        訂單号：  <span id="ordersn"></span>
+        <br/>
+        訂單時间(<span id="time"></span>)
+        <br/>
+
+        <!--<h2>操作 - 若链接不能点击請复制链接到浏览器訪問</h2>-->
+
+        <br/>
+        <span id="dosuccessurl">
+            http://
+        </span>
+        <br/>
+        <a id="dosuccess" href="http://baidu.com">
+            充值成功
+        </a>
+
+
+        <br/><br/>
+        <span id="dofailurl">
+            http://
+        </span>
+        <br/>
+        <a id="dofail" href="http://baidu.com">
+            充值失敗
+        </a>
+
+        <br/><br/>
+        <span id="docancelurl">
+            http://
+        </span>
+        <br/>
+        <a id="docancel" href="http://baidu.com">
+            取消訂單
+        </a>
+
+        <br/><br/><br/><br/>
+
+    </div>
+
+    <br/>
+    <br/>
+</div>
+</body>
+</html>

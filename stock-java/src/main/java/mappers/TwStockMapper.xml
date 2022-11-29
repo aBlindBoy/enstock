@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xc.dao.TwStockMapper" >
+  <resultMap id="BaseResultMap" type="com.xc.pojo.TwStock" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="stock_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="stock_code" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="stock_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="stock_plate" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, stock_name, stock_code, stock_type, stock_plate
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from twstock
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from twstock
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByCode">
+    delete from twstock
+    where stock_code = #{code,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.xc.pojo.TwStock" >
+    insert into twstock (id, stock_name, stock_code,stock_type,stock_plate)
+    values (#{id,jdbcType=INTEGER}, #{stockName,jdbcType=VARCHAR}, #{stockCode,jdbcType=VARCHAR},
+      #{stockType,jdbcType=VARCHAR}, #{stockPlate,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.xc.pojo.TwStock" >
+    update twstock
+    set stock_name = #{stockName,jdbcType=VARCHAR},
+      stock_code = #{stockCode,jdbcType=VARCHAR},
+      stock_type = #{stockType,jdbcType=VARCHAR},
+      stock_plate = #{stockPlate,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="findStockByCode" resultMap="BaseResultMap" parameterType="string">
+    SELECT
+    <include refid="Base_Column_List" />
+    from twstock
+    WHERE stock_code = #{stockCode}
+  </select>
+  <select id="findStockByName" resultMap="BaseResultMap" parameterType="string">
+    SELECT
+    <include refid="Base_Column_List" />
+    from twstock
+    WHERE stock_name = #{stockName}
+  </select>
+
+
+  <select id="findStockList" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM twstock
+  </select>
+
+  <select id="findStockListByKeyWords" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List" />
+    from twstock
+    <where>
+      <if test="keyWords != null and keyWords != '' ">
+        and (stock_code like CONCAT('%','${keyWords}','%')
+        or stock_name like CONCAT('%','${keyWords}','%'))
+      </if>
+      <if test="stockType != null and stockType != '' ">
+        and stock_type = #{stockType}
+      </if>
+      <if test="stockPlate != null and stockPlate != '' ">
+        and stock_plate = #{stockPlate}
+      </if>
+    </where>
+    ORDER BY id DESC
+  </select>
+</mapper>
