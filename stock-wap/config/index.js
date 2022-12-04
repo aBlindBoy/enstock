@@ -11,6 +11,22 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/cnyesWs': {
+        target: 'https://api.2vsec.com.tw/',
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/': '/'
+        }
+      },
+      '/cnyesApi': {
+        target: 'https://api.2vsec.com.tw/',
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/': '/'
+        }
+      },
       '/investing': {
         target: 'https://sbcharts.investing.com/',
         changeOrigin: true,
@@ -19,14 +35,23 @@ module.exports = {
           '^/investing': ''
         }
       },
-      '/twstock': {
-        target: 'https://www.nstock.tw/',
-        secure: false,
+      '/futunnApi': {
+        target: 'https://www.futunn.com/',
         changeOrigin: true,
+        secure: false,
         pathRewrite: {
-          '^/twstock': ''
+          '^/futunnApi': ''
         }
       },
+      
+      // '/yahooApi': { //请求不通403
+      //   target: 'https://api.2vsec.com.tw/',
+      //   secure: false,
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/': '/'
+      //   }
+      // },
       '/': {
         target:'http://127.0.0.1:8080/stock2c1/',
         secure: false,

@@ -81,4 +81,6 @@ public interface IUserService {
 
 
   List<User>   listByAgentId(Integer agentId);
+
+    ServerResponse allOption(HttpServletRequest request);
 }

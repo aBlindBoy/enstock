@@ -117,7 +117,7 @@ export default {
   watch: {},
   computed: {},
   created () {
-    this.timer = setInterval(this.refreshList, 5000)
+    this.timer = setInterval(this.refreshList, 10000)
   },
   beforeDestroy () {
     clearInterval(this.timer)
@@ -207,10 +207,11 @@ export default {
       //     return
       // }
       let code =val.stockCode
-      if(val.stockGid !== undefined && val.stockGid.indexOf('hf_')!=-1){
-        this.getQhDetail(val.stockCode,val.stockGid)
-      } else if(val.stockCode !== undefined && val.stockCode.substring(0,3)=='000'){
-        code = val.stockGid
+      debugger
+      // if(val.stockGid !== undefined && val.stockGid.indexOf('hf_')!=-1){
+      //   this.getQhDetail(val.stockCode,val.stockGid)
+      // } else if(val.stockCode !== undefined && val.stockCode.substring(0,3)=='000'){
+      //   code = val.stockGid
         // this.$router.push({
         //   path: '/listdetail',
         //   query: {
@@ -220,16 +221,16 @@ export default {
         //   }
         // })
 
-        this.$router.push({
-          path: '/listdetail2',
-          query: {
-            code: code,
-            stock_type:val.stock_type,
-            zsinfo: val
-          }
-        })
-        return
-      } else {
+      //   this.$router.push({
+      //     path: '/listdetail2',
+      //     query: {
+      //       code: code,
+      //       stock_type:val.stock_type,
+      //       zsinfo: val
+      //     }
+      //   })
+      //   return
+      // } else {
         // 詳情
         // this.$router.push({
         //   path: '/listdetail',
@@ -240,14 +241,13 @@ export default {
         // })
 
         this.$router.push({
-          path: '/listdetail2',
+          path: '/listdetail',
           query: {
             code: code,
             stock_type:val.stock_type,
-            zsinfo: val
+            // zsinfo: val
           }
         })
-      }
       
     },
     toSearch () {

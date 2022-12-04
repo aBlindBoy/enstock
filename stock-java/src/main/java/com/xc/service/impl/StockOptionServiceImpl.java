@@ -24,7 +24,7 @@ import com.xc.service.IUserService;
 
 import com.xc.utils.HttpClientRequest;
 import com.xc.utils.PropertiesUtil;
-import com.xc.utils.stock.TwStockApi;
+import com.xc.utils.stock.UsStockApi;
 import com.xc.utils.stock.sina.SinaStockApi;
 
 import com.xc.vo.stock.StockListVO;
@@ -46,6 +46,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service("iStockOptionService")
+
 
 public class StockOptionServiceImpl implements IStockOptionService {
 
@@ -72,46 +73,37 @@ public class StockOptionServiceImpl implements IStockOptionService {
 //        for (StockOption option : stockOptions) {
 //            queryString += option.getStockGid() + ",";
 //        }
-        int index=0;
-        for (StockOption option : stockOptions) {
-            if(index<stockOptions.size()-1){
-                queryString += option.getStockCode() + ",";
-            }else{
-                queryString += option.getStockCode();
-            }
-            index++;
-        }
+//        int index=0;
+//        for (StockOption option : stockOptions) {
+//            if(index<stockOptions.size()-1){
+//                queryString += option.getStockCode() + ",";
+//            }else{
+//                queryString += option.getStockCode();
+//            }
+//            index++;
+//        }
         //String[] httpResults = SinaStockApi.getSinaStockList(queryString);
         //TODO 代理到dl去获取sina data
 //        String host= PropertiesUtil.getProperty("proxy.host.api");
 //        String[] httpResults = HttpClientRequest.doGet(host+queryString).split(";");
-        String result=TwStockApi.getTwStock(queryString);
-        List<StockListVO> stockList=TwStockApi.assembleStockList(result);
-        for (int i = 0; i < stockList.size(); i++) {
-            StockListVO stockVO=stockList.get(i);
+
+        for (int i = 0; i < stockOptions.size(); i++) {
+//            StockListVO stockVO=stockOptions.get(i);
+            String result= UsStockApi.getStock(stockOptions.get(i).getStockCode());
+            StockListVO stockVO=UsStockApi.assembleStockListVO(result);
             StockOptionListVO stockOptionListVO =new StockOptionListVO();
-            stockOptionListVO.setId(stockOptions.get(i).getId().intValue());
-
+            stockOptionListVO.setId(stockOptions.get(i).getId());
             stockOptionListVO.setStockName(stockOptions.get(i).getStockName());
-
             stockOptionListVO.setStockCode(stockOptions.get(i).getStockCode());
-
             stockOptionListVO.setStockGid(stockOptions.get(i).getStockGid());
-
-
             stockOptionListVO.setNowPrice(stockVO.getNowPrice());
-
             stockOptionListVO.setHcrate(stockVO.getHcrate().toString());
-
             stockOptionListVO.setPreclose_px(stockVO.getPreclose_px());
-
             stockOptionListVO.setOpen_px(stockVO.getOpen_px());
-
             Stock stock = this.stockMapper.selectByPrimaryKey(stockOptions.get(i).getStockId());
-
             //stockOptionListVO.setStock_plate(stock.getStockPlate());
 
-            stockOptionListVO.setStock_type("tw");
+            stockOptionListVO.setStock_type(stock.getStockType());
             stockOptionListVO.setIsOption("1");
             stockOptionListVOS.add(stockOptionListVO);
         }
@@ -151,6 +143,11 @@ public class StockOptionServiceImpl implements IStockOptionService {
         }
         return "1";
 
+    }
+
+    @Override
+    public List<StockOption> allOption(Integer userId) {
+        return this.stockOptionMapper.allOption(userId);
     }
 
     //updated edison

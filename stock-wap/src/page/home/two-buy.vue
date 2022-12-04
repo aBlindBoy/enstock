@@ -48,7 +48,7 @@
             </li>
             <li>
               <p class="number red">
-                <span class="title red">Chg limit</span>
+                <span class="title red">High</span>
                 {{
                   (
                     Number(detail.nowPrice) * settingIndexInfo.riseLimit +
@@ -66,7 +66,7 @@
             <li>
               <!-- <p class="title">最低</p> -->
               <p class="green">
-                <span class="title green">Limit down</span>
+                <span class="title green">low </span>
                 {{
                   (
                     detail.nowPrice -
@@ -140,7 +140,7 @@
         <div class="notify">Minimum number of shares to buy {{settingInfo.buyMinNum}},Maximum number of shares that can be purchased{{settingInfo.buyMaxNum}} </div>
       </div>
       <div class="tab-con">
-        <!-- <ul class="radio-group clearfix">
+        <ul class="radio-group clearfix">
           <li
             v-for="item in numberList"
             :key="item.key"
@@ -152,12 +152,14 @@
           </li>
           <li v-show="!selectNumber">
             <input
+              style="width: 100%;"
               @keyup="changeAutoNumber"
               v-model="autoNumber"
               type="number"
-            />張
+            />
+            <!-- share -->
           </li>
-        </ul> -->
+        </ul>
         <!-- <p class="clearfix">
           <span class="pull-left"
             >最小購買股數{{ Number(settingInfo.buyMinNum) }}手</span
@@ -284,13 +286,13 @@ export default {
       ],
       selectCycle: "20",
       numberList: [
-        { label: "1張", value: "1" },
-        { label: "5張", value: "5" },
-        { label: "10張", value: "10" },
-        { label: "25張", value: "25" },
-        { label: "50張", value: "50" },
-        { label: "100張", value: "100" },
-        { label: "自定義", value: "" }
+        { label: "100 share", value: "100" },
+        { label: "200 share", value: "200" },
+        { label: "500 share", value: "500" },
+        { label: "1000 share", value: "1000" },
+        { label: "2000 share", value: "2000" },
+        { label: "5000 share", value: "5000" },
+        { label: "Input", value: "" }
       ],
       siteLeverList: [],
       selectNumber: "",
@@ -325,14 +327,14 @@ export default {
     poundage() {
       //手續費= 買入手續費+Stamp duty+Spread fee
       if (this.autoNumber) {
-        let payfee = (this.detail.nowPrice * this.autoNumber * 1000).toFixed(2); // / this.selectCycle
+        let payfee = (this.detail.nowPrice * this.autoNumber).toFixed(2); // / this.selectCycle
         return (
           payfee * this.settingInfo.buyFee +
           payfee * this.settingInfo.dutyFee +
           payfee * this.settingSpreadRate.spreadRate
         ).toFixed(2);
       } else if (this.selectNumber) {
-        let payfee = (this.detail.nowPrice * this.selectNumber * 1000).toFixed(
+        let payfee = (this.detail.nowPrice * this.selectNumber ).toFixed(
           2
         );
         return (
@@ -353,7 +355,7 @@ export default {
       }
       if (this.autoNumber) {
         let payfee =
-          (this.detail.nowPrice * this.autoNumber * 1000) / this.selectCycle;
+          (this.detail.nowPrice * this.autoNumber) / this.selectCycle;
         return (
           payfee +
           payfee * this.settingInfo.buyFee +
@@ -364,7 +366,7 @@ export default {
       } else if (this.selectNumber) {
         // alert("bb"+this.detail.nowPrice+"cc==="+this.selectNumber+"ff==="+this.selectCycle+"==="+this.settingSpreadRate.spreadRate)
         let payfee =
-          (this.detail.nowPrice * this.selectNumber * 1000) / this.selectCycle;
+          (this.detail.nowPrice * this.selectNumber) / this.selectCycle;
         return (
           payfee +
           payfee * this.settingInfo.buyFee +
@@ -379,9 +381,9 @@ export default {
     },
     price() {
       if (this.autoNumber) {
-        return (this.detail.nowPrice * this.autoNumber * 1000).toFixed(2);
+        return (this.detail.nowPrice * this.autoNumber).toFixed(2);
       } else if (this.selectNumber) {
-        return (this.detail.nowPrice * this.selectNumber * 1000).toFixed(2);
+        return (this.detail.nowPrice * this.selectNumber).toFixed(2);
       } else {
         return 0;
       }
@@ -496,52 +498,75 @@ export default {
         code: this.$route.query.code
       };
 
-      let [res1, res2] = await Promise.all([
-        api.getTwStockData(opts.code),
-        api.getTwStockExchange(opts.code)
-      ]);
+      // let [res1, res2] = await Promise.all([
+      //   api.getTwStockData(opts.code),
+      //   api.getTwStockExchange(opts.code)
+      // ]);
 
-      let data = {};
-      let data1 = res1.data[0];
-      let data2 = res2.data[0]["五檔"];
-      data.name = data1["股票名稱"];
-      data.code = opts.code;
-      data.spell = "";
-      data.gid = opts.code;
-      data.nowPrice = data1["當盤成交價"];
-      data.hcrate = data1["Quote change"];
-      data.today_max = data1["最高價"];
-      data.today_min = data1["最低價"];
-      data.business_balance = data1["成交金額"];
-      data.business_amount = data1["當盤成交量"];
-      data.preclose_px =
-        parseFloat(data1["開盤價"]) + parseFloat(data1["漲跌"]);
-      data.open_px = data1["開盤價"];
-      data.buy1 = data2["買價1"].substring(1).replace(/\s+/g, "");
-      data.buy2 = data2["買價2"].substring(1).replace(/\s+/g, "");
-      data.buy3 = data2["買價3"].substring(1).replace(/\s+/g, "");
-      data.buy4 = data2["買價4"].substring(1).replace(/\s+/g, "");
-      data.buy5 = data2["買價5"].substring(1).replace(/\s+/g, "");
-      data.sell1 = data2["Selling price1"].substring(1).replace(/\s+/g, "");
-      data.sell2 = data2["Selling price2"].substring(1).replace(/\s+/g, "");
-      data.sell3 = data2["Selling price3"].substring(1).replace(/\s+/g, "");
-      data.sell4 = data2["Selling price4"].substring(1).replace(/\s+/g, "");
-      data.sell5 = data2["Selling price5"].substring(1).replace(/\s+/g, "");
-      data.buy1_num = data2["買量1"];
-      data.buy2_num = data2["買量2"];
-      data.buy3_num = data2["買量3"];
-      data.buy4_num = data2["買量4"];
-      data.buy5_num = data2["買量5"];
-      data.sell1_num = data2["賣量1"];
-      data.sell2_num = data2["賣量2"];
-      data.sell3_num = data2["賣量3"];
-      data.sell4_num = data2["賣量4"];
-      data.sell5_num = data2["賣量5"];
+      // let data = {};
+      // let data1 = res1.data[0];
+      // let data2 = res2.data[0]["五檔"];
+      // data.name = data1["股票名稱"];
+      // data.code = opts.code;
+      // data.spell = "";
+      // data.gid = opts.code;
+      // data.nowPrice = data1["當盤成交價"];
+      // data.hcrate = data1["Quote change"];
+      // data.today_max = data1["最高價"];
+      // data.today_min = data1["最低價"];
+      // data.business_balance = data1["成交金額"];
+      // data.business_amount = data1["當盤成交量"];
+      // data.preclose_px =
+      //   parseFloat(data1["開盤價"]) + parseFloat(data1["漲跌"]);
+      // data.open_px = data1["開盤價"];
+      // data.buy1 = data2["買價1"].substring(1).replace(/\s+/g, "");
+      // data.buy2 = data2["買價2"].substring(1).replace(/\s+/g, "");
+      // data.buy3 = data2["買價3"].substring(1).replace(/\s+/g, "");
+      // data.buy4 = data2["買價4"].substring(1).replace(/\s+/g, "");
+      // data.buy5 = data2["買價5"].substring(1).replace(/\s+/g, "");
+      // data.sell1 = data2["Selling price1"].substring(1).replace(/\s+/g, "");
+      // data.sell2 = data2["Selling price2"].substring(1).replace(/\s+/g, "");
+      // data.sell3 = data2["Selling price3"].substring(1).replace(/\s+/g, "");
+      // data.sell4 = data2["Selling price4"].substring(1).replace(/\s+/g, "");
+      // data.sell5 = data2["Selling price5"].substring(1).replace(/\s+/g, "");
+      // data.buy1_num = data2["買量1"];
+      // data.buy2_num = data2["買量2"];
+      // data.buy3_num = data2["買量3"];
+      // data.buy4_num = data2["買量4"];
+      // data.buy5_num = data2["買量5"];
+      // data.sell1_num = data2["賣量1"];
+      // data.sell2_num = data2["賣量2"];
+      // data.sell3_num = data2["賣量3"];
+      // data.sell4_num = data2["賣量4"];
+      // data.sell5_num = data2["賣量5"];
+      let res1 = await api.getUsStockData(opts.code)
+      let stock = res1.data[0];
+      let stockDetail ={}
+      stockDetail.code =  opts.code
+      stockDetail.name = stock["200024"];//股票名稱
+      stockDetail.date = stock["200007"];//最近交易日期
+      // stockDetail.time = stock[""];//最近成交時刻
+      stockDetail.nowPrice = stock["6"];//最新價格
+      stockDetail.rate = stock["11"];//漲跌
+      stockDetail.hcrate = stock["56"];//漲跌幅
+      stockDetail.today_max = stock["12"];//最高價
+      stockDetail.today_min = stock["13"];//最低價
+      stockDetail.volumn = stock["800001"];//累積成交量
+      stockDetail.amount = stock[""];//成交金額
+      stockDetail.yes = stock["21"];//昨收
+      stockDetail.open = stock["19"];//開盤價
 
-      let code = data.code;
-      this.ucode = code;
 
-      this.detail = data;
+      if (stockDetail.rate > 0) {
+        stockDetail.color = "upColor";
+      }
+      if (stockDetail.rate < 0) {
+        stockDetail.color = "lowColor";
+      }
+      // let code = data.code;
+      this.ucode = opts.code;
+
+      this.detail = stockDetail;
       this.findSpreadRateOne();
     },
     selectCycleFun(value) {
@@ -587,35 +612,38 @@ export default {
       // 下單
 
       if (!this.$store.state.userInfo.idCard) {
-        Toast("您還未實名認證,請先實名認證了再下單");
+        Toast("You have not been authenticated by real name");
         this.$router.push("/authentication");
         return;
       }
       if (!this.agree) {
-        Toast("需同意合作協議才能交易!");
+        Toast("You need to agree to the cooperation agreement before trading!");
       } else if (isNull(this.selectNumber) && isNull(this.autoNumber)) {
-        Toast("請選擇購買張數");
+        Toast("Please select the number of shares to purchase");
       } else if (isNull(this.selectType)) {
-        Toast("請選擇買賣方嚮");
+        Toast("Please select the buying and selling direction");
       } else {
         this.buying = true;
         var gCode = this.$route.query;
-        let twRes = await api.getTwStockData(gCode.code);
-        let nowPrice = twRes.data[0]["當盤成交價"];
-        let hcrate = twRes.data[0]["Quote change"];
-        let preClose = twRes.data[0]["開盤價"];
+        let res1 = await api.getUsStockData(gCode.code)
+        let stock = res1.data[0];
+        let nowPrice = stock["6"];//最新價格
+        let hcrate = stock["56"];//漲跌幅
+
+        let res2 = await api.getUsOpenClose(gCode.code)
+        let preClose = res2.data["o"][0];//開盤價
+
+        
         let opts = {
-          stockId: parseInt(gCode.code),
-          buyNum: this.selectNumber
-            ? this.selectNumber * 1000
-            : this.autoNumber * 1000, // 單位為張
+          stockId: gCode.code,
+          buyNum: this.selectNumber == ''?this.autoNumber:this.selectNumber,
           buyType: this.selectType,
           lever: this.selectCycle ? this.selectCycle : 0,
           nowPrice,
           hcrate,
           preClose
         };
-        let data = await api.buyTwStock(opts);
+        let data = await api.buyUsStock(opts);
         this.buying = false;
         if (data.status === 0) {
           Toast(data.data);

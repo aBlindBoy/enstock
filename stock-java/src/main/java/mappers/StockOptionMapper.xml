@@ -127,6 +127,12 @@
       is_lock = #{isLock,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="allOption" resultMap="BaseResultMap" >
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM stock_option
+        WHERE user_id = #{userId}
+    </select>
 
 
     <select id="findMyOptionIsExistByCode" resultMap="BaseResultMap" parameterType="map">

@@ -65,6 +65,14 @@ public class UserController {
         return this.iUserService.isOption(code, request);
     }
 
+    //查詢全部自選股
+    @RequestMapping({"allOption.do"})
+    @ResponseBody
+    public ServerResponse allOption( HttpServletRequest request) {
+        return this.iUserService.allOption(request);
+    }
+
+
     //用戶下單买入股票
   /*  @RequestMapping({"buy.do"})
     @ResponseBody
@@ -79,7 +87,7 @@ public class UserController {
     }*/
 
     //用戶下單买入股票
-    @RequestMapping({"buyTwStock.do"})
+    /*@RequestMapping({"buyTwStock.do"})
     @ResponseBody
     public ServerResponse buyTwStock(@RequestParam("stockId") Integer stockId,
                                      @RequestParam("buyNum") Integer buyNum,
@@ -91,6 +99,23 @@ public class UserController {
         ServerResponse serverResponse = null;
         try {
             serverResponse = this.iUserPositionService.buyTwStock(stockId, buyNum, buyType, lever,nowPrice, hcrate, preClose,request);
+        } catch (Exception e) {
+            log.error("用戶下單操作 = {}", e);
+        }
+        return serverResponse;
+    }*/
+    @RequestMapping({"buyUsStock.do"})
+    @ResponseBody
+    public ServerResponse buyUsStock(@RequestParam("stockId") String stockId,
+                                     @RequestParam("buyNum") Integer buyNum,
+                                     @RequestParam("buyType") Integer buyType,
+                                     @RequestParam("lever") Integer lever,
+                                     @RequestParam("nowPrice") String nowPrice,
+                                     @RequestParam("hcrate") String hcrate,
+                                     @RequestParam("preClose")String preClose, HttpServletRequest request) {
+        ServerResponse serverResponse = null;
+        try {
+            serverResponse = this.iUserPositionService.buyUsStock(stockId, buyNum, buyType, lever,nowPrice, hcrate, preClose,request);
         } catch (Exception e) {
             log.error("用戶下單操作 = {}", e);
         }
@@ -111,16 +136,27 @@ public class UserController {
     }*/
 
     //用戶平倉操作
-    @RequestMapping({"sellTwStock.do"})
+    @RequestMapping({"sellUsStock.do"})
     @ResponseBody
-    public ServerResponse sellTwStock(HttpServletRequest request, @RequestParam("positionSn") String positionSn) {
+    public ServerResponse sellUsStock(HttpServletRequest request, @RequestParam("positionSn") String positionSn) {
         try {
-           return this.iUserPositionService.sellTwStock(positionSn, 1);
+            return this.iUserPositionService.sellUsStock(positionSn, 1);
         } catch (Exception e) {
             log.error("用戶平倉操作：{}", e);
         }
         return ServerResponse.createByErrorMsg("系统异常");
     }
+//    //用戶平倉操作
+//    @RequestMapping({"sellTwStock.do"})
+//    @ResponseBody
+//    public ServerResponse sellTwStock(HttpServletRequest request, @RequestParam("positionSn") String positionSn) {
+//        try {
+//           return this.iUserPositionService.sellTwStock(positionSn, 1);
+//        } catch (Exception e) {
+//            log.error("用戶平倉操作：{}", e);
+//        }
+//        return ServerResponse.createByErrorMsg("系统异常");
+//    }
 
     //用戶追加保证金操作
     @RequestMapping({"addmargin.do"})

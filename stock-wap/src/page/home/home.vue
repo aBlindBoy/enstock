@@ -170,34 +170,8 @@
       </div>
     </div> -->
     <!-- tab -->
+    <news/>
 
-<div class="news-tab">
-  <el-timeline>
-    <el-timeline-item 
-      v-for="(activity, index) in activities"
-      :key="index"
-      icon="el-icon-timer"
-      type="primary"
-      color="greep"
-      size="16"
-    
-      >
-      <!-- v-infinite-scroll="load" :timestamp="activity.addTime" {{activity.content}} -->
-      <!-- -->
-      <!-- <el-card> -->
-        <div   @click="toNewsDetail(activity.id)">
-          <p style="font-weight: 400;letter-spacing:.01rem;">{{activity.title}}</p>
-         <p style="margin-top:10px">
-          <el-tag type="danger" size="mini">{{activity.sourceName}}</el-tag>
-          {{dateFormNow(activity.addTime) }}</p>
-        </div>
-       
-        <!-- <p>{{activity.timestamp}}</p> -->
-      <!-- </el-card> -->
-    </el-timeline-item>
-  </el-timeline>
-
-</div>
 
 
     <foot></foot>
@@ -208,6 +182,7 @@
 
 <script>
 import foot from '@/components/foot/foot'
+import news from '@/page/home/news'
 import AllList from '@/page/list/list-all'
 import HomeList from './components/home-list'
 import { Toast } from 'mint-ui'
@@ -223,7 +198,8 @@ export default {
   components: {
     foot,
     HomeList,
-    AllList
+    AllList,
+    news
   },
   props: {},
   data () {
@@ -652,9 +628,7 @@ export default {
       overflow: hidden;
     }
   }
-  // .news-tab{
-  //   background-color: #16171d;
-  // }
+  
   // 移動框寬度設定
   #box {
     width: 80000%;
@@ -1005,15 +979,7 @@ export default {
     height: 100%;
   }
 }
-.news-tab {
-  background-color: #16171d;
-  min-height: 5rem;
-  padding: 0.3rem;
-  margin-top: .2rem;
-  p{
-    color:  #cfd0d1 !important;
-  }
-}
+
 
 #app.red-theme{
   .home-search {
@@ -1057,16 +1023,7 @@ export default {
   .swiper-home{
     background-color: #fff;
   }
-  .news-tab{
-      background-color: #fff;
-      
-      min-height: 5rem;
-      padding: 0.3rem;
-      margin-top: .2rem;
-      p{
-        color: #000 !important;
-      }
-  }
+ 
   .account-box .content .tab .name {
     border-color: #E9E9E9;
     color: #222222;

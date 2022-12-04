@@ -1210,7 +1210,7 @@ export default {
       padding: .3rem .2rem .28rem;
       .acc-pre-left {
         width: 1.92rem;
-        height: 1.92rem;
+        height: 1.62rem;
         background-image: url(../../assets/ico/round.png);
         background-size: cover;
         display: flex;

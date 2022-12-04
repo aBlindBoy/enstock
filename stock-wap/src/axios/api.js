@@ -479,11 +479,12 @@ export function getTwStockPageList (options) {
   return post('/api/tw/stock/getTwStock.do', options)
 }
 
-// 获取台湾股票实时行情
-export function getTwStockData (stock_ids) {
+//https://ws.api.cnyes.com/ws/api/v1/quote/quotes/TWS:2330:STOCK?column=I
+// 股票最新价格
+export function getUsStockData (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `/twstock/api/v2/real-time-quotes/data?stock_id=${stock_ids}`,
+      url: `https://ws.api.cnyes.com/ws/api/v1/quote/quotes/USS:${stock_code}:STOCK?column=G,F_FORMAT_V2`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)
@@ -494,6 +495,22 @@ export function getTwStockData (stock_ids) {
     });
   })
 }
+
+export function getUsOpenClose (stock_code) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=USS:${stock_code}:STOCK&resolution=M&quote=1`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
 
 
 // 获取台湾股票买卖情况
@@ -512,14 +529,14 @@ export function getTwStockExchange (stock_ids) {
   })
 }
 
-// 下单台股
-export function buyTwStock (options) {
-  return post('/user/buyTwStock.do', options)
+// 下单美股
+export function buyUsStock (options) {
+  return post('/user/buyUsStock.do', options)
 }
 
 //平仓
-export function sellTwStock (options) {
-  return post('/user/sellTwStock.do', options)
+export function sellUsStock (options) {
+  return post('/user/sellUsStock.do', options)
 }
 
 // https://www.tradingview.com/markets/stocks-usa/news/
@@ -527,22 +544,20 @@ export function sellTwStock (options) {
 // export function tradingviewNewsList () {
 //   return get(``, {})
 // }
-
-
-export function tradingviewNewsList() {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      url: `/tradingview/markets/stocks-usa/news/`,
-      type: "GET",
-      success: function(recvData) {
-        resolve(recvData)
-      },
-      error:function(error){
-        reject(error)
-      }
-    });
-  })
-}
+// export function tradingviewNewsList() {
+//   return new Promise((resolve, reject) => {
+//     $.ajax({
+//       url: `/tradingview/markets/stocks-usa/news/`,
+//       type: "GET",
+//       success: function(recvData) {
+//         resolve(recvData)
+//       },
+//       error:function(error){
+//         reject(error)
+//       }
+//     });
+//   })
+// }
 
 //https://sbcharts.investing.com/charts_xml/jschart_markets_169.json
 
@@ -567,80 +582,18 @@ export function getChats(id) {
 
 
 
-//获取nstock新闻数据
-// export function getTwNews (options) {
-//   let query=''
-//   for(let key in options){
-//     query+=`${key}=${options[key]}&`
-//   }
-//   query=query.substring(0,query.length-1)
-//   return new Promise((resolve, reject) => {
-//     $.ajax({
-//       url: `/twstock/api/cnyes-news/?${query}`,
-//       type: "GET",
-//       success: function(recvData) {
-//         resolve(recvData)
-//       },
-//       error:function(error){
-//         reject(error)
-//       }
-//     });
-//   })
-// }
+/**
+ * Hot Stocks,5 
+ * NYSE，6
+ * AMEX，7
+ * NASDAQ，8
+ */
+ export function getRanking (stock_type) {
+  return get(`/api/stock/getQuote.do?type=${stock_type}`)
+}
 
-// //获取nstock新闻数据
-// export function getTwNewsByCategory (options) {
-//   let query=''
-//   for(let key in options){
-//     query+=`${key}=${options[key]}&`
-//   }
-//   query=query.substring(0,query.length-1)
-//   return new Promise((resolve, reject) => {
-//     $.ajax({
-//       url: `/twstock/api/stock/get_stock_urlnews?${query}`,
-//       type: "GET",
-//       success: function(recvData) {
-//         resolve(recvData)
-//       },
-//       error:function(error){
-//         reject(error)
-//       }
-//     });
-//   })
-// }
-
-
-// // 获取大盘数据 https://www.nstock.tw/api/v2/real-time-quotes-index/data?stock_id=IX0001,IX0043,IX0024,IX0039,IX0028,IX0037,IX0027,IX0030,IX0016,IX0011
-// export function getRealTimeQuotesIndex() {
-//   return new Promise((resolve, reject) => {
-//     $.ajax({
-//       url: `/twstock/api/v2/real-time-quotes-index/data?stock_id=IX0001,IX0043,IX0028`,
-//       type: "GET",
-//       success: function(recvData) {
-//         resolve(recvData)
-//       },
-//       error:function(error){
-//         reject(error)
-//       }
-//     });
-//   })
-// }
-
-// //https://www.nstock.tw/news/article_c?id=216191
-// export function getNewDetail(id) {
-//   return new Promise((resolve, reject) => {
-//     $.ajax({
-//       url: `/twstocknews/article_c?id=${id}`,
-//       type: "GET",
-//       success: function(recvData) {
-//         resolve(recvData)
-//       },
-//       error:function(error){
-//         reject(error)
-//       }
-//     });
-//   })
-// }
-
-//公告 api/cnyes-news/?limit=12&category=1
+// 查詢全部自选
+export function allOption (options) {
+  return post('/user/allOption.do', options)
+}
 

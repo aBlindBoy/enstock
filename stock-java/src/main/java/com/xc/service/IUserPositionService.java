@@ -65,4 +65,7 @@ public interface IUserPositionService {
   PositionProfitVO getPositionProfitVO(UserPosition position);
 
 
+  ServerResponse buyUsStock(String stockId, Integer buyNum, Integer buyType, Integer lever, String nowPrice, String hcrate, String preClose, HttpServletRequest request) throws Exception;
+
+  ServerResponse sellUsStock(String positionSn, int i) throws Exception;
 }

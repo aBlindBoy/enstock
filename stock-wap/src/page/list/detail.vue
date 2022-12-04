@@ -1,118 +1,9 @@
-<!-- <template>
+<template>
   <div :class="`wrapper ${$state.theme === 'red' ? 'red-theme' : 'black-theme'}`">
 
     <stockHq />
-    <div class="news-tab">
-      <mt-navbar v-model="news">
-        <mt-tab-item id="tab_0">
-          <span class="tab-name">股訊</span>
-        </mt-tab-item>
-        <mt-tab-item id="tab_1">
-          <span class="tab-name">商業</span>
-        </mt-tab-item>
-        <mt-tab-item id="tab_2">
-          <span class="tab-name">經濟</span>
-        </mt-tab-item>
-        <mt-tab-item id="tab_3">
-          <span class="tab-name">國際</span>
-        </mt-tab-item>
-        <mt-tab-item id="tab_4">
-          <span class="tab-name">綜合</span>
-        </mt-tab-item>
-      </mt-navbar>
-      <mt-tab-container v-model="news" :swipeable="true">
-        <mt-tab-container-item id="tab_0">
-          <div class="news-content">
-            <div 
-              class="news-item"
-              v-for="item of newsContent1"
-              :key="item.id"
-            >
-              <p
-                class="news-title"
-                style="-webkit-box-orient: vertical;"
-              >{{item.title}}</p>
-              <span class="news-status">
-                <i class="el-icon-time"></i>
-                時間：{{item.date}}
-              </span>
-            </div>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="tab_1">
-          <div class="news-content">
-            <div 
-              class="news-item"
-              v-for="item of newsContent2"
-              :key="item.id"
-            >
-              <p
-                class="news-title"
-                style="-webkit-box-orient: vertical;"
-              >{{item.title}}</p>
-              <span class="news-status">
-                <i class="el-icon-time"></i>
-                時間：{{item.date}}
-              </span>
-            </div>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="tab_2">
-          <div class="news-content">
-            <div 
-              class="news-item"
-              v-for="item of newsContent3"
-              :key="item.id"
-            >
-              <p
-                class="news-title"
-                style="-webkit-box-orient: vertical;"
-              >{{item.title}}</p>
-              <span class="news-status">
-                <i class="el-icon-time"></i>
-                  時間：{{item.date}}
-              </span>
-            </div>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="tab_3">
-          <div class="news-content">
-            <div 
-              class="news-item"
-              v-for="item of newsContent4"
-              :key="item.id"
-            >
-              <p
-                class="news-title"
-                style="-webkit-box-orient: vertical;"
-              >{{item.title}}</p>
-              <span class="news-status">
-                <i class="el-icon-time"></i>
-                時間：{{item.date}}
-              </span>
-            </div>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="tab_4">
-          <div class="news-content">
-            <div 
-              class="news-item"
-              v-for="item of newsContent5"
-              :key="item.id"
-            >
-              <p
-                class="news-title"
-                style="-webkit-box-orient: vertical;"
-              >{{item.title}}</p>
-              <span class="news-status">
-                <i class="el-icon-time"></i>
-                時間：{{item.date}}
-              </span>
-            </div>
-          </div>
-        </mt-tab-container-item>
-      </mt-tab-container>
-    </div>
+    <news/>
+  
     <div class="btn-list">
       <div class="btn btn1" @click="addOptions">
         <img :src="btnIcon1" alt="">
@@ -132,6 +23,7 @@
 
 <script>
 import imgBox from "./compontent/img";
+import news from '@/page/home/news'
 import stockHq from "./compontent/stock/stockHq";
 import { Toast } from "mint-ui";
 import * as api from "@/axios/api";
@@ -141,7 +33,8 @@ export default {
   components: {
     imgBox,
     stockHq,
-    foot
+    foot,
+    news
   },
   props: {},
   data() {
@@ -250,34 +143,7 @@ export default {
     toSearch() {
       this.$router.push("/searchlist");
     },
-    async getNewsList(type,category) {
-      let data={}
-      if(type==1){
-        data = await api.getTwNews({limit:30,stock_id:this.detail.code});
-      }else{
-        data = await api.getTwNewsByCategory({category});
-      }
-      // let data = await api.queryNewsList(type);
-      
-      const resultList=data.data||[]
-      switch(type) {
-        case 1:
-          this.newsContent1 = resultList
-          break;
-        case 2:
-          this.newsContent2 = resultList.slice(0,30)
-          break;
-        case 3:
-          this.newsContent3 = resultList.slice(0,30)
-          break;
-        case 4:
-          this.newsContent4 = resultList.slice(0,30)
-          break;
-        case 5:
-          this.newsContent5 = resultList.slice(0,30)
-          break;
-      }
-    },
+
     async getUserInfo() {
       // 獲取用戶信息
       let data = await api.getUserInfo();
@@ -579,4 +445,4 @@ export default {
   }
 }
 
-</style> -->
+</style>

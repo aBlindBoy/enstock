@@ -6,7 +6,7 @@
         </router-link>
     </mt-header> -->
     <mt-navbar class="sub-navbar" v-model="selected">
-      <mt-tab-item id="1">my holdings</mt-tab-item>
+      <mt-tab-item id="1">Holding</mt-tab-item>
       <mt-tab-item id="2">Historical</mt-tab-item>
     </mt-navbar>
     <mt-tab-container class="order-list" v-model="selected">

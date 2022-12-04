@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="wrapper"> 
     <div class="detail-part">
       <div class="index-name">
@@ -16,7 +16,6 @@
         <div class="pull-right hangqin-right col-xs-8">
           <ul class="price-detail text-center">
             <li>
-              <!-- <p class="title"></p> -->
               <p :class="detail.hcrate<0?'number green': 'number red'">
                 <span class="title">Chg</span>
                 {{Number(detail.hcrate).toFixed(2)}} 
@@ -35,7 +34,6 @@
               </p>
             </li>
             <li>
-              <!-- <p class="title">最低</p> -->
               <p class="green">
                 <span class="title green">Limit down</span>
                 {{(detail.nowPrice - Number(detail.nowPrice) * settingIndexInfo.downLimit ).toFixed(2)}}
@@ -44,10 +42,7 @@
           </ul>
         </div>
       </div>
-      <!-- <div class="clearfix">
-          <div class="col-xs-4 red">漲停限制 </div>
-          <div class="col-xs-4 green">跌停限制 </div>
-      </div> -->
+
     </div>
     <div v-if="false" class="box-tab">
       <div class="tab-title">
@@ -66,47 +61,20 @@
         <ul class="first clearfix">
           <li class="pull-left">
             {{detail.indexCode}}
-            <!-- <span>(Scrb1905)</span> -->
           </li>
           <li :class="detail.hcrate < 0?'pull-left green':detail.hcrate == 0?'pull-left':'pull-left red'">
-            <!-- 當前價： -->
             <span>{{detail.hcrate}}%</span>
           </li>
         </ul>
-        <!-- <div class='buy-price clearfix'>
-            <div class="col-xs-4">
-                <p>市價買入</p>
-            </div>
-            <div class="col-xs-4">
-                <p class="red">{{detail.nowPrice}}</p>
-            </div>
-            <div class="col-xs-4">
-                <p>說明</p>
-            </div>
-        </div> -->
+    
       </div>
     </div>
     <div class="box-tab">
       <div class="tab-title special">
-        <!-- <div class="circle"></div>選擇張數 -->
         <div class="notify">Minimum number of shares to buy {{settingInfo.buyMinNum}} ，Maximum Buyable Quantity{{settingInfo.buyMaxNum}} </div>
       </div>
       <div class="tab-con">
-        <!-- <ul class="radio-group clearfix">
-          <li v-for="item in numberList" :key="item.key"
-          @click="selectNumberFun(item.value)">
-            <div :class="[selectNumber == item.value?'on':'']">
-              {{item.label}}
-            </div>
-          </li>
-          <li v-show="!selectNumber">
-            <input @keyup="changeAutoNumber" v-model="autoNumber" type="text">張
-          </li>
-        </ul> -->
-        <!-- <p class="clearfix">
-          <span class="pull-left">最小購買股數{{Number(settingInfo.buyMinNum)/100}}手</span>
-          <span class="protem pull-right">最大可購買Quantity{{Number(settingInfo.buyMaxNum)/100}}手</span>
-        </p> -->
+      
       </div>
     </div>
     <div class="box-tab">
@@ -146,35 +114,18 @@
         <option v-for="i in subaccountList" :key="i.subaccountNumber" :label="i.subaccountNumber" :value="i.subaccountNumber">{{i.subaccountNumber}}</option>
       </select>
     </div>
-    <!-- <div class="box-tab">
-      <div class="tab-con">
-        <p class="text-left page-part">
-            <span class="">{{selectNumber?selectNumber*100:autoNumber*100}}股</span>
-            <span class="pull-right">買入金額:{{price?price:0}}USD</span>
-        </p> -->
-        <!-- <p class="clearfix">
-          <span class="pull-right">最小購買金額{{settingInfo.buyMinAmt}}USD</span> -->
-          <!-- <span class="pull-right">最大購買金額:{{settingInfo.buyMaxPercent * $store.state.userInfo.enableIndexAmt}}</span>
-        </p>
-
-      </div>
-    </div> --> 
+  
     <div class="agree">
       <p style="line-height: 0.4rem;padding: 0 0.2rem;">
         When the index rises to <span class="red">daily limit </span>, cannotBullish;achieve<span class="green">Limit down</span>,Can't Bearish.
       </p>
-      <!-- <p>
-          <i @click="isAgree" :class="agree?'glyphicon glyphicon glyphicon-ok-sign red':'glyphicon glyphicon-ok-circle'"></i>
-          我已閱讀併同意
-          <a @click="totrageUrl" >《指數交易交易⻛險揭示書》</a>
-      </p> -->
+     
     </div>
     <div class="footer-btn">
       <div class="total">
         <p class="pay">Pay Margin<span class="protem">{{total?total:0}}</span></p>
         <p class="account">(account balance:{{$store.state.userInfo.enableIndexAmt}}USD)</p>
       </div>
-      <!-- <mt-button :disabled="buying" class="btn-red" size="small" type="danger" @click="toInquiry">下單</mt-button> -->
       <div class="right-btn">
         <div class="btn-buy" @click="toInquiry">
           <img src="../../../static/img/detail/fencang-icon.png" alt="" srcset="">
@@ -897,4 +848,4 @@ export default {
       background-color: #E00101;
     }
   }
-</style>
+</style> -->

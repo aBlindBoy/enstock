@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="wrapper">
         <!-- <div class="header">
             <mt-header :title="detail.name+' ('+detail.code+')'">
@@ -386,4 +386,4 @@
     .box-part {
         padding: 0;
     }
-</style>
+</style> -->

@@ -43,7 +43,6 @@ import Trage from '@/page/tradeAgree'
 import OpenAccount from '@/page/openaccount'
 import FundsList from '@/page/funds/funds-list'
 import newsDetail from '@/page/home/newsDetail'
-import newsDetail2 from '@/page/home/newsDetail2'
 
 
 
@@ -77,16 +76,7 @@ export default new Router({
         hasHeader: true
       },
       component: newsDetail
-    }, 
-    {
-      path: '/newsDetail2',
-      name: 'newsDetail2',
-      meta: {
-        title: 'announcement',
-        hasHeader: true
-      },
-      component: newsDetail2
-    }, 
+    },
     {
       path: '/buy',
       name: 'buy',

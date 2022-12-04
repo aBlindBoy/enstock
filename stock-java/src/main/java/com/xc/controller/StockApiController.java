@@ -1,7 +1,13 @@
 package com.xc.controller;
 
 import com.xc.common.ServerResponse;
+import com.xc.pojo.Stock;
 import com.xc.service.IStockService;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping({"/api/stock/"})
@@ -41,6 +53,57 @@ public class StockApiController {
     public ServerResponse getSingleStock(@RequestParam("code") String code) {
         return this.iStockService.getSingleStock(code);
     }
+
+    @RequestMapping({"getQuote.do"})
+    @ResponseBody
+    public ServerResponse getQuote(int type) throws IOException {
+//        return this.iStockService.getSingleStock(code);
+        Connection connect = Jsoup.connect( "https://www.moomoo.com/quote/list/us/"+type+"/1");
+//        connect.proxy("127.0.0.1",7890);
+        Document document = connect.execute().parse();
+        Elements aTags = document.getElementsByClass("list-item-main").first().getElementsByTag("a");
+        List<Stock> stockList = new ArrayList<>();
+
+        for (Element element:aTags){
+//                String href = element.attr("href");
+            Elements divTags = element.getElementsByTag("div");
+            String stockCode = divTags.get(0).attr("title");
+            Stock stock = new Stock();
+            stock.setStockCode(stockCode);
+            stock.setStockName(divTags.get(1).attr("title"));
+            stock.setLatestPrice(new BigDecimal(divTags.get(2).attr("title")));
+            stock.setChg( new BigDecimal(divTags.get(3).attr("title").replace("%","")));
+            stock.setChgRate(new BigDecimal(divTags.get(4).attr("title").replace("%","")));
+//            Connection detailConn = Jsoup.connect( "https://www.moomoo.com/stock/"+stockCode+"-US/company-profile");
+//            Document document1 = detailConn.execute().parse();
+//            Elements companyMain =
+//                    document1.getElementsByClass("company-item");
+//            for (Element company:companyMain) {
+//                if (company.getElementsByClass("name").first().text().contains("Company Name")){
+//                    stock.setCompanyName(company.getElementsByClass("value").last().text());
+//                }
+//                if (company.getElementsByClass("name").first().text().contains("Market")){
+//                    stock.setStockPlate(company.getElementsByClass("value").last().text());
+//                }
+//                if (company.getElementsByClass("name").first().text().contains("Securities Type")){
+//                    stock.setStockType(company.getElementsByClass("value").last().text());
+//                }
+//                if (company.getElementsByClass("name").first().text().contains("Website")){
+//                    stock.setWebsite(company.getElementsByClass("value").last().text());
+//                }
+//                if (company.getElementsByClass("name").first().text().contains("Profile")){
+//                    stock.setProfile(company.getElementsByClass("value").last().text());
+//                }
+//            }
+//            stock.setIsLock(0);
+//            stock.setIsShow(0);
+//            stock.setAddTime(new Date());
+//        }
+            stockList.add(stock);
+        }
+        return ServerResponse.createBySuccess(stockList);
+}
+
 
 //    @RequestMapping({"getMinK.do"})
 //    @ResponseBody

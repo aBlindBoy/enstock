@@ -10,15 +10,15 @@
     <div class="box1">
       <div class="form-block page-part">
         <mt-field
-          label="Recharge amount"
+          label="Amount"
           placeholder="Recharge amount"
           disabled
           type="number"
           v-model="selectNumber"
         ></mt-field>
         <mt-field
-          label="訂單號"
-          placeholder="訂單號"
+          label="Order number"
+          placeholder="order number"
           disabled
           v-model="orderSn">
           <span

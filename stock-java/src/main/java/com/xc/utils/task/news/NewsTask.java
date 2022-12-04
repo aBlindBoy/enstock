@@ -24,7 +24,7 @@ public class NewsTask {
     * 新闻資讯抓取
     *
     * */
-    @Scheduled(cron = "1 * * * * ?")
+    @Scheduled(cron = "10 * * * * ?")
     public void NewsInfoTask() throws IOException {
         this.iSiteNewsService.grabNews();
     }

@@ -12,17 +12,18 @@
       show
       autofocus
       v-model="keywords"
-      @keyup.enter.native="getStock"
+     
       placeholder="Stock code can be entered"
     >
+    <!--  @keyup.enter.native="getStock" -->
       <ul class="table-list">
         <li class="title">
           <div>
             <ul class="clearfix">
               <li class="li-title">Stock</li>
               <li class="li-base">Latest price</li>
-              <li class="li-base">Quote change</li>
-              <li class="li-base">chg %</li>
+              <!-- <li class="li-base">Chg</li> -->
+              <li class="li-base">Chg %</li>
             </ul>
           </div>
         </li>
@@ -50,9 +51,9 @@
                         ? 'iconfont shen-mark hushen-mark'
                         : 'iconfont hushen-mark'
                     "
-                    >{{ item.stock_type == "sz" ? "深" : "台" }}</i
+                    >US</i
                   >
-                  <i v-else class="iconfont kechuang-mark">科創</i>
+                  <!-- <i v-else class="iconfont kechuang-mark">科創</i> -->
                   {{ item.code }}
                 </p>
               </li>
@@ -61,12 +62,12 @@
                   item.nowPrice ? Number(item.nowPrice).toFixed(2) : "-"
                 }}</span>
               </li>
-              <li class="li-base">
-                <span v-if="item.nowPrice == 0">-</span>
-                <span v-else>{{ item.hcrate ? item.hcrate : "0" }}%</span>
-              </li>
+              <!-- <li class="li-base">
+                <span v-if="item.hcrate == 0">-</span>
+                <span v-else>{{ item.hcrate ? item.hcrate : "0" }}</span>
+              </li> -->
               <li class="li-base no-bold">
-                <span>{{ item.rate }}</span>
+                <span>{{ item.hcrate }}%</span>
               </li>
             </ul>
           </div>
@@ -77,10 +78,10 @@
         Loading...
       </div>
       <div v-show="!loading && hasSearch" class="load-all text-center">
-        all loaded
+        All loaded
       </div>
       <div v-show="!hasSearch" class="load-all text-center">
-        You can enter the stock code you want to query for query
+        Enter the stock code to query
       </div>
     </mt-search>
     <foot></foot>
@@ -110,15 +111,15 @@ export default {
     };
   },
   watch: {
-    keywords(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.getStock();
-      }
-    }
+    // keywords(newVal, oldVal) {
+    //   if (newVal !== oldVal) {
+    //     this.getStock();
+    //   }
+    // }
   },
   computed: {},
   created() {
-    this.timer = setInterval(this.refreshList, 5000);
+    // this.timer = setInterval(this.refreshList, 5000);
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -134,67 +135,68 @@ export default {
         pageSize: 15
       };
       this.hasSearch = true;
-      let data = await api.getTwStockPageList(opt);
-      if (data.status === 0) {
-        this.loading=false
-        this.total = data.data.total;
-        let codes = data.data.list.map(item => item.code).join(',');
-        if(!codes){
-          return 
-        }
-        const res = await api.getTwStockData(codes);
-        res.data.forEach((item, index) => {
-          let newItem = {
-            nowPrice: item["當盤成交價"],
-            preclose_px: item["當盤成交價"] - item["漲跌"],
-            hcrate: item["Quote change"],
-            rate: item["漲跌"],
-            name: item["股票名稱"],
-            code:item['股票代號'],
-            stock_type:'tw'
-          };
-          this.list.push(newItem);
-        });
-      } else {
-        Toast(data.msg);
-      }
+      let data = await api.getStock(opt);
+      this.list = data.data.list
+      // if (data.status === 0) {
+      //   this.loading=false
+      //   this.total = data.data.total;
+      //   let codes = data.data.list.map(item => item.code).join(',');
+      //   if(!codes){
+      //     return 
+      //   }
+      //   const res = await api.getTwStockData(codes);
+      //   res.data.forEach((item, index) => {
+      //     let newItem = {
+      //       nowPrice: item["當盤成交價"],
+      //       preclose_px: item["當盤成交價"] - item["漲跌"],
+      //       hcrate: item["Quote change"],
+      //       rate: item["漲跌"],
+      //       name: item["股票名稱"],
+      //       code:item['股票代號'],
+      //       stock_type:'tw'
+      //     };
+      //     this.list.push(newItem);
+      //   });
+      // } else {
+      //   Toast(data.msg);
+      // }
     },
-    async refreshList() {
-      // 判斷是不是已經查詢 或者是否正在加載下一頁 是則退出，不進行刷新
-      if (!this.hasSearch || this.loading) {
-        return;
-      }
-      let opt = {
-        keyWords: this.keywords,
-        pageNum: 1,
-        pageSize: this.currentNum
-      };
-      let data = await api.getTwStockPageList(opt);
-      this.loading=false
-      if (data.status === 0) {
-        this.total = data.data.total;
-        let codes = data.data.list.map(item => item.code).join(',');
-        if(!codes){
-          return 
-        }
-        const res = await api.getTwStockData(codes);
+    // async refreshList() {
+    //   // 判斷是不是已經查詢 或者是否正在加載下一頁 是則退出，不進行刷新
+    //   if (!this.hasSearch || this.loading) {
+    //     return;
+    //   }
+    //   let opt = {
+    //     keyWords: this.keywords,
+    //     pageNum: 1,
+    //     pageSize: this.currentNum
+    //   };
+    //   let data = await api.getTwStockPageList(opt);
+    //   this.loading=false
+    //   if (data.status === 0) {
+    //     this.total = data.data.total;
+    //     let codes = data.data.list.map(item => item.code).join(',');
+    //     if(!codes){
+    //       return 
+    //     }
+    //     const res = await api.getTwStockData(codes);
         
-        let result = [];
-        res.data.forEach((item, index) => {
-          let newItem = {
-            nowPrice: item["當盤成交價"],
-            preclose_px: item["當盤成交價"] + item["漲跌"],
-            hcrate: item["Quote change"],
-            rate: item["漲跌"],
-            name: item["股票名稱"],
-            code:item['股票代號'],
-            stock_type:'tw'
-          };
-          result.push(newItem);
-        });
-        this.list = [...result];
-      }
-    },
+    //     let result = [];
+    //     res.data.forEach((item, index) => {
+    //       let newItem = {
+    //         nowPrice: item["當盤成交價"],
+    //         preclose_px: item["當盤成交價"] + item["漲跌"],
+    //         hcrate: item["Quote change"],
+    //         rate: item["漲跌"],
+    //         name: item["股票名稱"],
+    //         code:item['股票代號'],
+    //         stock_type:'tw'
+    //       };
+    //       result.push(newItem);
+    //     });
+    //     this.list = [...result];
+    //   }
+    // },
     async loadMore() {
       if (this.list.length < 10) {
         return;
@@ -235,7 +237,7 @@ export default {
   }
 
   .li-base {
-    width: 22%;
+    width: 33%;
     text-align: center;
 
     &.no-bold {

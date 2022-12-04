@@ -10,36 +10,41 @@
         <router-link to="/list" slot="left"></router-link>
         <mt-button slot="left" icon="search" @click="toSearch"></mt-button>
     </mt-header> -->
-    <mt-search
+    <!-- <mt-search
         style="height:auto;"
         fixed
         @click.enter.native="toSearch"
-        placeholder="Stock code can be entered"
+        placeholder="可輸入股票代碼"
       >
-      </mt-search>
+      </mt-search> -->
+   
+<!-- <mt-navbar v-model="selected" style="margin-top:50px">
+  <mt-tab-item id="1">option A</mt-tab-item>
+  <mt-tab-item id="2">option B</mt-tab-item>
+  <mt-tab-item id="3">option C</mt-tab-item>
+</mt-navbar> -->
+   
+
+
     <div class="list-table-title">
        <ul class="table-list">
         <li class="title">
           <div>
             <ul class="clearfix">
-              <li class="li-title">Stock</li>
-              <li class="li-base" @click="soltPrice()">Latest price<img :src="sortIcon" alt="" /></li>
-              <li class="li-base"  @click="soltAmplitude()">Quote change<img :src="sortIcon" alt="" /></li>
+              <li class="li-title">Stock Name</li>
+              <li class="li-base" @click="soltPrice()">Latest price</li>
+              <li class="li-base"  @click="soltAmplitude()">chg %</li>
             </ul>
           </div>
         </li>
       </ul>
     </div>
-
-    <div class="list-table-body">
-       
-      <!--  infinite-scroll-disabled="loading"  -->
+    <div class="list-table-body" style="margin-top: 10px;">
       <ul
         class="table-list table-list-body"
-        v-infinite-scroll="loadMore"
         infinite-scroll-distance="10"
       >
-        <li class="list-body" v-for="item in list" :key="item.key">
+        <li class="list-body" v-for="item in dataList" :key="item.key">
           <div>
             <ul
               class="clearfix green"
@@ -56,7 +61,7 @@
                 <p class="name">
                   <img
                     @click.stop="toDeleteMy(item)"
-                    v-if="item.isOption == '1'"
+                    v-if="item.isOption"
                     :src="
                       require(`../../../static/img/list/${
                         $state.theme === 'red' ? 'red-' : ''
@@ -74,20 +79,26 @@
                     "
                     alt=""
                   />
-                  {{ item.name }}
+                 <span style="font-size: 0.25rem;text-overflow: ellipsis;overflow: hidden; white-space:nowrap;"> {{ item.stockName }}</span>
                 </p>
                 <p class="code">
-                  <span class="code-wra">{{ item.code }}</span>
+                  <span class="code-wra">{{ item.stockCode }}</span>
+                   <i
+                    class="iconfont shen-mark hushen-mark"
+                  >
+                      US
+                  </i>
+                 <!-- <i v-else class="iconfont kechuang-mark">科創</i> -->
                 </p>
               </li>
               <li class="li-base">
                 <span>{{
-                  item.nowPrice ? Number(item.nowPrice).toFixed(2) : "-"
+                  item.latestPrice ? Number(item.latestPrice).toFixed(2) : "-"
                 }}</span>
               </li>
               <li class="li-base">
-                <span v-if="item.nowPrice == 0">-</span>
-                <span v-else> {{ item.hcrate ? item.hcrate : "0" }}%</span>
+                <span v-if="item.chgRate == 0">-</span>
+                <span v-else> {{ item.chgRate ? item.chgRate : "0" }}%</span>
               </li>
               <!-- <li class="li-base no-bold">
                 <span v-if="item.nowPrice == 0">-</span>
@@ -98,14 +109,16 @@
           </div>
         </li>
       </ul>
+   
       <div v-show="loading" class="load-all text-center">
         <mt-spinner type="fading-circle"></mt-spinner>
         Loading...
       </div>
-      <div v-show="!loading && list.length > 0" class="load-all text-center">
-        all loaded
-      </div>
+      <!-- <div v-show="!loading && list.length > 0" class="load-all text-center">
+        已全部加載
+      </div> -->
     </div>
+  
     <foot></foot>
   </div>
 </template>
@@ -114,6 +127,10 @@
 import foot from "../../components/foot/foot";
 import { Toast } from "mint-ui";
 import * as api from "@/axios/api";
+// import * as htmlparser2 from "htmlparser2";
+// var cheerio = require('/node_modules/cheerio/lib/cheerio');
+// const cheerio = require('cheerio');
+
 
 export default {
   components: {
@@ -131,165 +148,88 @@ export default {
       pageNum: 1,
       pageSize: 15,
       currentNum: 15,
-      list: [],
+      // list: [],
       timer: "",
       market: [],
       changeTextClass: {},
       total: 0,
       sortIcon: require("../../../static/img/list/sort-icon.png"),
       sort:{
-      }
+      },
+      dataList:[]
     };
   },
   watch: {
-    selectedNumber(val) {
-      if (val === "2"|| val ==='5') {
-        let opt={pageNum:1}
-        this.getStock(opt);
-        this.timer = setInterval(this.refreshList, 5000);
-      } else {
-        clearInterval(this.timer);
-      }
-    }
+    // selectedNumber(val) {
+    //   if (val === "2" ) {
+    //     // let opt={pageNum:1}
+    //     this.getStock('TSE');
+    //     // this.timer = setInterval(this.refreshList, 5000);
+    //   } else  if(val =='5'){
+    //     this.getStock('OTC');
+    //   }
+    //   else {
+    //     clearInterval(this.timer);
+    //   }
+    // }
   },
   computed: {
 
   },
-  created() {},
+  created() {
+    this.getStock();
+  },
   beforeDestroy() {
     clearInterval(this.timer);
   },
   mounted() {
-    this.getStock({stockPlate:'上市'});
+    // this.getStock('TSE');
   },
   methods: {
-    forceUpdate(){
-      this.list = []
-      this.$forceUpdate()
-    },
+    // forceUpdate(){
+    //   this.list = []
+    //   this.$forceUpdate()
+    // },
     async addOptions(val) {
-      let data = await api.addOption({ code: val.code });
+      let data = await api.addOption({ code: val.stockCode });
       if (data.status === 0) {
-        val.isOption='1'
-        Toast("Add optional successfully");
+        val.isOption=true
+        Toast(data.msg);
       } else {
         Toast(data.msg);
       }
     },
     async toDeleteMy(val) {
-      
-      let data = await api.delOption({ code: val.code });
+      let data = await api.delOption({ code: val.stockCode });
       if (data.status === 0) {
-        val.isOption='0'
-        Toast("Deleting self-selected stocks succeeded");
-        this.refreshList();
+        val.isOption=false
+        Toast(data.msg);
+        // this.refreshList();
       } else {
         Toast(data.msg);
       }
     },
-    // async getMarket() {
-    //   // 獲取大盤指數
-    //   let result = await api.getIndexMarket();
-    //   if (result.status === 0) {
-    //     this.market = result.data;
-    //   } else {
-    //     Toast(result.msg);
-    //   }
-    // },
-    async getStock(params={}) {
-      this.loading=true
-      let opt = {
-        stockPlate: "",
-        pageNum: this.pageNum,
-        pageSize: 15,
-        ...params
-      };
-      if(this.selectedNumber=='2'){
-        opt.stockPlate='上市'
+   
+    async getStock() {
+      this.dataList = []
+       let allOptionResult = await  api.allOption();
+       let allOption = allOptionResult.data
+
+      let res =   await api.getRanking(this.selectedNumber);
+      for (let index = 0; index < res.data.length; index++) {
+          let item = res.data[index]
+          item.code = res.data.stockCode
+          item.isOption = allOption.some(option=>{
+            return option.stockCode == item.stockCode
+          })
+          this.dataList.push(item)
       }
-      if(this.selectedNumber=='5'){
-        opt.stockPlate='上櫃'
-      }
-      let data = await api.getTwStockPageList(opt);
-      if (data.status === 0) {
-        this.total = data.data.total;
-        let codes = data.data.list.map(item => item.code).join(',');
-        if(!codes){
-          return 
-        }
-        const res = await api.getTwStockData(codes);
-        res.data.forEach((item, index) => {
-          let newItem = {
-            ...data.data.list[index],
-            nowPrice: item["當盤成交價"],
-            preclose_px: item["當盤成交價"] - item["漲跌"],
-            hcrate: item["Quote change"],
-            name: item["股票名稱"],
-            code:item['股票代號'],
-            stock_type:'tw'
-          };
-          this.list.push(newItem);
-        });
-        this.loading = false;
-      } else {
-        Toast(data.msg);
-      }
+     
+   
     },
     async refreshList() {
-      if (this.loading) {
-        return;
-      }
-      let opt = {
-        stockPlate: "",
-        pageNum: 1,
-        pageSize: this.currentNum
-      };
-      if(this.selectedNumber=='2'){
-        opt.stockPlate='上市'
-      }
-      if(this.selectedNumber=='5'){
-        opt.stockPlate='上櫃'
-      }
-      let data = await api.getTwStockPageList(opt);
-      let result=[]
-      if (data.status === 0) {
-        this.total = data.data.total;
-        let codes = data.data.list.map(item => item.code).join(',');
-        if(!codes){
-          return 
-        }
-        const res = await api.getTwStockData(codes);
-        res.data.forEach((item, index) => {
-          let newItem = {
-            ...data.data.list[index],
-            nowPrice: item["當盤成交價"],
-            preclose_px: item["當盤成交價"] + item["漲跌"],
-            hcrate: item["Quote change"],
-            name: item["股票名稱"],
-            code:item['股票代號'],
-            stock_type:'tw',
-          };
-          result.push(newItem);
-        });
-      } 
-      this.list=result
-      // 刷新大盤指數
-      // let result = await api.getIndexMarket()
-      // this.changeTextClass = {}
-      // if(result.status == 0){
-      //     // this.market = result.data.market
-      //     result.data.forEach((element,i) => {
-      //     this.changeTextClass[i] = ''
-      //     if(element.currentPoint != this.market[i].currentPoint){
-      //         this.changeTextClass[i] = true // 設定對應的動畫過濾
-      //         this.market[i].currentPoint = element.currentPoint
-      //         this.market[i].floatPoint = element.floatPoint
-      //         this.market[i].floatRate = element.floatRate
-      //     }
-      //     });
-      // }else{
-      //     Toast(result.msg)
-      // }
+      this.getStock();
+     
     },
     async loadMore() {
       if (this.list.length < 10 || this.pageNum * this.pageSize >= this.total) {
@@ -299,15 +239,16 @@ export default {
       // 加載下一頁
       this.pageNum++;
       this.currentNum = this.pageNum * this.pageSize;
-      await this.getStock();
+      // await this.getStock();
       this.loading = false;
     },
     toDetail(val) {
+      debugger
       // 詳情
       this.$router.push({
         path: "/listdetail",
         query: {
-          code: val.code,
+          code: val.stockCode,
           stock_type: val.stock_type
           // name: val.name
         }
@@ -332,7 +273,9 @@ export default {
   // padding-top:0.62rem;
   // margin-top: 40px;
 }
-
+.list-content-wrapper{
+  // overflow-y: auto;
+}
 .table-list {
   .li-title {
     width: 34%;
@@ -416,13 +359,14 @@ export default {
 }
 .list-content-wrapper {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   position: relative;
   .list-table-title {
     width: 100%;
-    position: absolute;
-    left: 0;
-    top: 44px;
+    // position: absolute;
+    // left: 0;
+    // top: 50px;
+    margin-top: 10px;
     .title {
       position: relative;
       top: 0;
@@ -453,10 +397,10 @@ export default {
   }
   .list-table-body {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     box-sizing: border-box;
-    overflow-y: auto;
-    padding-top: 44px;
+    // overflow-y: auto;
+ 
     ul {
       .li-base {
         width: 30%;
@@ -489,7 +433,7 @@ export default {
           background: none;
           margin-left: 0.1rem;
           border: 1px solid rgba(20, 142, 180, 1);
-          width: 0.28rem;
+          width: 0.48rem;
           height: 0.28rem;
           display: flex;
           justify-content: center;

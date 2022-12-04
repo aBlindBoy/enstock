@@ -22,4 +22,5 @@ public interface StockOptionMapper {
   List findMyOptionByKeywords(@Param("uid") Integer paramInteger, @Param("keyWords") String paramString);
   
   StockOption isOption(@Param("uid") Integer paramInteger, @Param("code") String paramString);
+  List<StockOption> allOption(Integer userId);
 }

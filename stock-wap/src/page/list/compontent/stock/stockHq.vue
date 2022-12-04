@@ -3,17 +3,16 @@
     :class="`hqWrap ${$state.theme === 'red' ? 'red-theme' : 'black-theme'}`"
   >
     <!--页面头部-->
-    <div class="headTitle" v-if="false">
+    <div class="headTitle" >
       <div class="name-box">
         <div class="nameWrap">
           <span class="stockName">{{ stockDetail.name }}</span
-          ><span class="flagBox rFlag" v-show="StockData.IsMargin">melt</span
-          ><span class="flagBox tFlag" v-show="StockData.IsSHHK">Pass</span>
+          >
         </div>
-        <div class="exchangeInfo">
+        <!-- <div class="exchangeInfo">
           <span class="date">{{ stockDetail.date }}</span
           ><span class="time">{{ stockDetail.time }}</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <!--价格部分-->
@@ -21,13 +20,14 @@
       <div class="overall-box">
         <div class="left">
           <div class="overall-item">
-            <strong :class="stockDetail.color">{{ stockDetail.price }}</strong>
-            <span
+            <span style="font-size: 0.30rem;">Last</span>
+            <strong :class="stockDetail.color"> {{ stockDetail.price }}</strong>
+            <!-- <span
               style="margin-left: 0.1rem;margin-right: 0.1rem;"
               :class="stockDetail.color"
-              >{{ stockDetail.hcrate }}</span
+              ></span
             >
-            <span :class="stockDetail.color">{{ stockDetail.rate }}</span>
+            <span :class="stockDetail.color">Chg {{ stockDetail.rate }} </span> -->
           </div>
           <div class="overall-item">
             <ul>
@@ -35,10 +35,10 @@
                 <h4>volume</h4>
                 <span>{{ stockDetail.volumn }}</span>
               </li>
-              <li>
+              <!-- <li>
                 <h4>turnover</h4>
                 <span>{{ stockDetail.amount }}</span>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
@@ -46,23 +46,27 @@
           <div class="overall-item">
             <ul>
               <li>
-                <h4>received yesterday</h4>
-                <span>{{ stockDetail.yes }}</span>
+                <h4>Chg</h4>
+                <span>
+                  <span v-if="(stockDetail.hcrate > 0)">+</span>
+                  {{ stockDetail.rate }}</span>
               </li>
               <li>
-                <h4>open today</h4>
-                <span>{{ stockDetail.open }}</span>
+                <h4>Chg %</h4>
+                <span >
+                  <span v-if="(stockDetail.hcrate > 0)">+</span>
+                  {{ stockDetail.hcrate }}%</span>
               </li>
             </ul>
           </div>
           <div class="overall-item">
             <ul>
               <li>
-                <h4>Highest</h4>
+                <h4>High</h4>
                 <span>{{ stockDetail.high }}</span>
               </li>
               <li>
-                <h4>lowest</h4>
+                <h4>Low</h4>
                 <span>{{ stockDetail.low }}</span>
               </li>
             </ul>
@@ -584,6 +588,7 @@ DefaultData.GetStockData = function() //数据默认显示值
 DefaultData.GetMinuteOption = function(symbol) {
   let data = {
     Type: "分钟走势图", //走势图
+    Language:'EN',
     Symbol: symbol,
     IsAutoUpate: true, //是自动更新数据
 
@@ -623,7 +628,7 @@ DefaultData.GetMinuteOption = function(symbol) {
 DefaultData.GetFiveDayMinuteOption = function(symbol) {
   var option = {
     Type: "历史K线图", //创建图形类型
-
+    Language:'EN',
     //窗口指标
     Windows: [
       { Index: "MA", Modify: true, Modify: true, Change: true },
@@ -681,12 +686,12 @@ DefaultData.GetFiveDayMinuteOption = function(symbol) {
 
 DefaultData.GetKlineOption = function(symbol) {
   let data = {
-    Type: "历史K线图",
+    Type: "k line",
     Windows: [
       { Index: "均线", Modify: false, Change: false },
       { Index: "VOL", Modify: false, Change: false }
     ], //窗口指标
-
+    Language:'EN',
     Symbol: symbol,
     IsAutoUpate: true, //是自动更新数据
 
@@ -880,7 +885,7 @@ export default {
 
       PeriodObj: {
         //周期数据
-        TabTextAry: ['實時', '1分','5分', '日K', '週K', '月K'],
+        TabTextAry: ['Real', '1m','5m', '1d', '1w', '1M'],
         TabTextIndex: 0,
         preTextIndex: 0
       },
@@ -938,11 +943,14 @@ export default {
     this.JSStock = JSCommonStock.JSStockInit();
     //this.InitalStock()
     this.getStockDeatil(this.$parent.detail.code);
+
     this.JSStock.RequestData();
 
     this.Minute.Option = DefaultData.GetMinuteOption(this.Symbol);
     this.FiveMinute.Option = DefaultData.GetFiveDayMinuteOption(this.Symbol);
     this.Kline.Option = DefaultData.GetKlineOption(this.Symbol);
+    debugger
+    console.log(this.Kline.Option);
   },
   beforeDestroy() {
     // clearInterval(this.timer)
@@ -997,21 +1005,21 @@ export default {
 
   methods: {
     async getStockDeatil(code) {
-      const res = await api.getTwStockData(code);
-      let stock = res.data[0];
-      let stockDetail = {};
-      stockDetail.name = stock["股票名稱"];
-      stockDetail.date = stock["最近交易日期"];
-      stockDetail.time = stock["最近成交時刻"];
-      stockDetail.price = stock["當盤成交價"];
-      stockDetail.rate = stock["漲跌"];
-      stockDetail.hcrate = stock["Quote change"];
-      stockDetail.high = stock["最高價"];
-      stockDetail.low = stock["最低價"];
-      stockDetail.volumn = stock["累積成交量"];
-      stockDetail.amount = stock["成交金額"];
-      stockDetail.yes = stock["參考價"];
-      stockDetail.open = stock["開盤價"];
+      let res1 = await api.getUsStockData(code)
+      let stock = res1.data[0];
+      let stockDetail ={}
+      stockDetail.name = stock["200024"];//股票名稱
+      stockDetail.date = stock["200007"];//最近交易日期
+      // stockDetail.time = stock[""];//最近成交時刻
+      stockDetail.price = stock["6"];//最新價格
+      stockDetail.rate = stock["11"];//漲跌
+      stockDetail.hcrate = stock["56"];//漲跌幅
+      stockDetail.high = stock["12"];//最高價
+      stockDetail.low = stock["13"];//最低價
+      stockDetail.volumn = stock["800001"];//累積成交量
+      stockDetail.amount = stock[""];//成交金額
+      stockDetail.yes = stock["21"];//昨收
+      stockDetail.open = stock["19"];//開盤價
       if (stockDetail.rate > 0) {
         stockDetail.color = "upColor";
       }
@@ -1106,69 +1114,28 @@ export default {
       this.loading = true;
       //let data = await api.getSingleStock(opts);
 
-      let [res1, res2] = await Promise.all([
-        api.getTwStockData(opts.code),
-        api.getTwStockExchange(opts.code)
-      ]);
-      let data = {};
-      let data1 = res1.data[0];
-      let data2 = res2.data[0]["五檔"];
-      data.name = data1["股票名稱"];
-      data.code = opts.code;
-      data.spell = "";
-      data.gid = opts.code;
-      data.nowPrice = data1["當盤成交價"];
-      data.hcrate = data1["Quote change"];
-      data.today_max = data1["最高價"];
-      data.today_min = data1["最低價"];
-      data.business_balance = data1["成交金額"];
-      data.business_amount = data1["當盤成交量"];
-      data.preclose_px =
-        parseFloat(data1["開盤價"]) + parseFloat(data1["漲跌"]);
-      data.open_px = data1["開盤價"];
-      data.buy1 = data2["買價1"].substring(1).replace(/\s+/g, "");
-      data.buy2 = data2["買價2"].substring(1).replace(/\s+/g, "");
-      data.buy3 = data2["買價3"].substring(1).replace(/\s+/g, "");
-      data.buy4 = data2["買價4"].substring(1).replace(/\s+/g, "");
-      data.buy5 = data2["買價5"].substring(1).replace(/\s+/g, "");
-      data.sell1 = data2["Selling price1"].substring(1).replace(/\s+/g, "");
-      data.sell2 = data2["Selling price2"].substring(1).replace(/\s+/g, "");
-      data.sell3 = data2["Selling price3"].substring(1).replace(/\s+/g, "");
-      data.sell4 = data2["Selling price4"].substring(1).replace(/\s+/g, "");
-      data.sell5 = data2["Selling price5"].substring(1).replace(/\s+/g, "");
-      data.buy1_num = data2["買量1"];
-      data.buy2_num = data2["買量2"];
-      data.buy3_num = data2["買量3"];
-      data.buy4_num = data2["買量4"];
-      data.buy5_num = data2["買量5"];
-      data.sell1_num = data2["賣量1"];
-      data.sell2_num = data2["賣量2"];
-      data.sell3_num = data2["賣量3"];
-      data.sell4_num = data2["賣量4"];
-      data.sell5_num = data2["賣量5"];
-      // 卖
-      this.list[0].price = data.sell5;
-      this.list[1].price = data.sell4;
-      this.list[2].price = data.sell3;
-      this.list[3].price = data.sell2;
-      this.list[4].price = data.sell1;
-      this.list[0].volumes = data.sell5_num;
-      this.list[1].volumes = data.sell4_num;
-      this.list[2].volumes = data.sell3_num;
-      this.list[3].volumes = data.sell2_num;
-      this.list[4].volumes = data.sell1_num;
-      // 买
-      this.listbuy[0].price = data.buy1;
-      this.listbuy[1].price = data.buy2;
-      this.listbuy[2].price = data.buy3;
-      this.listbuy[3].price = data.buy4;
-      this.listbuy[4].price = data.buy5;
-      this.listbuy[0].volumes = data.buy1_num;
-      this.listbuy[1].volumes = data.buy2_num;
-      this.listbuy[2].volumes = data.buy3_num;
-      this.listbuy[3].volumes = data.buy4_num;
-      this.listbuy[4].volumes = data.buy5_num;
-      this.detail = data;
+      let res1 = await api.getUsStockData(opts.code)
+      let stock = res1.data[0];
+      let stockDetail ={}
+      stockDetail.name = stock["200024"];//股票名稱
+      stockDetail.date = stock["200007"];//最近交易日期
+      // stockDetail.time = stock[""];//最近成交時刻
+      stockDetail.price = stock["6"];//最新價格
+      stockDetail.rate = stock["11"];//漲跌
+      stockDetail.hcrate = stock["56"];//漲跌幅
+      stockDetail.high = stock["12"];//最高價
+      stockDetail.low = stock["13"];//最低價
+      stockDetail.volumn = stock["800001"];//累積成交量
+      stockDetail.amount = stock[""];//成交金額
+      stockDetail.yes = stock["21"];//昨收
+      stockDetail.open = stock["19"];//開盤價
+      if (stockDetail.rate > 0) {
+        stockDetail.color = "upColor";
+      }
+      if (stockDetail.rate < 0) {
+        stockDetail.color = "lowColor";
+      }
+      this.stockDetail = stockDetail;
     },
     async addOptions() {
       //   if(!this.$store.state.userInfo.phone){
@@ -1179,7 +1146,7 @@ export default {
       //   }
       let data = await api.addOption({ code: this.$route.query.code });
       if (data.status === 0) {
-        Toast("添加自选成功");
+        Toast(data.msg);
         this.isOptionOpt = true;
       } else {
         Toast(data.msg);
@@ -1188,7 +1155,7 @@ export default {
     async deteleOptions() {
       let data = await api.delOption({ code: this.$route.query.code });
       if (data.status === 0) {
-        Toast("删除自选股成功");
+        Toast(data.msg);
         this.isOptionOpt = false;
       } else {
         Toast(data.msg);
@@ -1928,7 +1895,7 @@ export default {
     }
   }
   .left {
-    width: 55%;
+    width: 40%;
     border-right: 1px solid #242427;
     ul {
       li {
@@ -1937,7 +1904,7 @@ export default {
     }
   }
   .right {
-    width: 45%;
+    width: 60%;
   }
 }
 .clear:after {
@@ -1998,7 +1965,7 @@ export default {
 
 .headTitle {
   display: flex;
-  height: 60px;
+  height: 20px;
   box-sizing: border-box;
   padding-top: 4px;
   padding-bottom: 4px;

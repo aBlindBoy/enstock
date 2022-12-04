@@ -1,26 +1,8 @@
-<template>
+<!-- <template>
   <div class="wrapper">
-    <!-- <div class="header">
-      <mt-header fixed title="查詢持仓單">
-        <router-link to="/orderlist" slot="left">
-          <mt-button icon="back"></mt-button>
-        </router-link> -->
-        <!-- <mt-button icon="more" slot="right"></mt-button> -->
-      <!-- </mt-header>
-    </div> -->
-    <!-- <form target="frameFile" v-on:submit.prevent='formSubmit'>
-      <mt-button slot="right" class="search-btn-list" @click="getOrderList" icon="search">搜索</mt-button> -->
-    <!-- </form> --> 
+  
     <div class="search">
-      <!-- <mt-search
-        fixed
-        show
-        v-model="stockCode"
-        @keyup.enter.native="getOrderList"
-        placeholder="可輸入股票簡拼查詢持仓"
-      >
-        
-      </mt-search> -->
+    
       <div class="search-input">
         <input type="text" placeholder="You can enter the stock code to query"
          v-model="stockCode"
@@ -44,33 +26,21 @@
                 <span @click="toDetail(item.stockCode)" class="main">{{item.stockName}}</span>
                 <span class="secondary">({{item.stockCode}})</span>
                 <span :class="item.orderDirection=='Bullish'?'type type-up':'type type-down'">{{item.orderDirection=='Bullish'?'Bullish':'Bearish'}}</span>
-                <!-- <span v-if="item.stockPlate=='科創'" :class="item.stockPlate=='科創'?'type':''">科創</span> -->
                 <span class="direction pull-right big-font">
                   latest price:
                         <b v-if="item.now_price == 0">-</b>
                         <b v-else
                            :class="item.now_price-item.buyOrderPrice<0?'space green':item.now_price-item.buyOrderPrice==0?'space':'space red'">{{item.now_price}}</b>
                     </span>
-                <!-- <span class="red direction pull-right">{{item.orderDirection}}<i class="iconfont icon-up"></i></span> -->
-                <!-- <span class="secondary ">123456789</span> -->
               </div>
               <div class="order-info">
-                <!-- <p class="font"><span class="col-xs-4 text-center pull-right red">審核中</span></p> -->
 
                 <p class="clearfix">
-                  <!-- <span class="col-xs-4">方嚮:<b class="red">Bullish</b></span> -->
                   <span class="col-xs-4">Buying price:<b class="space">{{item.buyOrderPrice}}</b></span>
                   <span class="col-xs-4 text-center">Quantity:<b class="space">{{item.orderNum}}</b></span>
-                  <!-- <span class="col-xs-4 text-right">杠桿:<b class="space">{{item.orderLever}}</b>倍</span> -->
                   <span class="col-xs-4 text-right">market value:<b class="space">{{item.orderTotalPrice}}</b></span>
                 </p>
-                <!-- <p class="clearfix">
-                    <span class="col-xs-4">方嚮:
-                        <b v-if="item.orderDirection=='Bullish'">{{item.orderDirection}}<i style="color:red" class="iconfont icon-up"></i></b>
-                        <b v-if="item.orderDirection=='Bearish'">{{item.orderDirection}}<i style="color:green" class="iconfont icon-down"></i></b>
-                    </span>
-                    <span class="col-xs-4 text-right">Days to stay:<b class="space">{{item.orderStayDays}}</b></span>
-                </p> -->
+             
                 <p class="clearfix">
                   <span class="col-xs-4">handling fee:<b class="space">{{item.orderFee}}</b></span>
                   <span class="col-xs-4 text-center">Stamp duty:<b class="space">{{item.orderSpread}}</b></span>
@@ -88,12 +58,7 @@
                                :class="item.allProfitAndLose<0?'space green':item.allProfitAndLose==0?'space':'space red'">{{item.allProfitAndLose}}</b>
                         </span>
                 </p>
-                <!-- <p class="clearfix">
-                    <span class="secondary col-xs-12 text-right">Buy time:
-                        <b v-if="item.buyOrderTime">{{new Date(item.buyOrderTime) | timeFormat}}</b>
-                        <b v-else></b>
-                    </span>
-                </p> -->
+               
               </div>
               <div class="order-foot clearfix">
                 <div style="text-align: left;color: #666;padding: 0;" class="col-xs-6">
@@ -336,4 +301,4 @@ export default {
   .order-info-box-wrap{
     padding-top: 1rem;
   }
-</style>
+</style> -->

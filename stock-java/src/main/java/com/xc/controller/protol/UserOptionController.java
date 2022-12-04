@@ -25,5 +25,6 @@ public class UserOptionController {
     @ResponseBody
     public ServerResponse list(HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "keyWords", required = false) String keyWords) {
         return this.iStockOptionService.findMyStockOptions(keyWords, request, pageNum, pageSize);
+//        return null;
     }
 }

@@ -52,8 +52,8 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     StockMapper stockMapper;
 
-    @Autowired
-    TwStockMapper twStockMapper;
+//    @Autowired
+//    TwStockMapper twStockMapper;
 
     @Autowired
     IUserPositionService iUserPositionService;
@@ -210,43 +210,41 @@ public class UserServiceImpl implements IUserService {
 
     public ServerResponse addOption(String code, HttpServletRequest request) {
         User user = getCurrentUser(request);
-        String stockcode = code;
-        if(code.contains("hf")){
-            stockcode = code.split("_")[1];
-        }
-        stockcode = stockcode.replace("sh","").replace("sz","");
-        StockOption dboption = this.stockOptionMapper.findMyOptionIsExistByCode(user.getId(), stockcode);
+//        String stockcode = code;
+//        if(code.contains("hf")){
+//            stockcode = code.split("_")[1];
+//        }
+//        stockcode = stockcode.replace("sh","").replace("sz","");
+        StockOption dboption = this.stockOptionMapper.findMyOptionIsExistByCode(user.getId(), code);
 
         if (dboption != null) {
             return ServerResponse.createByErrorMsg("Add failed, optional stock already exists");
         }
-
-
-        Stock stock = new Stock();
-        TwStock twStock =new TwStock();
+//        Stock stock = new Stock();
+//        new TwStock();
         //期货逻辑
-        if(code.contains("hf")){
-            StockFutures stockFutures = this.stockFuturesMapper.selectFuturesByCode(stockcode);
-            if(stockFutures != null){
-                stock.setId(stockFutures.getId());
-                stock.setStockCode(stockFutures.getFuturesCode());
-                stock.setStockGid(stockFutures.getFuturesGid());
-                stock.setStockName(stockFutures.getFuturesName());
-                stock.setIsLock(0);
-            }
-        } else if(code.contains("sh") || code.contains("sz")){
-            StockIndex stockIndex = this.stockIndexMapper.selectIndexByCode(stockcode);
-            if(stockIndex != null){
-                stock.setId(stockIndex.getId());
-                stock.setStockCode(stockIndex.getIndexCode());
-                stock.setStockGid(stockIndex.getIndexGid());
-                stock.setStockName(stockIndex.getIndexName());
-                stock.setIsLock(0);
-            }
-        } else {
-            twStock = this.twStockMapper.findStockByCode(code);
-        }
-        if (twStock == null) {
+//        if(code.contains("hf")){
+//            StockFutures stockFutures = this.stockFuturesMapper.selectFuturesByCode(code);
+//            if(stockFutures != null){
+//                stock.setId(stockFutures.getId());
+//                stock.setStockCode(stockFutures.getFuturesCode());
+//                stock.setStockGid(stockFutures.getFuturesGid());
+//                stock.setStockName(stockFutures.getFuturesName());
+//                stock.setIsLock(0);
+//            }
+//        } else if(code.contains("sh") || code.contains("sz")){
+//            StockIndex stockIndex = this.stockIndexMapper.selectIndexByCode(code);
+//            if(stockIndex != null){
+//                stock.setId(stockIndex.getId());
+//                stock.setStockCode(stockIndex.getIndexCode());
+//                stock.setStockGid(stockIndex.getIndexGid());
+//                stock.setStockName(stockIndex.getIndexName());
+//                stock.setIsLock(0);
+//            }
+//        } else {
+        Stock stock = this.stockMapper.findStockByCode(code);
+//        }
+        if (stock == null) {
             return ServerResponse.createByErrorMsg("Add failed, stock does not exist");
         }
         StockOption stockOption = new StockOption();
@@ -261,11 +259,11 @@ public class UserServiceImpl implements IUserService {
 
         //添加台湾自選股
         stockOption.setUserId(user.getId());
-        stockOption.setStockId(twStock.getId());
+        stockOption.setStockId(stock.getId());
         stockOption.setAddTime(new Date());
 
-        stockOption.setStockCode(twStock.getStockCode());
-        stockOption.setStockName(twStock.getStockName());
+        stockOption.setStockCode(stock.getStockCode());
+        stockOption.setStockName(stock.getStockName());
         //stockOption.setStockGid(stock.getStockGid());
         stockOption.setIsLock(0);
 
@@ -281,12 +279,12 @@ public class UserServiceImpl implements IUserService {
 
     public ServerResponse delOption(String code, HttpServletRequest request) {
         User user = getCurrentUser(request);
-        String stockcode = code;
-        if(code.contains("hf")){
-            stockcode = code.split("_")[1].toString();
-        }
-        stockcode = stockcode.replace("sh","").replace("sz","");
-        StockOption dboption = this.stockOptionMapper.findMyOptionIsExistByCode(user.getId(), stockcode);
+//        String stockcode = code;
+//        if(code.contains("hf")){
+//            stockcode = code.split("_")[1].toString();
+//        }
+//        stockcode = stockcode.replace("sh","").replace("sz","");
+        StockOption dboption = this.stockOptionMapper.findMyOptionIsExistByCode(user.getId(), code);
 
         if (dboption == null) {
             return ServerResponse.createByErrorMsg("Delete failed, optional stock does not exist");
@@ -1652,6 +1650,12 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<User> listByAgentId(Integer agentId) {
         return userMapper.listByAgentId(agentId);
+    }
+
+    @Override
+    public ServerResponse allOption(HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        return ServerResponse.createBySuccess(this.iStockOptionService.allOption(user.getId()));
     }
 
 }

@@ -8,7 +8,6 @@
 
  import javax.servlet.http.HttpServletRequest;
 
- import com.xc.service.ITwStockService;
  import org.slf4j.Logger;
 
  import org.slf4j.LoggerFactory;
@@ -32,8 +31,8 @@
      @Autowired
      IStockService iStockService;
 
-     @Autowired
-     ITwStockService iTwStockService;
+//     @Autowired
+//     ITwStockService iTwStockService;
 
      //查询產品管理 所以股票信息及模糊查询
      @RequestMapping({"list.do"})
@@ -78,23 +77,23 @@
      }
 
      //添加產品管理 股票信息
-     @RequestMapping({"addTwStock.do"})
-     @ResponseBody
-     public ServerResponse addTwStock(@RequestParam(value = "stockName", required = false) String stockName, @RequestParam(value = "stockCode", required = false) String stockCode, @RequestParam(value = "stockType", required = false) String stockType, @RequestParam(value = "stockPlate", required = false) String stockPlate) {
-         return this.iTwStockService.addStock(stockName, stockCode, stockType,stockPlate);
-     }
+//     @RequestMapping({"addTwStock.do"})
+//     @ResponseBody
+//     public ServerResponse addTwStock(@RequestParam(value = "stockName", required = false) String stockName, @RequestParam(value = "stockCode", required = false) String stockCode, @RequestParam(value = "stockType", required = false) String stockType, @RequestParam(value = "stockPlate", required = false) String stockPlate) {
+//         return this.iStockService.addStock(stockName, stockCode, stockType,stockPlate);
+//     }
 
      //修改票信息
-     @RequestMapping({"updateTwStock.do"})
-     @ResponseBody
-     public ServerResponse updateTwStock(TwStock model) {
-         return this.iTwStockService.updateStock(model);
-     }
-
-     //刪除股票
-     @RequestMapping({"delTwStock.do"})
-         public ServerResponse deleteTwStockByPrimaryKey(@RequestParam("code") Integer code) {
-         return this.iTwStockService.deleteByCode(code);
-     }
+//     @RequestMapping({"updateTwStock.do"})
+//     @ResponseBody
+//     public ServerResponse updateTwStock(TwStock model) {
+//         return this.iTwStockService.updateStock(model);
+//     }
+//
+//     //刪除股票
+//     @RequestMapping({"delTwStock.do"})
+//         public ServerResponse deleteTwStockByPrimaryKey(@RequestParam("code") Integer code) {
+//         return this.iTwStockService.deleteByCode(code);
+//     }
 
  }

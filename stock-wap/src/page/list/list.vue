@@ -5,13 +5,27 @@
         </router-link>
         <mt-button slot="right" icon="search" @click="toSearch"></mt-button>
     </mt-header> -->
-    <mt-navbar class="top-navbar" v-model="selected" :style="selected != '2'?'':''" :fixed="selected != '2'?true:false">
+    <mt-search
+        style="height:auto;top: 0;position: absolute;width: 100%;"
+        fixed
+        @click.enter.native="toSearch"
+        placeholder="Name/Code Initials"
+      >
+      </mt-search>
+      <!-- :fixed="selected != '2'?true:false" -->
+    <mt-navbar class="top-navbar" v-model="selected">
       <!-- <mt-tab-item id="0">全部</mt-tab-item> -->
       <!-- <mt-tab-item v-if="this.$store.state.settingForm.indexDisplay" id="1">指數</mt-tab-item> -->
-      <mt-tab-item v-if="this.$store.state.settingForm.stockDisplay" id="2">上市</mt-tab-item>
+      <!--  v-if="this.$store.state.settingForm.stockDisplay" -->
+      <!--  -->
+      <!-- <mt-tab-item id="1" > <div @click="clickTab('1')">Hot Stocks</div> </mt-tab-item> -->
+      <mt-tab-item id="6" > <div @click="clickTab('6')">NYSE</div> </mt-tab-item>
       <!-- <mt-tab-item v-if="this.$store.state.settingForm.kcStockDisplay" id="3">科創</mt-tab-item>
       <mt-tab-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">期貨</mt-tab-item> -->
-      <mt-tab-item v-if="this.$store.state.settingForm.stockDisplay" id="5">上櫃</mt-tab-item>
+      <!--   -->
+      <mt-tab-item  id="7"> <div  @click="clickTab('7')">AMEX</div> </mt-tab-item>
+      <mt-tab-item  id="8"> <div  @click="clickTab('8')">NASDAQ</div> </mt-tab-item>
+
     </mt-navbar>
     <mt-tab-container class="order-list" v-model="selected">
       <!-- <mt-tab-container-item id="0">
@@ -20,8 +34,9 @@
       <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.indexDisplay" id="1">
         <List1 :selectedNumber='selected'/>
       </mt-tab-container-item> -->
-      <mt-tab-container-item   v-if="this.$store.state.settingForm.stockDisplay" :id="['2','5'].includes(selected)?selected:''">
-        <List2 ref="List2" :selectedNumber='selected'/>
+      <!-- v-if="this.$store.state.settingForm.stockDisplay"  -->
+      <mt-tab-container-item   :id="['6','7','8'].includes(selected)?selected:''">
+        <listStock ref="listStock" :selectedNumber='selected'/>
       </mt-tab-container-item>
       <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.kcStockDisplay" id="3">
         <List3 :selectedNumber='selected'/>
@@ -39,7 +54,7 @@ import foot from '@/components/foot/foot'
 // import '@/assets/style/common.less'
 // import List0 from './list-all'
 // import List1 from './list-index'
-import List2 from './list-stock'
+import listStock from './list-stock'
 // import List3 from './list-kechuang'
 // import List4 from './list-futures'
 import * as api from '@/axios/api'
@@ -50,27 +65,29 @@ export default {
     foot,
     // List0,
     // List1,
-    List2,
+    listStock,
     // List3,
     // List4
   },
   props: {},
   data () {
     return {
-      selected: '' // 選中
+      selected: '6' // 選中
     }
   },
   watch: {
-    selected(newVal,oldVal){
-      this.selected = newVal
-      this.$refs.List2.forceUpdate() 
-    }
+    // selected(newVal,oldVal){
+    //   this.selected = newVal
+    //   this.$refs.List2.forceUpdate() 
+    // }
   },
   computed: {},
   created () {
+    console.log(this.selected);
     this.getProductSetting()
     if (!this.$store.state.userInfo.phone) {
       this.getUserInfo()
+      // this.$refs.List2.getStock('TSE');
     }
   },
   mounted () {
@@ -79,12 +96,22 @@ export default {
     }
   },
   methods: {
+    clickTab(newVal){
+      console.log(newVal);
+      this.$refs.listStock.getStock();
+      // if (newVal === "2" ) {
+       
+      // } else if(newVal ==='5'){
+      //   this.$refs.listStock.getStock('OTC');
+      // }
+    },
     toSearch () {
       this.$router.push('/searchlist')
     },
     changeNavOptions (opts) {
       this.selected = opts
       this.$route.query.index = opts
+      console.log( this.selected );
     },
     async getUserInfo () {
       // 獲取用戶信息
@@ -97,22 +124,25 @@ export default {
     },
     async getProductSetting () {
       let data = await api.getProductSetting()
-      if (data.status === 0) {
-        this.$store.state.settingForm = data.data
-        // 1 指數 2 美股 3科創 4 期貨
-        if (this.$store.state.settingForm.indexDisplay) {
-          this.selected = '1'
-        } else if (this.$store.state.settingForm.stockDisplay) {
-          this.selected = '2'
-        } else if (this.$store.state.settingForm.kcStockDisplay) {
-          this.selected = '3'
-        } else {
-          this.selected = '4'
-        }
-      } else {
-        this.$message.error(data.msg)
-      }
-    }
+      // if (data.status === 0) {
+      //   this.$store.state.settingForm = data.data
+      //   // 1 指數 2 台股 3科創 4 期貨
+      //   if (this.$store.state.settingForm.indexDisplay) {
+      //     this.selected = '1'
+      //   } else if (this.$store.state.settingForm.stockDisplay) {
+      //     this.selected = '2'
+      //   } else if (this.$store.state.settingForm.kcStockDisplay) {
+      //     this.selected = '3'
+      //   } else {
+      //     this.selected = '4'
+      //   }
+      // } else {
+      //   this.$message.error(data.msg)
+      // }
+    },
+      toSearch() {
+      this.$router.push("/searchlist");
+    },
   }
 }
 </script>
@@ -191,11 +221,11 @@ export default {
     box-sizing: border-box;
     padding-top: 1rem;
     .top-navbar{
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 70%;
-      margin-left: -35%;
+      // position: absolute;
+      // top: 40;
+      // left: 50%;
+      // width: 70%;
+      // margin-left: -35%;
       background: none;
       box-shadow: none;
       /deep/.mint-tab-item{
@@ -225,10 +255,10 @@ export default {
     }
     .order-list{
       width: 100%;
-      height: 100%;
+      // height: 100%;
       /deep/.mint-tab-container-wrap{
         width: 100%;
-        height: 100%;
+        // height: 100%;
       }
     }
   }

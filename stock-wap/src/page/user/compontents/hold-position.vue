@@ -246,7 +246,7 @@ export default {
         let opt = {
           positionSn: val
         }
-        let data = await api.sellTwStock(opt)
+        let data = await api.sellUsStock(opt)
         if (data.status === 0) {
           Toast(data.msg)
           this.hasChangeSell = true

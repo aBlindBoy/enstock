@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="form-block page-part">
-        <mt-field label="Withdrawal金額" placeholder="Please enter Withdrawal amount" type="number" v-model="number">
+        <mt-field label="Amount" placeholder="Please enter Withdrawal amount" type="number" v-model="number">
           <span @click="changeAllNumber">all</span>
         </mt-field>
         <!-- <mt-field label="到帳金融" placeholder="請輸入Withdrawal金額" type="number" v-model="card"></mt-field> -->

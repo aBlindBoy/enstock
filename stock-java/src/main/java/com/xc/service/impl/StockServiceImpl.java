@@ -1,5 +1,6 @@
 package com.xc.service.impl;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -13,6 +14,7 @@ import com.xc.service.IStockService;
 import com.xc.service.IUserService;
 import com.xc.utils.HttpClientRequest;
 import com.xc.utils.PropertiesUtil;
+import com.xc.utils.stock.UsStockApi;
 import com.xc.utils.stock.pinyin.GetPyByChinese;
 import com.xc.utils.stock.qq.QqStockApi;
 import com.xc.utils.stock.sina.SinaStockApi;
@@ -35,6 +37,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -117,44 +121,54 @@ public class StockServiceImpl implements IStockService {
         PageHelper.startPage(pageNum, pageSize);
         User user = iUserService.getCurrentUser(request);
         List<Stock> stockList = this.stockMapper.findStockListByKeyWords(keyWords, stockPlate, stockType, 0);
-        /*List<StockListVO> stockListVOS = Lists.newArrayList();
-        String queryString = "";
-         for (Stock stock : stockList) {
-            queryString += stock.getStockGid() + ",";
-        }
-        String[] querys = SinaStockApi.getSinaStockList(queryString);
+        List<StockListVO> stockListVOS = Lists.newArrayList();
+//        String queryString = "";
+//         for (Stock stock : stockList) {
+//            queryString += stock.getStockGid() + ",";
+//        }
+//        String[] querys = SinaStockApi.getSinaStockList(queryString);
         List<StockOption> stockOptions=null;
         if(user!=null){
              stockOptions = this.stockOptionMapper.findMyOptionByKeywords(user.getId(), null);
         }
+
+        CompletionService<StockListVO> objectCompletionService = ThreadUtil.newCompletionService();
+
        if (stockList.size() > 0)
             for (int i = 0; i < stockList.size(); i++) {
-                //單條股票的sina api数据
-                String sinaData = querys[i].substring(querys[i].indexOf("\"") + 1, querys[i].lastIndexOf("\""));
-                StockListVO stockListVO = SinaStockApi.assembleStockListVO(sinaData);
-                stockListVO.setCode(stockList.get(i).getStockCode());
-                stockListVO.setSpell(stockList.get(i).getStockSpell());
-                stockListVO.setGid(stockList.get(i).getStockGid());
-                BigDecimal day3Rate = (BigDecimal) selectRateByDaysAndStockCode(stockList.get(i).getStockCode(), 3).getData();
-                stockListVO.setDay3Rate(day3Rate);
-                stockListVO.setStock_plate(stockList.get(i).getStockPlate());
-                stockListVO.setStock_type(stockList.get(i).getStockType());
-                //是否添加自選
-                if (user == null) {
-                    stockListVO.setIsOption("0");
-                } else {
-                    stockListVO.setIsOption("0");
-                    //stockListVO.setIsOption(iStockOptionService.isMyOption(user.getId(), stockList.get(i).getStockCode()));
-                    for (StockOption stockOption : stockOptions) {
-                        if (stockList.get(i).getStockCode().equals(stockOption.getStockCode())) {
-                            stockListVO.setIsOption("1");
-                        }
-                    }
+                StockListVO stockListVO = UsStockApi.getMoomooStock(stockList.get(i).getStockCode());
+                int finalI = i;
+                List<StockOption> finalStockOptions = stockOptions;
+                objectCompletionService.submit(()-> {
+                            //是否添加自選
+                            if (user == null) {
+                                stockListVO.setIsOption("0");
+                            } else {
+                                stockListVO.setIsOption("0");
+                                //stockListVO.setIsOption(iStockOptionService.isMyOption(user.getId(), stockList.get(i).getStockCode()));
+                                for (StockOption stockOption : finalStockOptions) {
+                                    if (stockList.get(finalI).getStockCode().equals(stockOption.getStockCode())) {
+                                        stockListVO.setIsOption("1");
+                                    }
+                                }
+                            }
+                            return  stockListVO;
+                        });
+//                stockListVOS.add(stockListVO);
+            }
+
+            try {
+                for (int i = 0; i < stockList.size(); i++) {
+                    StockListVO vo = objectCompletionService.take().get();
+                    stockListVOS.add(vo);
                 }
-                stockListVOS.add(stockListVO);
-            }*/
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         PageInfo pageInfo = new PageInfo(stockList);
-        pageInfo.setList(stockList);
+        pageInfo.setList(stockListVOS);
         return ServerResponse.createBySuccess(pageInfo);
     }
 

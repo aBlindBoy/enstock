@@ -11,7 +11,7 @@
       >
         <el-table-column prop="name" width="200px" align="left" label="Stock Name">
           <template slot-scope="scope">
-            <span style="padding-right:6px">{{ scope.row.stockName }}</span>
+            <span style="padding-right:6px">{{ scope.row.name }}</span>
          
           </template>
         </el-table-column>
@@ -19,7 +19,7 @@
         <el-table-column prop="stockCode" width="200px" align="left" label="Stock Code">
           <template slot-scope="scope">
             <span class="code">
-              {{ scope.row.stockCode }}
+              {{ scope.row.code }}
             </span>
           </template>
         </el-table-column>
