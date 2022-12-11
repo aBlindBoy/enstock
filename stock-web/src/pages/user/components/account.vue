@@ -2,26 +2,14 @@
   <div class="con-box account">
     <div class="header-top">
       <div class="account-all">
-        <!-- <p class="title">
-          帳戶總資産 <span>( 美股帳戶 <i v-if="$store.state.productSetting.indexDisplay">+ 指數帳戶</i> <i
-          v-if="$store.state.productSetting.futuresDisplay">+ 期貨帳戶</i>)</span>
-        </p>-->
         <div class="pull-right">
-          <el-button class="cz" @click="toRechange()">Recharge</el-button>
-          <el-button class="tx" @click="toWithdraw()">Withdrawal</el-button>
+          <el-button class="cz" @click="toRechange()">{{$t('account.recharge')}}</el-button>
+          <el-button class="tx" @click="toWithdraw()">{{$t('account.withdrawal')}}</el-button>
         </div>
         <div
           id="chart"
           style="width:400px;height:192px;position: relative;"
         ></div>
-        <!-- <p class="number">
-        -->
-        <!-- <span v-if="$store.state.userInfo.accountType === 1">{{(Number($store.state.userInfo.userAmt) + Number($store.state.userInfo.userIndexAmt) + Number($store.state.userInfo.enableFuturesAmt)).toFixed(2)}}</span> -->
-        <!-- <span v-if="$store.state.productSetting.indexDisplay && !$store.state.productSetting.futuresDisplay">{{(Number($store.state.userInfo.userAmt) + Number($store.state.userInfo.userIndexAmt)).toFixed(2)}}</span>
-          <span v-else-if="!$store.state.productSetting.indexDisplay && $store.state.productSetting.futuresDisplay">{{(Number($store.state.userInfo.userAmt) + Number($store.state.userInfo.enableFuturesAmt)).toFixed(2)}}</span>
-          <span v-else-if="!$store.state.productSetting.indexDisplay && !$store.state.productSetting.futuresDisplay">{{(Number($store.state.userInfo.userAmt)).toFixed(2)}}</span>
-          <span v-else>{{(Number($store.state.userInfo.userAmt) + Number($store.state.userInfo.userIndexAmt) + Number($store.state.userInfo.userFuturesAmt)).toFixed(2)}}</span>
-        </p>-->
       </div>
 
       <el-row class="box-account" :gutter="20">
@@ -35,7 +23,7 @@
         <el-collapse v-model="accountActiveNames">
           <div class="count-r">
             <span class="line">
-              （Your US stock account forces the Closing Line to be
+              （{{$t('account.usStockClosingLine')}}
               <span class="num">{{
                 (
                   ($store.state.userInfo.enableAmt +
@@ -52,7 +40,7 @@
                 <el-col :span="6">
                   <div class="box box1">
                     <i class="color3 iconfont icon-yingkuixuanzhong"></i>
-                    <p class="title">US stock funds:</p>
+                    <p class="title">{{$t('account.usStockFunds')}}:</p>
                     <p :class="refresh ? 'number heartBeat' : 'number'">
                       {{
                         $store.state.hide
@@ -65,7 +53,7 @@
                 <el-col :span="5">
                   <div class="box box1">
                     <i class="color3 iconfont icon-yingkuixuanzhong"></i>
-                    <p class="title">New shares freeze Margin:</p>
+                    <p class="title">{{$t('account.newSharesFreeze')}}:</p>
                     <p :class="refresh ? 'number heartBeat' : 'number'">
                       {{ shengoudj.djzj }}
                     </p>
@@ -74,7 +62,7 @@
                 <el-col :span="5">
                   <div class="box box1">
                     <i class="color1 iconfont icon-dongjiezijin"></i>
-                    <p class="title">US stocks freeze Margin:</p>
+                    <p class="title">{{$t('account.usStocksFreeze')}}:</p>
                     <p>
                       <span class="number">{{
                         $store.state.hide
@@ -87,7 +75,7 @@
                 <el-col :span="6">
                   <div class="box box1">
                     <i class="color2 iconfont  icon-yingkuixuanzhong"></i>
-                    <p class="title">U.S. stocks available funds:</p>
+                    <p class="title">{{$t('account.usAvailable')}}:</p>
                     <p class="number">
                       {{
                         $store.state.hide
@@ -100,7 +88,7 @@
                 <el-col :span="6">
                   <div class="box box1">
                     <i class="color4 iconfont icon-yingkuixuanzhong"></i>
-                    <p class="title">Total profit and loss of U.S. stock holdings:</p>
+                    <p class="title">{{$t('account.totalProfitAndLoss')}}:</p>
                     <p :class="refresh ? 'heartBeat' : ''">
                       <span
                         :class="
@@ -122,10 +110,10 @@
               </el-row>
             </el-col>
           </el-collapse-item>
-          <template v-if="$store.state.productSetting.indexDisplay">
+          <!-- <template v-if="$store.state.productSetting.indexDisplay">
             <div class="count-r">
               <span class="line">
-                （Your US stock account forces the Closing Line to be
+                （Your US stock account forces the Closing Line to be 22
                 <span class="num">{{
                   (
                     ($store.state.userInfo.allIndexFreezAmt +
@@ -208,7 +196,7 @@
           <template v-if="$store.state.productSetting.futuresDisplay">
             <div class="count-r">
               <span class="line">
-                （Your futures account forces the Closing Line to be
+                （Your futures account forces the Closing Line to be22
                 <span class="num">{{
                   (
                     $store.state.userInfo.allFuturesFreezAmt +
@@ -291,30 +279,19 @@
                 </el-row>
               </el-col>
             </el-collapse-item>
-          </template>
+          </template> -->
         </el-collapse>
       </el-row>
-      <el-row v-if="false">
-        <el-col :span="12">
-          <div class="box-btn text-center">
-            <el-button type="primary" @click="toRechange()">Recharge</el-button>
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div class="box-btn text-center">
-            <el-button type="success" @click="toWithdraw()">Withdrawal</el-button>
-          </div>
-        </el-col>
-      </el-row>
+    
     </div>
     <div class="info">
       <layout>
         <div class="info_l" slot="left">
           <div class="accicon iconfont icon-zhanghaoanquan"></div>
           <div class="accinfo">
-            <div class="tit">account information</div>
+            <div class="tit">{{$t('account.accountInformation')}}</div>
             <div class="iteminfo">
-              State：
+              {{$t('account.state')}}
               <span class="info">
                 <i
                   v-if="$store.state.userInfo.isActive === 2"
@@ -331,11 +308,11 @@
                 ></i>
               </span>
               <span v-if="$store.state.userInfo.isActive === 1" class="info">
-                <i class="iconfont icon-dengdai"></i> under review
+                <i class="iconfont icon-dengdai"></i> {{$t('account.underReview')}}
               </span>
             </div>
             <div class="iteminfo">
-              cellphone number:{{ $store.state.userInfo.phone }}
+              {{$t('account.cellphoneNumber')}}:{{ $store.state.userInfo.phone }}
             </div>
             <div v-if="$store.state.userInfo.isActive === 0">
               <el-col>
@@ -344,7 +321,7 @@
                   type="primary"
                   plain
                   @click="toAuth"
-                  >Go to real-name authentication</el-button
+                  >{{$t('account.goToRealName')}}</el-button
                 >
               </el-col>
             </div>
@@ -356,10 +333,10 @@
             </div>
             <div v-if="$store.state.userInfo.isActive === 2">
               <div class="iteminfo">
-                actual name:{{ $store.state.userInfo.realName }}
+                {{$t('account.actualName')}}:{{ $store.state.userInfo.realName }}
               </div>
               <div class="iteminfo">
-                identity card:
+                {{$t('account.identityCard')}}:
                 <span
                   class="info"
                   v-if="$store.state.userInfo.isActive === 2"
@@ -370,7 +347,7 @@
             <div v-if="$store.state.userInfo.isActive === 3">
               <el-row>
                 <el-col>
-                  <span class="name">Reason for failure</span>
+                  <span class="name">{{$t('account.reasonForFailure')}}</span>
                   <span class="info">{{ $store.state.userInfo.authMsg }}</span>
                 </el-col>
               </el-row>
@@ -381,7 +358,7 @@
                     type="primary"
                     plain
                     @click="toAuth"
-                    >to re-authenticate</el-button
+                    >{{$t('account.toReauthenticate')}}</el-button
                   >
                 </el-col>
               </el-row>
@@ -398,20 +375,20 @@
                   type="primary"
                   plain
                   @click="toAddCard"
-                  >to add</el-button
+                  >{{$t('account.toAdd')}}</el-button
                 >
               </span>
             </div>
             <div v-if="hasBankNo">
-              <div class="tit">Financial Account Information</div>
+              <div class="tit">{{$t('account.financialAccountInformation')}}</div>
               <div class="iteminfo">
-                Financial name:{{ $store.state.bankInfo.bankName }}
+                {{$t('account.financialName')}}:{{ $store.state.bankInfo.bankName }}
               </div>
               <div class="iteminfo">
-                Branch address:{{ $store.state.bankInfo.bankAddress }}
+                {{$t('account.branchAddress')}}:{{ $store.state.bankInfo.bankAddress }}
               </div>
               <div class="iteminfo">
-                Financial Account Number:{{ $store.state.bankInfo.bankNo }}
+                {{$t('account.financialAccountNumber')}}:{{ $store.state.bankInfo.bankNo }}
               </div>
             </div>
           </div>
@@ -518,7 +495,8 @@ export default {
       var styleName = localStorage.getItem("styleName");
       var color = styleName == "red-bg" ? "#000" : "#fff";
       window.drawLine = this.drawLine;
-      var data = "US stock account: " + this.$store.state.userInfo.userAmt;
+     
+      var data =  this.$t('account.usStockAccount') +"  "+ this.$store.state.userInfo.userAmt;
       var data1 = "Index Account:" + this.$store.state.userInfo.userIndexAmt;
       var data2 = "Futures Account: " + this.$store.state.userInfo.userFuturesAmt;
 
@@ -544,7 +522,8 @@ export default {
           orient: "vertical",
           right: 0,
           top: 50,
-          data: [data, data1, data2],
+          // , data1, data2
+          data: [data],
           textStyle: {
             fontSize: 10,
             color: color

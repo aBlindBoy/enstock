@@ -14,11 +14,11 @@
     </div>
     <div class="login-box">
       <div class="form-box top-box">
-        <!-- <p class="animated fadeInDown">专线直连 机构版交易</p> -->
-        <!-- <p class="prompt animated fadeInUp">为投资者量身定做机构版投资软件</p> -->
+        <p class="animated fadeInDown">{{$t('login.title')}}</p>
+      <p class="prompt animated fadeInUp">{{$t('login.subTitle')}}</p>
       </div>
       <div class="form-box">
-        <h2 style="text-align:center">Login</h2>
+        <h2 style="text-align:center">{{$t('common.login')}}</h2>
         <el-form
           :hide-required-asterisk="true"
           :model="form"
@@ -33,13 +33,14 @@
               type="text"
               class="user-phone"
               v-model="form.phone"
-              placeholder="Please enter your mobile number or email"
+              :placeholder="$t('login.phonePlaceholder')"
             >
               <i slot="prepend" class="iconfont icon-user1" style="font-size:13px"></i>
             </el-input>
           </el-form-item>
           <el-form-item label prop="pwd">
-            <el-input type="password"  class="user-phone" v-model="form.pwd" placeholder="Please enter password">
+            <el-input type="password"  class="user-phone" v-model="form.pwd" 
+             :placeholder="$t('login.passwordPlaceholder')">
               <i slot="prepend" class="iconfont icon-zu" style="font-size: 15px;"></i>
             </el-input>
           </el-form-item>
@@ -50,15 +51,15 @@
             type="primary"
             :loading="islogin"
             @click="checkPhone('ruleForm')"
-          >login immediately</el-button>
+          >{{$t('login.loginImmediately')}}</el-button>
         </div>
         <div class="text-right clearfix">
           <div class="pull-left">
-            <a @click="toForget">forget password?</a>
+            <a @click="toForget">{{$t('login.forgetPassword')}}?</a>
           </div>
           <div class="pull-right">
-            No account yet?
-            <a @click="toRegister">Sign up now</a>
+            {{$t('login.noAccount')}} ?
+            <a @click="toRegister">{{$t('login.signUp')}} </a>
           </div>
         </div>
       </div>
@@ -71,47 +72,26 @@
 
 <script>
 import * as api from "../../axios/api";
-import HomeFooter from "../../components/Footer";
+// import HomeFooter from "../../components/Footer";
 import HomeHeader from "../../components/HeaderOrder";
 import newFooter from '@/components/newFooter'
 import cookies from 'vue-cookies'
 
 export default {
   components: {
-    HomeFooter,
+    // HomeFooter,
     HomeHeader,
     newFooter
   },
   props: {},
   data() {
     let validatePass = (rule, value, callback) => {
-      // if (value === "") {
-      //   callback(new Error("請輸入手機號碼或電子郵箱"));
-      // } else {
-      //   // let myreg = /^[1][3,4,5,7,8][0-9]{9}$/  //手機號碼驗證
-      //   let myreg = /^[0-9]{11}$/; // 手機號碼驗證
-      //   if (!myreg.test(value)) {
-      //     callback(new Error("請輸入正確的手機號碼或電子郵箱"));
-      //   }
-      //   callback();
-      // }
+
       if (value === "") {
         callback(new Error("Please enter your mobile number or email"));
       } 
       callback()
     };
-    // let validatePass2 = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('請輸入密碼'))
-    //   } else {
-    //     let value = psd.replace(/\s*/g, '')
-    //     let myreg = '/^[a-zA-Z0-9!@#$%^&*.]{6,12}$/' // 手機號碼驗證
-    //     if (!myreg.test(value)) {
-    //       callback(new Error('請輸入正確的手機號碼或電子郵箱'))
-    //     }
-    //     callback()
-    //   }
-    // }
     return {
       islogin: false,
       siteInfo: {},
@@ -124,11 +104,11 @@ export default {
           {
             required: true,
             validator: validatePass,
-            message: "Please enter your mobile number or email",
+            message: this.$t('login.phonePlaceholder'),
             trigger: "blur",
           },
         ],
-        pwd: [{ required: true, message: "Please enter password", trigger: "blur" }],
+        pwd: [{ required: true, message:  this.$t('login.passwordPlaceholder'), trigger: "blur" }],
       },
     };
   },
@@ -156,7 +136,7 @@ export default {
         // 如果用户已存在返回 0
         this.submit(val);
       } else {
-        this.$message.success("User has not registered yet, please register first");
+        this.$message.success(this.$t('login.passwordPlaceholder'));
         this.$router.push("/register");
       }
     },
@@ -189,13 +169,19 @@ export default {
       });
     },
     async toTransform() {
+      // let opt = {
+      //   pageNum: 1,
+      //   pageSize: 1,
+      //   stockPlate:'上市'
+      // };
+      // this.loading = true;
+      // let data = await api.getTwStockPageList(opt);
       let opt = {
-        pageNum: 1,
-        pageSize: 1,
-        stockPlate:'上市'
-      };
-      this.loading = true;
-      let data = await api.getTwStockPageList(opt);
+					pageNum: 1,
+					pageSize: 1
+				};
+				this.loading = true;
+				let data = await api.getStock(opt);
       if (data.status === 0) {
         this.$router.push({
           path: "/transaction",

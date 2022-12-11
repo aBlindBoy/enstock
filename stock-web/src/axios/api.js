@@ -549,38 +549,8 @@ export function getTwStockListApi (options) {
 //   return post('/api/tw/stock/getTwStock.do', options)
 // }
 
-// 获取台湾股票实时行情
-export function getTwStockData (stock_ids) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      url: `/twstock/api/v2/real-time-quotes/data?stock_id=${stock_ids}`,
-      type: "GET",
-      success: function(recvData) {
-        resolve(recvData)
-      },
-      error:function(error){
-        reject(error)
-      }
-    });
-  })
-}
 
 
-// 获取台湾股票买卖情况
-export function getTwStockExchange (stock_ids) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      url: `/twstock/api/v2/five-price-stock-data/data?stock_id=${stock_ids}`,
-      type: "GET",
-      success: function(recvData) {
-        resolve(recvData)
-      },
-      error:function(error){
-        reject(error)
-      }
-    });
-  })
-}
 
 // 下单美股
 export function buyTwStock (options) {
@@ -593,27 +563,6 @@ export function sellTwStock (options) {
 }
 
 
-//获取nstock新闻数据
-// export function getTwNews (options) {
-//   let query=''
-//   for(let key in options){
-//     query+=`${key}=${options[key]}&`
-//   }
-//   query=query.substring(0,query.length-1)
-//   return new Promise((resolve, reject) => {
-//     $.ajax({
-//       url: `/twstock/api/USDes-news/?${query}`,
-//       type: "GET",
-//       success: function(recvData) {
-//         resolve(recvData)
-//       },
-//       error:function(error){
-//         reject(error)
-//       }
-//     });
-//   })
-// }
-
 // 查询新闻
 export function queryNewsList () {
   return get(`/api/news/getNewsList.do?pageNum=1&pageSize=15`, {})
@@ -622,18 +571,19 @@ export function queryNewsList () {
 export function getNewDetail(id) {
   return get(`/api/news/getDetail.do?id=${id}`, {})
 }
+// 下单美股
+export function buyUsStock (options) {
+  return post('/user/buyUsStock.do', options)
+}
 
-
-//获取nstock新闻数据
-export function getTwNewsByCategory (options) {
-  let query=''
-  for(let key in options){
-    query+=`${key}=${options[key]}&`
-  }
-  query=query.substring(0,query.length-1)
+//平仓
+export function sellUsStock (options) {
+  return post('/user/sellUsStock.do', options)
+}
+export function getUsOpenClose (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `/twstock/api/stock/get_stock_urlnews?${query}`,
+      url: `https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=USS:${stock_code}:STOCK&resolution=M&quote=1`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)
@@ -645,16 +595,10 @@ export function getTwNewsByCategory (options) {
   })
 }
 
-//获取nstock新闻详情
-export function getTwNewsDetail (options) {
-  let query=''
-  for(let key in options){
-    query+=`${key}=${options[key]}&`
-  }
-  query=query.substring(0,query.length-1)
+export function getUsStockData (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `/twstock/news/article_c?${query}`,
+      url: `https://ws.api.cnyes.com/ws/api/v1/quote/quotes/USS:${stock_code}:STOCK?column=G,F_FORMAT_V2`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)

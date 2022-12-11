@@ -1,5 +1,6 @@
 package com.xc.service.impl;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.github.pagehelper.PageHelper;
 
 import com.github.pagehelper.PageInfo;
@@ -32,7 +33,9 @@ import com.xc.vo.stock.StockOptionListVO;
 
 import com.xc.vo.stock.StockVO;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -68,8 +71,6 @@ public class StockOptionServiceImpl implements IStockOptionService {
         User user = this.iUserService.getCurrentUser(request);
         List<StockOption> stockOptions = this.stockOptionMapper.findMyOptionByKeywords(user.getId(), keyWords);
 
-        List<StockOptionListVO> stockOptionListVOS = Lists.newArrayList();
-        String queryString = "";
 //        for (StockOption option : stockOptions) {
 //            queryString += option.getStockGid() + ",";
 //        }
@@ -86,27 +87,43 @@ public class StockOptionServiceImpl implements IStockOptionService {
         //TODO 代理到dl去获取sina data
 //        String host= PropertiesUtil.getProperty("proxy.host.api");
 //        String[] httpResults = HttpClientRequest.doGet(host+queryString).split(";");
+        CountDownLatch countDownLatch = new CountDownLatch(stockOptions.size());
+        StockOptionListVO [] stockOptionList = new StockOptionListVO[stockOptions.size()];
+
+//        String queryString = "";
 
         for (int i = 0; i < stockOptions.size(); i++) {
-//            StockListVO stockVO=stockOptions.get(i);
-            String result= UsStockApi.getStock(stockOptions.get(i).getStockCode());
-            StockListVO stockVO=UsStockApi.assembleStockListVO(result);
-            StockOptionListVO stockOptionListVO =new StockOptionListVO();
-            stockOptionListVO.setId(stockOptions.get(i).getId());
-            stockOptionListVO.setStockName(stockOptions.get(i).getStockName());
-            stockOptionListVO.setStockCode(stockOptions.get(i).getStockCode());
-            stockOptionListVO.setStockGid(stockOptions.get(i).getStockGid());
-            stockOptionListVO.setNowPrice(stockVO.getNowPrice());
-            stockOptionListVO.setHcrate(stockVO.getHcrate().toString());
-            stockOptionListVO.setPreclose_px(stockVO.getPreclose_px());
-            stockOptionListVO.setOpen_px(stockVO.getOpen_px());
-            Stock stock = this.stockMapper.selectByPrimaryKey(stockOptions.get(i).getStockId());
-            //stockOptionListVO.setStock_plate(stock.getStockPlate());
 
-            stockOptionListVO.setStock_type(stock.getStockType());
-            stockOptionListVO.setIsOption("1");
-            stockOptionListVOS.add(stockOptionListVO);
+            int finalI = i;
+            ThreadUtil.execute(()->{
+//                String result= UsStockApi.getStock(stockOptions.get(finalI).getStockCode());
+//                StockListVO stockVO=UsStockApi.assembleStockListVO(result);
+                StockListVO stockVO = UsStockApi.getMoomooStock(stockOptions.get(finalI).getStockCode());
+                StockOptionListVO stockOptionListVO =new StockOptionListVO();
+                stockOptionListVO.setId(stockOptions.get(finalI).getId());
+                stockOptionListVO.setStockName(stockOptions.get(finalI).getStockName());
+                stockOptionListVO.setStockCode(stockOptions.get(finalI).getStockCode());
+                stockOptionListVO.setStockGid(stockOptions.get(finalI).getStockGid());
+                stockOptionListVO.setNowPrice(stockVO.getNowPrice());
+                stockOptionListVO.setHcrate(stockVO.getHcrate().toString());
+                stockOptionListVO.setPreclose_px(stockVO.getPreclose_px());
+                stockOptionListVO.setOpen_px(stockVO.getOpen_px());
+                Stock stock = this.stockMapper.selectByPrimaryKey(stockOptions.get(finalI).getStockId());
+                //stockOptionListVO.setStock_plate(stock.getStockPlate());
+
+                stockOptionListVO.setStock_type(stock.getStockType());
+                stockOptionListVO.setIsOption("1");
+                stockOptionList[finalI] = stockOptionListVO;
+                countDownLatch.countDown();
+            });
+
         }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        List<StockOptionListVO> stockOptionListVOS = Arrays.asList(stockOptionList);
 //        int i = 0;
 //        for (StockOption option : stockOptions) {
 //            StockOptionListVO stockOptionListVO = assembleStockOptionListVO(option, httpResults[i]);

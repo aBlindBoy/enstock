@@ -20,7 +20,6 @@
       <arg column="latest_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="chg" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="chg_rate" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
@@ -303,6 +302,8 @@
         and stock_type = #{stockType}
       </if>
     </where>
+    order by stock_code 
+
   </select>
 
 

@@ -1818,14 +1818,14 @@ public class UserPositionServiceImpl implements IUserPositionService {
 //                    SinaStockApi.getSinaStock(position.getStockGid()));
 //            nowPrice = stockListVO.getNowPrice();
 
-            String twStockResult= UsStockApi.getStock(position.getStockCode());
-            StockListVO stockListVO=UsStockApi.assembleStockListVO(twStockResult);
-
+//            String twStockResult= UsStockApi.getStock(position.getStockCode());
+//            StockListVO stockListVO=UsStockApi.assembleStockListVO(twStockResult);
+            StockListVO stockListVO= UsStockApi.getMoomooStock(position.getStockCode());
             nowPrice = stockListVO.getNowPrice();
             BigDecimal subPrice = (new BigDecimal(nowPrice)).subtract(position.getBuyOrderPrice());
             //profitAndLose = subPrice.multiply(new BigDecimal(position.getOrderNum().intValue())).multiply(new BigDecimal(position.getOrderLever())).setScale(2,4);
             profitAndLose = subPrice.multiply(new BigDecimal(position.getOrderNum().intValue()));
-            if ("看跌".equals(position.getOrderDirection())) {
+            if ("bearish".equals(position.getOrderDirection())) {
                 profitAndLose = profitAndLose.negate();
             }
 
@@ -1996,7 +1996,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         int compareCwInt = buy_amt_autual.compareTo(max_buy_amt);
         if (compareCwInt == 1) {
             return ServerResponse.createByErrorMsg("Failed to place an order, cannot exceed available funds" + siteSetting
-                    .getBuyMaxAmtPercent().multiply(new BigDecimal("100")) + "%");
+                    .getBuyMaxAmtPercent().multiply(new BigDecimal("100")) + " %");
         }
 
 

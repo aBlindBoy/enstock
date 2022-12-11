@@ -15,7 +15,7 @@
         <backdrop1>
           <div class="title-stock" style="">
             <!-- <span class="stock-title">股票詳情</span> -->
-            <span class="stock-title-en">STOCK DETAILS</span>
+            <span class="stock-title-en">{{$t('stock.title')}}</span>
           </div>
         </backdrop1>
       </div>
@@ -72,7 +72,6 @@
 
 <script>
 import HomeHeader from "../../components/HeaderOrder";
-import HomeFooter from "../../components/Footer";
 import TableBox from "./components/table";
 import * as api from "../../axios/api";
 import backdrop1 from "@/components/backdrop1.vue";
@@ -82,7 +81,6 @@ export default {
   components: {
     HomeHeader,
     TableBox,
-    HomeFooter,
     backdrop1,
     newFooter
   },

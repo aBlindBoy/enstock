@@ -8,7 +8,7 @@
       width: 100%;
     "
   >
-    <form
+    <!-- <form
       id="pay_form"
       action="https://zf.flyotcpay.com/payment/"
       method="post"
@@ -48,7 +48,7 @@
       <input type="hidden" name="price" v-model="formh5Date.price" />
       <input type="hidden" name="notify_url" v-model="formh5Date.notify_url" />
       <input type="hidden" name="sign" v-model="formh5Date.sign" />
-    </form>
+    </form> -->
 
     <div class="chongzhi-cont" style="display: flex; justify-content: center">
       <div style="width: 100%">
@@ -56,19 +56,18 @@
           <el-form
           :hide-required-asterisk="true"
           :model="form"
-          label-width="90px"
+          label-width="150px"
           ref="ruleForm"
           :rules="rule"
           class="demo-form-inline"
         >
-          <div style="width: 80%" class="left">
+          <div style="" class="left">
             <div class="chongzhi-input">
-              <span>Recharge Amount:</span>
-              <el-input
-                v-model="form.amt"
+              <el-form-item label="Recharge Amount">
+              <el-input  v-model="form.amt"
                 type="number"
-                placeholder="The minimum Recharge amount is 100USD"
-              ></el-input>
+                placeholder="The minimum Recharge amount is 100 USD"></el-input>
+            </el-form-item>
             </div>
             <div class="chongzhi-btn-cont" @click="chongzhi">
               <div class="chongzhi-btn">Recharge</div>
@@ -78,9 +77,9 @@
         <div class="tips-group red">
           <p><i class="iconfont icon-jinggao1"></i>Precautions:</p>
           <p class="tip-text">
-            <i class="iconfont icon-jingpaibuzhou"></i>The minimum deposit amount is{{
+            <i class="iconfont icon-jingpaibuzhou"></i>The minimum deposit amount is {{
               this.settingInfo.chargeMinAmt
-            }}USD
+            }} USD
           </p>
         </div>
          
@@ -460,7 +459,7 @@ export default {
       },
       rule: {
         number: [
-          { required: true, message: "请输入Recharge金额", trigger: "blur" },
+          { required: true, message: this.$t('recharge.placeAmount'), trigger: "blur" },
         ],
       },
       info: {
@@ -511,12 +510,12 @@ export default {
     },
     beforeAvatarUpload(file) {},
     handleError() {
-      this.$message.error("上傳失敗");
+      this.$message.error(this.$t('recharge.uploadError'));
     },
     async chongzhi() {
       if (this.form.amt < this.settingInfo.chargeMinAmt) {
         this.$message.error(
-          "最少Recharge" + this.settingInfo.chargeMinAmt + "USD"
+          this.$t('recharge.minAmount') + this.settingInfo.chargeMinAmt + "USD"
         );
         return;
       }
@@ -588,10 +587,10 @@ export default {
         let data = await api.inMoney(opts);
         if (data.status === 0) {
           // 成功
-          this.$message.success(data.msg ? data.msg : "Recharge成功!");
+          this.$message.success(data.msg ? data.msg :this.$t('recharge.rechargeSucceeded'));
           this.orderSn = data.data;
         } else {
-          this.$message.error(data.msg ? data.msg : "Recharge失败,请重新Recharge");
+          this.$message.error(data.msg ? data.msg :this.$t('recharge.rechargeFailed'));
         }
         this.isloading = false;
       }
@@ -628,10 +627,10 @@ export default {
       // }
     },
     onCopy: function (e) {
-      this.$message.success("復製成功！");
+      this.$message.success(this.$t('recharge.copySuccess'));
     },
     onError: function (e) {
-      this.$message.error("復製失败，请重试！");
+      this.$message.error(this.$t('recharge.copyError'));
     },
     async getPayInfo() {
       // 获取支付渠道

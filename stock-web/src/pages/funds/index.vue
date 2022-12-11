@@ -18,7 +18,6 @@
 
 <script>
   import HomeHeader from '../../components/HeaderOrder'
-  import HomeFooter from '../../components/Footer'
   import AccountBox from './components/account'
   // import MenuBox from './components/menu'
   import MenuBox from '@/pages/user/components/menu'
@@ -27,7 +26,6 @@
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
       AccountBox,
       MenuBox
     },

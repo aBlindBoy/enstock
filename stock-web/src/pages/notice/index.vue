@@ -54,14 +54,14 @@
 
 <script>
   import HomeHeader from '../../components/HeaderOrder'
-  import HomeFooter from '../../components/Footer'
+  // import HomeFooter from '../../components/Footer'
   // import DetailNotice from './components/components'
   import * as api from '../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter
+      // HomeFooter
       // DetailNotice
     },
     props: {},

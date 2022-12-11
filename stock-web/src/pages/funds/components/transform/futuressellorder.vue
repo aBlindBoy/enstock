@@ -14,7 +14,7 @@
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
                   <div class="expand-row">
-                    <p v-if="props.row.orderDirection === 'Bullish'">
+                    <p v-if="props.row.orderDirection === 'bullish'">
                       Floating profit and loss：( {{ props.row.sellOrderPrice }} -
                       {{ props.row.buyOrderPrice }} ) *
                       {{ props.row.orderNum }} * {{ props.row.eachPoint }} =
@@ -148,15 +148,15 @@
             <el-table-column prop="orderDirection" width="80px" label="Direction">
               <template slot-scope="scope">
                 <span
-                  :class="scope.row.orderDirection === 'Bullish' ? 'red' : 'green'"
+                  :class="scope.row.orderDirection === 'bullish' ? 'red' : 'green'"
                 >
                   {{ scope.row.orderDirection }}
                   <i
-                    v-if="scope.row.orderDirection === 'Bullish'"
+                    v-if="scope.row.orderDirection === 'bullish'"
                     class="iconfont icon-up"
                   ></i>
                   <i
-                    v-if="scope.row.orderDirection === 'Bearish'"
+                    v-if="scope.row.orderDirection === 'bearish'"
                     class="iconfont icon-down"
                   ></i>
                 </span>

@@ -12,23 +12,23 @@
         <div class="wrapper">
           <div class="user-center-title" style="text-align:left;">
             <span class="iconfont icon-you" style="color:#C11815;font-size:18px;margin-right:10px"></span>
-            Withdrawal records
+           {{$t('withdrawalRecords.title')}}
           </div>
           <el-table
             :data="list.list"
             style="width: 100%">
             <el-table-column
               prop="withAmt"
-              label="Withdrawal amount">
+              :label="$t('withdrawalRecords.withdrawalAmount')">
             </el-table-column>
             <el-table-column
               prop="withFee"
-              label="Handling fee">
+              :label="$t('withdrawalRecords.handlingFee')">
             </el-table-column>
             <el-table-column
               width="100"
               prop="withStatus"
-              label="State">
+              :label="$t('withdrawalRecords.state')">
               <template slot-scope="scope">
                         <span :class="scope.row.withStatus === 1?'green':scope.row.withStatus === 2?'red':'red'">
                             <i v-if="scope.row.withStatus === 1" class="iconfont icon-tongguo4 animated bounceIn"></i>
@@ -37,20 +37,19 @@
                                class="iconfont icon-failure animated bounceInDown"></i>
                             <i v-if="scope.row.withStatus === 3"
                                class="iconfont icon-iconfontweitongguo animated bounceInDown"></i>
-                            {{scope.row.withStatus === 1?'Withdrawal success':scope.row.withStatus === 2?'Withdrawal failed':
-                            scope.row.withStatus === 3?'Cancel Withdrawal':'Under review'}}
+                            {{withStatus[scope.row.withStatus]}}
                         </span>
               </template>
             </el-table-column>
             <el-table-column
               width="170px"
               prop="withMsg"
-              label="Remark">
+              :label="$t('withdrawalRecords.remark')">
             </el-table-column>
             <el-table-column
               prop="addTime"
               width="180px"
-              label="Withdrawal Financial Account">
+              :label="$t('withdrawalRecords.withdrawalFinancialAccount')">
               <template slot-scope="scope">
                 {{scope.row.bankName}}-{{scope.row.bankAddress}}
               </template>
@@ -58,12 +57,12 @@
             <el-table-column
               width="170px"
               prop="bankNo"
-              label="Withdrawal card number">
+              :label="$t('withdrawalRecords.withdrawalCardNumber')">
             </el-table-column>
             <el-table-column
               prop="applyTime"
               width="170px"
-              label="time">
+              :label="$t('withdrawalRecords.time')">
               <template slot-scope="scope">
                 <b v-if="scope.row.applyTime">{{scope.row.applyTime | timeFormat}}</b>
                 <b v-else></b>
@@ -73,10 +72,11 @@
               fixed="right"
               prop="isLock"
               width="100px"
-              label="Cancel">
+              :label="$t('withdrawalRecords.cancel')">
               <template slot-scope="scope">
                 <el-button v-if="scope.row.withStatus != 3" type="danger" plain size="small"
-                           @click="toOption(scope.row)">Cancel Withdrawal
+                           @click="toOption(scope.row)">
+                           {{$t('withdrawalRecords.cancelWithdrawal')}}
                 </el-button>
               </template>
             </el-table-column>
@@ -102,14 +102,14 @@
 
 <script>
   import HomeHeader from '../../../../components/HeaderOrder'
-  import HomeFooter from '../../../../components/Footer'
+  // import HomeFooter from '../../../../components/Footer'
   import MenuBox from '../menu'
   import * as api from '../../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
+      // HomeFooter,
       MenuBox
     },
     props: {},
@@ -119,7 +119,10 @@
         pageSize: 15,
         list: {
           list: []
-        }
+        },
+        withStatus:[this.$t('withdrawalRecords.underReview'),this.$t('withdrawalRecords.withdrawalSuccess'),
+        this.$t('withdrawalRecords.withdrawalFailed'),this.$t('withdrawalRecords.cancelWithdrawal')]
+   
       }
     },
     watch: {},

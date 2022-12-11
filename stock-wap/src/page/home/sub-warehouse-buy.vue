@@ -117,7 +117,7 @@
   
     <div class="agree">
       <p style="line-height: 0.4rem;padding: 0 0.2rem;">
-        When the index rises to <span class="red">daily limit </span>, cannotBullish;achieve<span class="green">Limit down</span>,Can't Bearish.
+        When the index rises to <span class="red">daily limit </span>, cannotbullish;achieve<span class="green">Limit down</span>,Can't bearish.
       </p>
      
     </div>
@@ -176,8 +176,8 @@ export default {
       selectNumber: '',
       autoNumber: '',
       type: [
-        { label: 'Bullish', value: '0' },
-        { label: 'Bearish', value: '1' }
+        { label: 'bullish', value: '0' },
+        { label: 'bearish', value: '1' }
       ],
       selectType: '',
       // number:0,// 股

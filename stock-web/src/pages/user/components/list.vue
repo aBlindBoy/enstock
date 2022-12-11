@@ -17,7 +17,7 @@
 
 <script>
   import HomeHeader from '../../../components/HeaderOrder'
-  import HomeFooter from '../../../components/Footer'
+  // import HomeFooter from '../../../components/Footer'
   import AccountBox from './table/list'
   import MenuBox from './menu'
   import * as api from '../../../axios/api'
@@ -25,7 +25,7 @@
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
+      // HomeFooter,
       AccountBox,
       MenuBox
     },

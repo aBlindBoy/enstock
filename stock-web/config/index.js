@@ -10,18 +10,36 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/twstock': {
-        target: 'https://www.nstock.tw',
+      '/cnyesWs': {
+        target: 'https://api.2vsec.com.tw/',
+        secure: false,
         changeOrigin: true,
         pathRewrite: {
-          '^/twstock': ''
+          '^/': '/'
         }
       },
-      '/flowstockxchange': {
-        target: 'https://newapsxlbadxqgguejf.flowstockxchange.net',
+      '/cnyesApi': {
+        target: 'https://api.2vsec.com.tw/',
+        secure: false,
         changeOrigin: true,
         pathRewrite: {
-          '^/flowstockxchange': ''
+          '^/': '/'
+        }
+      },
+      '/investing': {
+        target: 'https://sbcharts.investing.com/',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          '^/investing': ''
+        }
+      },
+      '/futunnApi': {
+        target: 'https://www.futunn.com/',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          '^/futunnApi': ''
         }
       },
       '/': {

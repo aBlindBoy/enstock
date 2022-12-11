@@ -3,18 +3,13 @@
     <el-header>
       <home-header></home-header>
     </el-header>
-    <!-- <el-container class=""> -->
         <backdrop1>
           <slot>
             <div class="bancot">
               <div class="description">
                 <div class="tit">
-                  <!-- <span class="zh">產品說明</span> -->
-                  <span class="en">PRODUCT DESCRIPTION</span></div>
-                <div class="text">Our greatest asset is our people,{{siteInfo.siteName}}
-                  
-                  Hire only those experienced professionals who have demonstrated their top-notch customer service skills and tie-in skills in the financial services industry. Provide professional customer service.
-                   Our sales and operations representatives will answer any inquiries from customers in professional Chinese.</div>
+                  <span class="en">{{$t('product.title')}}</span></div>
+                <div class="text">{{$t('product.productContent')}}</div>
               </div>
             </div>
           </slot>
@@ -25,29 +20,29 @@
               <layout>
               <div slot="left">
                 <div class="s_left" >
-                  <!-- <div class="not_l" style="width: 35px;overflow: hidden;"><span class="iconfont icon-kaihuhedui"></span>Account opening instructions</div> -->
+                  <!-- <div class="not_l" style="width: 35px;overflow: hidden;"><span class="iconfont icon-kaihuhedui"></span></div> -->
                   <div class="not_r">
                     <ul>
-                      <li>Before opening a real account (registered member), you must carefully read and review the company's "Trading Rules" and "Risk Disclosure and Notification".</li>
-                      <li>Account opening requirements for customers: Citizens over the age of 18 with full capacity for civil conduct. Customers must open an account in a real and legal identity and ensure the legality of the source of funds.</li>
-                      <li>Customers should prepare their own financial accounts for mutual transfer (open online finance), and customers should keep their financial passwords and transaction passwords well, and change the passwords regularly, and must not disclose the passwords to anyone.</li>
-                      <li>Register yourself and follow the "One Person One Account Rule".</li>
-                      <li>After the official account is successfully recharged, you can start trading.</li>
+                      <li>{{$t('product.openContent1')}}</li>
+                      <li>{{$t('product.openContent2')}}</li>
+                      <li>{{$t('product.openContent3')}}</li>
+                      <li>{{$t('product.openContent4')}}</li>
+                      <li>{{$t('product.openContent5')}}</li>
                     </ul>
                   </div>
                 </div>
               </div>
               <div slot="right">
                 <div class="s_right">
-                  <div class="not_l" style="width: 35px;overflow: hidden;"><span class="iconfont icon-kaihuhedui"></span>操盤須知</div>
+                  <!-- <div class="not_l" style="width: 35px;overflow: hidden;"><span class="iconfont icon-kaihuhedui"></span></div> -->
                     <div class="not_r">
                     <ul>
-                      <li>The principal you invest is the minimum 10000 USD;</li>
-                      <li>After applying for funds, buy and sell at any time;</li>
-                      <li>Once the accounts are matched, the same day can be traded;</li>
-                      <li>When the funds are close to the loss and forced to liquidate the Warning line, the Margin needs to be replenished as soon as possible;</li>
-                      <li>When the trading capital is lower than the Closing Line, the system will terminate the operation;</li>
-                      <li>A single stock position shall not exceed the total funds in the account 90.00% ;</li>                           
+                      <li>{{$t('product.principalContent1')}}</li>
+                      <li>{{$t('product.principalContent2')}}</li>
+                      <li>{{$t('product.principalContent3')}}</li>
+                      <li>{{$t('product.principalContent4')}}</li>
+                      <li>{{$t('product.principalContent5')}}</li>
+                      <li>{{$t('product.principalContent6')}}</li>                           
                     </ul>
                     </div>
                   </div>
@@ -60,68 +55,68 @@
               <div class="info">
                 <div class="left">
                   <div class="item">
-                    <div class="i_tit">Target name:</div>
-                    <div class="msg">U.S. Stock market margin financing and securities lending sector</div>
+                    <div class="i_tit">{{$t('product.targetName')}}</div>
+                    <div class="msg">{{$t('product.targetContent')}}</div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Market trading hours:</div>
+                    <div class="i_tit">{{$t('product.marketTradingHours')}}</div>
                     <div class="msg">
-                      <span>Section 1:{{sitesetInfo.transAmBegin}}-{{sitesetInfo.transAmEnd}}</span>
-                      <span>Section two:{{sitesetInfo.transPmBegin}}-{{sitesetInfo.transPmEnd}}</span>
-                      <p>(The actual open trading time is subject to the trading rules)</p>
+                      <span>{{$t('product.sectionOne')}}{{sitesetInfo.transAmBegin}}-{{sitesetInfo.transAmEnd}}</span>
+                      <span>{{$t('product.sectionOne')}} {{sitesetInfo.transPmBegin}}-{{sitesetInfo.transPmEnd}}</span>
+                      <p>{{$t('product.marketTradingHoursContent')}}</p>
                     </div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Minimum transaction unit:	</div>
-                    <div class="msg">{{(sitesetInfo.buyMinAmt/10000).toFixed(2)}} share</div>
+                    <div class="i_tit">{{$t('product.minimumTransactionUnit')}}	</div>
+                    <div class="msg">{{(sitesetInfo.buyMinAmt/10000).toFixed(2)}} {{$t('common.shares')}}</div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Maximum transaction unit:</div>
-                    <div class="msg">{{(sitesetInfo.buyMaxNum/1000).toFixed(2)}} share</div>
+                    <div class="i_tit">{{$t('product.maximumTransactionUnit')}}</div>
+                    <div class="msg">{{(sitesetInfo.buyMaxNum/1000).toFixed(2)}} {{$t('common.shares')}}</div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">means of transaction:</div>
-                    <div class="msg">You can buy long, sell short, buy up, buy squat, buy on the same day, close the position on the same day, and earn the swing amplitude spread of the day!</div>
+                    <div class="i_tit">{{$t('product.meansOfTransaction')}}</div>
+                    <div class="msg">{{$t('product.meansOfTransactionContent')}}</div>
                   </div>
                 </div>
                 <div class="mid">
                   <div class="item">
-                    <div class="i_tit">Transaction Amount:	</div>
+                    <div class="i_tit">{{$t('product.transactionAmount')}}</div>
                     <div class="msg">Using financing and securities lending, buying up and down by buying and selling</div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Minimum purchase amount:	</div>
+                    <div class="i_tit">{{$t('product.minimumPurchaseAmount')}}</div>
                     <div class="msg">{{sitesetInfo.buyMinAmt}} USD</div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Handling fee：		</div>
-                    <div class="msg">Charged when buying and selling, based on the total transaction price * {{sitesetInfo.buyFee}} charge</div>
+                    <div class="i_tit">{{$t('product.handlingFee')}}	</div>
+                    <div class="msg">{{$t('product.handlingContent')}} * {{sitesetInfo.buyFee}} </div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Stamp duty：		</div>
-                    <div class="msg">Charged when buying, based on the total transaction price* {{sitesetInfo.dutyFee}} charge</div>
+                    <div class="i_tit">{{$t('product.stampDuty')}}		</div>
+                    <div class="msg">{{$t('product.stampDutyContent')}} * {{sitesetInfo.dutyFee}} </div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Storage fee：		</div>
-                    <div class="msg">If the transaction is not closed before the market close, the transaction will be recorded as a reserve order after the market close, and the closing price of the stock * the number of shares remaining will be charged * {{sitesetInfo.stayFee}} Storage fee,(Holidays are also charged)</div>
+                    <div class="i_tit">{{$t('product.storagFee')}}		</div>
+                    <div class="msg">{{$t('product.storagFee1')}} * {{sitesetInfo.stayFee}}{{$t('product.storagFee2')}}</div>
                   </div>
                 </div>
                 <div class="right">
                   <div class="item">
-                    <div class="i_tit">maximum Days to stay：		</div>
-                    <div class="msg">{{sitesetInfo.stayMaxDays}} day</div>
+                    <div class="i_tit">{{$t('product.maximumDaysToStay')}}	</div>
+                    <div class="msg">{{sitesetInfo.stayMaxDays}} {{$t('product.day')}}</div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Withdrawal rules:	</div>
-                    <div class="msg">Currently there is a position that cannot be withdrawn, the minimum withdrawal amount is {{sitesetInfo.withMinAmt}} USD</div>
+                    <div class="i_tit">{{$t('product.withdrawalRules')}}</div>
+                    <div class="msg">{{$t('product.withdrawalRulesContent')}} {{sitesetInfo.withMinAmt}} USD</div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">Withdrawal time:			</div>
-                    <div class="msg">Withdrawal time is  {{sitesetInfo.withTimeBegin}} :00 - {{sitesetInfo.withTimeEnd}} : 00 </div>
+                    <div class="i_tit">{{$t('product.withdrawalTime')}}	</div>
+                    <div class="msg">{{$t('product.withdrawalTimeContent')}} {{sitesetInfo.withTimeBegin}} :00 - {{sitesetInfo.withTimeEnd}} : 00 </div>
                   </div>
                   <div class="item">
-                    <div class="i_tit">jet lag：		</div>
-                    <div class="msg">Summer: 0 hours; Winter: 0 hours</div>
+                    <div class="i_tit">{{$t('product.jetLag')}}		</div>
+                    <div class="msg">{{$t('product.jetLagContent')}}	</div>
                   </div>
                   <!-- <div class="item">
                     <div class="i_tit">數據來源：		</div>

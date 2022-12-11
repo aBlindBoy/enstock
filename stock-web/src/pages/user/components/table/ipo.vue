@@ -11,33 +11,33 @@
         <el-main style=" min-height: calc(100vh - 150px );">
           <div class="con-box account futuresholdposition">
             <el-tabs v-model="activeName" class="aaaa" @tab-click="tabsClick"	>
-              <el-tab-pane label="open subscription" name="1">
+              <el-tab-pane label="Open subscription" name="1">
                 <div class="user-info">
                   <el-table :data="list" style="width: 100%">
         
-                    <el-table-column prop="stockName" label="New stock name">
+                    <el-table-column prop="stockName" :label="$t('ipo.newStockName')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.stockName }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="stockCode" label="stock code">
+                    <el-table-column prop="stockCode" :label="$t('common.stockCode')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.stockCode }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="stockPlate" label="Issue market">
+                    <el-table-column prop="stockPlate" :label="$t('ipo.issueMarket')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.stockPlate }}</span>
                       </template>
                     </el-table-column>
 
 
-                    <el-table-column prop="ticketingDate" label="date of issuance">
+                    <el-table-column prop="ticketingDate" :label="$t('ipo.dateOfIssuance')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.ticketingDate }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="subscriptionTime" label="Subscription period">
+                    <el-table-column prop="subscriptionTime" :label="$t('ipo.subscriptionPeriod')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.subscriptionTime }}</span>
                       </template>
@@ -48,13 +48,13 @@
                       </template>
                     </el-table-column> -->
 
-                    <el-table-column prop="underwritingPrice" label="underwriting price">
+                    <el-table-column prop="underwritingPrice" :label="$t('ipo.underwritingPrice')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.underwritingPrice }}</span>
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="marketPrice" label="market price">
+                    <el-table-column prop="marketPrice" :label="$t('ipo.marketPrice')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.marketPrice }}</span>
                       </template>
@@ -63,7 +63,7 @@
                       fixed="right"
                       prop="isLock"
                       width="120px"
-                      label="operate"
+                      :label="$t('ipo.operate')"
                     >
                       <template slot-scope="scope">
                            <div  v-if="isSubscribe(scope.row.subscriptionTime)"  @click="clickCtock(scope.row)" class="foot-btn">
@@ -73,7 +73,7 @@
                                 plain
                                 size="small"
                                 @click="clickSubscribe(scope.row)"
-                                >Subscription</el-button
+                                >{{$t('ipo.subscription')}}</el-button
                               >
                            </div>
                             <div v-else class="foot-btn">
@@ -88,24 +88,24 @@
                 <div class="user-info">
                   <el-table :data="historyList" style="width: 100%">
                    
-                    <el-table-column prop="stockName" label="New stock name">
+                    <el-table-column prop="stockName" :label="$t('ipo.newStockName')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.stockName }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="stockCode" label="stock code">
+                    <el-table-column prop="stockCode" :label="$t('common.stockCode')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.stockCode }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="stockPlate" label="Issue market">
+                    <el-table-column prop="stockPlate" :label="$t('ipo.issueMarket')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.stockPlate }}</span>
                       </template>
                     </el-table-column>
 
 
-                    <el-table-column prop="ticketingDate" label="date of issuance">
+                    <el-table-column prop="ticketingDate" :label="$t('ipo.dateOfIssuance')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.ticketingDate }}</span>
                       </template>
@@ -117,34 +117,34 @@
                       </template>
                     </el-table-column> -->
 
-                    <el-table-column prop="underwritingPrice" label="underwriting price">
+                    <el-table-column prop="underwritingPrice" :label="$t('ipo.underwritingPrice')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.underwritingPrice }}</span>
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="marketPrice" label="market price">
+                    <el-table-column prop="marketPrice" :label="$t('ipo.marketPrice')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.marketPrice }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="submitTime" label="Subscription date">
+                    <el-table-column prop="submitTime" :label="$t('ipo.subscriptionDate')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ formatDate(scope.row.submitTime) }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="submitAmount" label="Funds purchased">
+                    <el-table-column prop="submitAmount" :label="$t('ipo.fundsPurchased')">
                       <template slot-scope="scope">
                         <span style="color: #fff">{{ scope.row.submitAmount }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="endTime" label="Date of winning the lottery">
+                    <el-table-column prop="endTime" :label="$t('ipo.dateOfWinningTheLottery')">
                       <template slot-scope="scope">
                         <span v-if="scope.row.endTime!=null" style="color: #fff">{{ formatDate(scope.row.endTime) }}</span>
                         <span>-</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="tradeSheets" label="Number of winning tickets">
+                    <el-table-column prop="tradeSheets" :label="$t('ipo.numberOfWinningTickets')">
                       <template slot-scope="scope">
                         <span v-if="scope.row.tradeSheets!=null" style="color: #fff">{{ scope.row.tradeSheets }}</span>
                         <span v-else>-</span>
@@ -161,16 +161,16 @@
                       fixed="right"
                       prop="isLock"
                       width="120px"
-                      label="操作"
+                      :label="$t('ipo.operate')"
                     >
                       <template slot-scope="scope">
                         <div v-if="scope.row.status != 1" >
                           <div v-if="scope.row.deductionStatus == 1" @click="clickPay(scope.row)">
-                              <el-button  type="primary" v-if="isNowDay(scope.row)">to pay</el-button>
-                              <el-button type="info" v-else disabled>Not due payment time</el-button>
+                              <el-button  type="primary" v-if="isNowDay(scope.row)">{{$t('ipo.toPay')}}</el-button>
+                              <el-button type="info" v-else disabled>{{$t('ipo.notDuePaymentTime')}}</el-button>
                           </div>
                           <div v-if="scope.row.deductionStatus == 2">
-                              <el-button type="info" disabled>Paid</el-button>
+                              <el-button type="info" disabled>{{$t('ipo.paid')}}</el-button>
                           </div>
                         </div>
                         <div v-else>
@@ -197,7 +197,7 @@
                     <el-input
                       type="text"
                       v-model="form.submitSheets"
-                      placeholder="Please fill in to apply for Quantity"
+                      :placeholder="$t('ipo.pleaseQuantity')"
                       clearable="true"
                       show-word-limit
                       oninput="value=value.replace(/[^\d]/g,'')"
@@ -205,10 +205,10 @@
                     </el-input>
                   </el-form-item>
                 </div>
-                <p> stock name:{{form.stockName}}</p>
-                <p style="margin-top:20px"> Subscription price:{{form.underwritingPrice}}USD</p>
-                <p style="margin-top:20px"> Available funds:{{formartAmount($store.state.userInfo.enableAmt)}}USD</p>
-                <p v-if="form.sheets !=0" style="margin-top:20px"> cost:{{formartAmount(form.underwritingPrice*1000*form.submitSheets)}}USD</p>
+                <p> {{$t('common.stockName')}}:{{form.stockName}}</p>
+                <p style="margin-top:20px"> {{$t('ipo.subscriptionPrice')}}:{{form.underwritingPrice}}USD</p>
+                <p style="margin-top:20px"> {{$t('ipo.availableFunds')}}:{{formartAmount($store.state.userInfo.enableAmt)}}USD</p>
+                <p v-if="form.sheets !=0" style="margin-top:20px"> {{$t('ipo.cost')}}:{{formartAmount(form.underwritingPrice*1000*form.submitSheets)}}USD</p>
 
                 <el-form-item style="text-align:center;">
                   <!-- <el-button @click="dialogCommunity = false">取 消</el-button> -->
@@ -216,7 +216,7 @@
                     type="primary"
                     @click="submitData()"
                    style="background-color: #fff !important;color:#333 !important;border-color:#DCDFE6 !important;"
-                    >Confirm
+                    >{{$t('common.confirm')}}
                   </el-button>
                 </el-form-item>
               </el-form>
@@ -230,7 +230,6 @@
 
 <script>
 import HomeHeader from "../../../../components/HeaderOrder";
-import HomeFooter from "../../../../components/Footer";
 import MenuBox from "../menu";
 import * as api from "../../../../axios/api";
 // import {  format } from 'date-fns'
@@ -242,7 +241,6 @@ import isBetween from 'dayjs/plugin/isBetween'
 export default {
   components: {
     HomeHeader,
-    HomeFooter,
     MenuBox,
   },
   props: {},
@@ -258,11 +256,13 @@ export default {
       form: {
           underwritingPrice:null,
       },
-      statusType:["","Appointment successful","Won the lottery","Did not win the lottery"],//,"部分中签"
+      statusType:["",this.$t('common.appointmentSuccessful'),this.$t('common.wonTheLottery'),
+      this.$t('common.didNotWinTheLottery')],//,"部分中签"
     };
   },
   computed: {},
   created() {
+    this.$store.state.userMenu = '2-14'
     this.getHiStockList()
     this.getStockSubscribeHistoryList()
     this.getUserInfo()
@@ -401,9 +401,9 @@ export default {
 
 
              clickPay(item ) {
-              this.$confirm('您確定繳費嗎?', 'Tips', {
-                confirmButtonText: '確認',
-                cancelButtonText: 'Cancel',
+              this.$confirm(this.$t('ipo.confirmPay'), 'Tips', {
+                confirmButtonText: this.$t('common.comfirm'),
+                cancelButtonText: this.$t('common.cancel'),
                 type: 'warning'
               }).then( () => {
                   this.pay(item )

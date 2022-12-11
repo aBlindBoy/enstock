@@ -11,7 +11,7 @@
 				<el-main style=" min-height: calc(100vh - 150px );">
 					<div data-v-5d396ccb class="user-center-title" style="text-align: left;margin: 15px 10px 10px 10px;">
 						<span data-v-5d396ccb class="iconfont icon-you" style="color: rgb(193, 24, 21); font-size: 18px; margin-right: 10px;"></span>
-						change Password
+						{{$t('changePassword.title')}}
 					</div>
 					<div class="wrapper yhk-cont">
 						<div class="box page-part transaction">
@@ -23,20 +23,20 @@
 								<div class="auth-box">
 									<el-form :hide-required-asterisk='true' :model="form" label-width="100px" ref="ruleForm" :rules="rule" class="demo-form-inline">
 										<el-form-item prop="oldPwd">
-											<el-input type='password' class="chongzhi-input" v-model="form.oldPwd" placeholder="Please enter old password">
+											<el-input type='password' class="chongzhi-input" v-model="form.oldPwd" :placeholder="$t('changePassword.oldPasswordPlaceholder')">
 											</el-input>
 										</el-form-item>
 										<el-form-item prop="newPsd">
-											<el-input type='password' class="chongzhi-input" v-model="form.newPsd" placeholder="Please enter a new password">
+											<el-input type='password' class="chongzhi-input" v-model="form.newPsd" :placeholder="$t('changePassword.newPasswordPlaceholder')">
 											</el-input>
 										</el-form-item>
 										<el-form-item prop="newPsdQr">
-											<el-input type='password' class="chongzhi-input" v-model="form.newPsdQr" placeholder="Please enter new password again">
+											<el-input type='password' class="chongzhi-input" v-model="form.newPsdQr" :placeholder="$t('changePassword.againNewPasswordPlaceholder')">
 											</el-input>
 										</el-form-item>
 									</el-form>
 									<div slot="footer" class="dialog-footer">
-										<el-button type="primary" :loading="isloading" @click="submit('ruleForm')">Revise</el-button>
+										<el-button type="primary" :loading="isloading" @click="submit('ruleForm')">{{$t('changePassword.revise')}}</el-button>
 									</div>
 								</div>
 
@@ -54,14 +54,12 @@
 
 <script>
 	import HomeHeader from '../../../../components/HeaderOrder'
-	import HomeFooter from '../../../../components/Footer'
 	import MenuBox from '../menu'
 	import * as api from '../../../../axios/api'
 
 	export default {
 		components: {
 			HomeHeader,
-			HomeFooter,
 			MenuBox
 		},
 		props: {},
@@ -88,12 +86,12 @@
 				rule: {
 					newPsd: [{
 							required: true,
-							message: 'Please enter password',
+							message: this.$t('changePassword.passwordPlease'),
 							trigger: 'blur'
 						},
 						{
 							min: 6,
-							message: 'Password must be at least 6 digits',
+							message: this.$t('changePassword.passwordFormat'),
 							trigger: 'blur'
 						}
 					]
@@ -109,7 +107,7 @@
 		methods: {
 			submit(formName) {
 				if(this.form.newPsd !== this.form.newPsdQr){
-					this.$message.error('The two passwords do not match')
+					this.$message.error( this.$t('changePassword.passwordNotMatch'))
 					return 
 				}
 				// 提交

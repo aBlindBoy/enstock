@@ -12,7 +12,7 @@
         <div class="wrapper user-center-table">
           <div class="user-center-title" style="text-align:left;">
             <span class="iconfont icon-you" style="color:#C11815;font-size:18px;margin-right:10px"></span>
-            Financing position
+            {{$t("financingPosition.title")}}
           </div>
           <div class="table-search">
             <el-row type="flex" justify='end'>
@@ -63,7 +63,7 @@
             <el-table-column
               width="126px"
               prop="stockName"
-              label="Stock name/Symbol">
+              :label="$t('common.stockName')">
               <template slot-scope="scope">
                 <span>{{scope.row.stockName}}</span>
                 <p>
@@ -74,7 +74,7 @@
             </el-table-column>
             <el-table-column
               prop="now_price"
-              label="Current price">
+              :label="$t('common.lastPrice')">
               <template slot-scope="scope">
                 <span
                   :class="scope.row.now_price - scope.row.buyOrderPrice > 0 ? 'red':'green'">{{scope.row.now_price}}</span>
@@ -82,44 +82,44 @@
             </el-table-column>
             <el-table-column
               prop="buyOrderPrice"
-              label="Buying price">
+              :label="$t('common.purchasePrice')">
               <template slot-scope="scope">
                 <span>{{scope.row.buyOrderPrice}}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="profitAndLose"
-              label="Floating profit and loss">
+              :label="$t('common.ploatingProfitAndLoss')">
               <template slot-scope="scope">
                 <span :class="scope.row.profitAndLose > 0 ? 'red':'green'">{{scope.row.profitAndLose}}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="allProfitAndLose"
-              label="Total profit and loss">
+              :label="$t('common.totalProfitAndLoss')">
               <template slot-scope="scope">
                 <span :class="scope.row.allProfitAndLose > 0 ? 'red':'green'">{{scope.row.allProfitAndLose}}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="orderDirection"
-              label="Direction">
+              :label="$t('common.direction')">
               <template slot-scope="scope">
-                        <span :class="scope.row.orderDirection === 'Bullish' ? 'red':'green'">
+                        <span :class="scope.row.orderDirection === 'bullish' ? 'red':'green'">
                             {{scope.row.orderDirection}}
-                            <i v-if="scope.row.orderDirection === 'Bullish'" class="iconfont icon-up"></i>
-                            <i v-if="scope.row.orderDirection === 'Bearish'" class="iconfont icon-down"></i>
+                            <i v-if="scope.row.orderDirection === 'bullish'" class="iconfont icon-up"></i>
+                            <i v-if="scope.row.orderDirection === 'bearish'" class="iconfont icon-down"></i>
                         </span>
               </template>
             </el-table-column>
             <el-table-column
               prop="orderNum"
-              label="Quantity">
+              :label="$t('common.quantity')">
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               prop="orderTotalPrice"
               label="The total market capitalization">
-            </el-table-column>
+            </el-table-column> -->
             <!-- <el-table-column
                 prop="orderFee"
                 label="Handling fee">
@@ -149,10 +149,11 @@
               fixed="right"
               prop="isLock"
               width="100px"
-              label="Close the position">
+              :label="$t('common.operate')">
               <template slot-scope="scope">
                 <!-- <el-button type="primary" plain size="small" @click="toDetail(scope.row)">查看詳情</el-button> -->
-                <el-button type="success" style="cursor: pointer;z-index: 9999999;" plain size="small" @click="toSell(scope.row)">Close the position</el-button>
+                <el-button type="success" style="cursor: pointer;z-index: 9999999;" plain size="small" @click="toSell(scope.row)">
+                  {{$t('common.sell')}}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -167,7 +168,6 @@
             :total="list.total">
           </el-pagination>
         </div>
-        <!-- <home-footer :siteInfo="siteInfo"></home-footer> -->
       </el-main>
     </el-container>
     </div>
@@ -177,14 +177,12 @@
 
 <script>
   import HomeHeader from '../../../../components/HeaderOrder'
-  import HomeFooter from '../../../../components/Footer'
   import MenuBox from '../menu'
   import * as api from '../../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
       MenuBox
     },
     props: {},
@@ -275,9 +273,9 @@
         }
       },
       toSell (val) {
-        this.$confirm('Are you sure you want to close the position?', 'Tips', {
-          confirmButtonText: 'Confirm',
-          cancelButtonText: 'Cancel',
+        this.$confirm(this.$t('financingPosition.closePosition'), this.$t('financingPosition.tips'), {
+          confirmButtonText: this.$t('common.confirm'),
+          cancelButtonText: this.$t('common.cancel'),
           type: 'warning'
         }).then(async () => {
           let opt = {
@@ -291,10 +289,7 @@
             this.$message.error(data.msg)
           }
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消平倉'
-          })
+         
         })
       },
       getSummaries (param) {

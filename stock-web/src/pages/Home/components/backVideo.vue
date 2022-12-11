@@ -17,7 +17,9 @@
 
     <div class="pc-wrap" >
       <div class="actTitleBar" >
-        Trade Like a Pro <br class="showH5" />with 2v.com
+        {{$t('home.tradeLike')}} <br class="showH5" />
+        {{$t('home.with')}}
+        2v.com
       </div>
       <div class="btnBox" @click="toRegister">
         <div class="signUp us" >
@@ -25,7 +27,7 @@
             href="javascript:void(0)"
             ga_btn="homepage"
             class="register-btn"
-            >Sign Up</a
+            >{{$t('home.signUp')}}</a
           >
         </div>
       </div>

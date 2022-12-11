@@ -152,38 +152,6 @@
     data () {
       return {
         detail: {
-          'name': '青海華鼎',
-          'code': '600243',
-          'spell': 'qhhd',
-          'gid': 'sh600243',
-          'nowPrice': '4.290',
-          'hcrate': 1.18,
-          'today_max': '4.300',
-          'today_min': '4.240',
-          'business_balance': '4151985.000',
-          'business_amount': '973005',
-          'preclose_px': '4.240',
-          'open_px': '4.240',
-          'buy1': '4.290',
-          'buy2': '4.280',
-          'buy3': '4.270',
-          'buy4': '4.260',
-          'buy5': '4.250',
-          'sell1': '4.300',
-          'sell2': '4.310',
-          'sell3': '4.320',
-          'sell4': '4.330',
-          'sell5': '4.340',
-          'buy1_num': '34700',
-          'buy2_num': '38900',
-          'buy3_num': '35900',
-          'buy4_num': '26200',
-          'buy5_num': '50100',
-          'sell1_num': '76005',
-          'sell2_num': '5100',
-          'sell3_num': '2500',
-          'sell4_num': '40200',
-          'sell5_num': '11500'
         }, // 詳情
         buyList: [
           {price: 33.5, price2: 14323.5},

@@ -14,7 +14,7 @@
             <div class="order-title">
               <span class="main">{{item.futuresName}}</span>
               <span class="secondary">({{item.futuresCode}})</span>
-              <span :class="item.orderDirection=='Bullish'?'type type-up':'type type-down'">{{item.orderDirection=='Bullish'?'Bullish':'Bearish'}}</span>
+              <span :class="item.orderDirection=='bullish'?'type type-up':'type type-down'">{{item.orderDirection=='bullish'?'bullish':'bearish'}}</span>
               <span class="pull-right big-font">total profit and loss:
                         <b :class="item.allProfitAndLose<0?'space green':item.allProfitAndLose==0?'space':'space red'">{{item.allProfitAndLose}}</b> <span
                   class="mini-size">{{item.coinCode}}</span>

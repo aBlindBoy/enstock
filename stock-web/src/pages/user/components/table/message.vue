@@ -12,7 +12,7 @@
         <div class="wrapper">
           <div class="user-center-title" style="text-align:left;">
             <span class="iconfont icon-you" style="color:#C11815;font-size:18px;margin-right:10px"></span>
-            Station news
+            {{$t('stationMessage.title')}}
           </div>
           <el-table
             :data="list.list"
@@ -20,32 +20,32 @@
             <el-table-column
               prop="id"
               width="60px"
-              label="id">
+              :label="$t('stationMessage.id')">
             </el-table-column>
             <el-table-column
               prop="typeName"
               width="90px"
-              label="type">
+              :label="$t('stationMessage.type')">
             </el-table-column>
             <el-table-column
               prop="status"
               width="100px"
-              label="state">
+              :label="$t('stationMessage.state')">
               <template slot-scope="scope">
                 <el-tag :type="scope.row.status<=1?'danger':scope.row.status>1?'success':''">
-                  <span v-if="scope.row.status == 2">Have read</span>
-                  <span v-else>unread</span>
+                  <span v-if="scope.row.status == 2">{{$t('stationMessage.haveRead')}}</span>
+                  <span v-else>{{$t('stationMessage.unread')}}</span>
                 </el-tag>
               </template>
             </el-table-column>
             <el-table-column
               prop="content"
-              label="content">
+              :label="$t('stationMessage.content')">
             </el-table-column>
             <el-table-column
               prop="addTime"
               width="166px"
-              label="time">
+              :label="$t('stationMessage.time')">
               <template slot-scope="scope">
                 <b v-if="scope.row.addTime">{{scope.row.addTime | timeFormat}}</b>
                 <b v-else></b>
@@ -73,14 +73,12 @@
 
 <script>
   import HomeHeader from '../../../../components/HeaderOrder'
-  import HomeFooter from '../../../../components/Footer'
   import MenuBox from '../menu'
   import * as api from '../../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
       MenuBox
     },
     props: {},

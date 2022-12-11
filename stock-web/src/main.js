@@ -3,6 +3,10 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/en'
+import localeTW from 'element-ui/lib/locale/lang/zh-TW'
+import VueI18n from 'vue-i18n'
+import en from './i18n/en'
+import zhTW from './i18n/zhTW'
 
 import store from './store'
 import axios from './axios/index' // 这里这里
@@ -25,9 +29,23 @@ Vue.config.productionTip = false
 Vue.use(animated)
 Vue.use(preview)
 Vue.use(VueClipboard)
-Vue.use(ElementUI, { locale })
+// localeTW
+Vue.use(ElementUI,{locale,localeTW})
 
 
+Vue.use(VueI18n)
+// Vue.config.lang = 'zh-TW'
+// Vue.locale('zh-TW', localeTW)
+// Vue.locale('en', localeEN)
+const i18n = new VueI18n({
+	locale: 'zh-TW',
+	messages: {
+		en,
+		"zh-TW":zhTW
+	}
+  })
+
+  
 // Vue.use(MetaInfo)
 Object.keys(filters).forEach(key => {
 	Vue.filter(key, filters[key])
@@ -82,5 +100,6 @@ new Vue({
 	router,
 	store,
 	axios,
+	i18n,
 	render: h => h(App)
 }).$mount('#app')

@@ -68,7 +68,7 @@ public class UsStockApi {
                     document1.getElementsByClass("stock-main").first();
 
             //stock-price
-            stockListVO.setName(stockMain.getElementsByClass("stock-name").last().text());
+            stockListVO.setName(stockMain.getElementsByClass("stock-name").last().text().split(" ",2)[1]);
             stockListVO.setCode(stockCode);
             stockListVO.setNowPrice(stockMain.getElementsByClass("stock-price").last().text());
             stockListVO.setHcrate(new BigDecimal(stockMain.getElementsByClass("stock-change").get(1).text().replace("%","")));
@@ -82,6 +82,8 @@ public class UsStockApi {
         } catch (Exception e) {
             log.error("获取股票行情出错，錯誤信息 = {}", e);
         }
+        log.info("请取Moomoo数据源：{}",stockCode);
+        log.info("Moomoo返回数据：{}",stockListVO);
         return stockListVO;
     }
   /*  public static List<StockListVO> assembleStockList(String result) {

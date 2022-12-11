@@ -126,7 +126,7 @@
    
     <div class="agree">
       <p style="line-height: 0.4rem;padding: 0 0.2rem;">
-        當該指數漲幅達到<span class="red">漲停限制</span>時,不能Bullish；達到<span class="green">跌停限制</span>時，不能Bearish.
+        當該指數漲幅達到<span class="red">漲停限制</span>時,不能bullish；達到<span class="green">跌停限制</span>時，不能bearish.
       </p>
       
     </div>
@@ -194,8 +194,8 @@ export default {
       selectNumber: '',
       autoNumber: '',
       type: [
-        { label: 'Bullish', value: '0' },
-        { label: 'Bearish', value: '1' }
+        { label: 'bullish', value: '0' },
+        { label: 'bearish', value: '1' }
       ],
       selectType: '',
       // number:0,// 股

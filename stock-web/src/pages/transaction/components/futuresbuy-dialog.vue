@@ -48,8 +48,8 @@
                 </p> -->
                 <el-form-item label="Direction" prop="buyType">
                   <el-radio-group v-model="form.buyType">
-                    <el-radio label="Bullish" value="0"></el-radio>
-                    <el-radio label="Bearish" value="1"></el-radio>
+                    <el-radio label="bullish" value="0"></el-radio>
+                    <el-radio label="bearish" value="1"></el-radio>
                   </el-radio-group>
                 </el-form-item>
 
@@ -274,7 +274,7 @@
               let opts = {
                 FuturesId: this.futuresInfo.id,
                 buyNum: this.form.buyNum ? this.form.buyNum : 0,
-                buyType: this.form.buyType === 'Bullish' ? 0 : 1
+                buyType: this.form.buyType === 'bullish' ? 0 : 1
               }
               this.loadingBtn = true
               let data = await api.buyFutures(opts)

@@ -5,115 +5,6 @@
     :style="'height:' + windowHeight + 'px'"
   >
     <el-tabs style="margin-top:0px;" v-model="activeName" class="black-style">
-      <!--  label="指数" -->
-      <el-tab-pane v-if="$store.state.productSetting.indexDisplay" name="three">
-        <div class="table transaction-table">
-          <!-- <div class="table-search">
-            <el-row type="flex" justify='end'>
-              <el-col :span="24">
-                <el-input size="mini" clearable v-model="form.stock" placeholder="请输入股票代码和股票">
-                  <el-button size="mini" @click="getList" slot="append" icon="el-icon-search"></el-button>
-                </el-input>
-              </el-col>
-            </el-row>
-          </div>-->
-          <el-table
-            stripe
-            v-loading="loading"
-            :data="list.list"
-            @row-click="toTransaction2"
-            :height="windowHeight + 70"
-            style="width: 100%"
-          >
-            <el-table-column prop="indexName" label="name">
-              <template slot-scope="scope">
-                <div class="tab-name">
-                  <p style="display: flex; width: 100px;">
-                    <a
-                      v-if="scope.row.isOption == 0"
-                      href="javascript:;"
-                      @click="tianjiaOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing"></i
-                    ></a>
-                    <a
-                      v-if="scope.row.isOption == 1"
-                      href="javascript:;"
-                      @click="quxiaoOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing1"></i
-                    ></a>
-                    {{ scope.row.indexName }}
-                  </p>
-                  <span class="code">
-                    <i
-                      v-if="scope.row.transState === 1"
-                      class="iconfont icon-jiaoyi1 red"
-                    ></i>
-                    <i
-                      v-if="scope.row.transState === 0"
-                      class="iconfont icon-jinzhi"
-                    ></i>
-                    {{ scope.row.indexCode }}
-                  </span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="nowPrice" align="right" label="latest price">
-              <template slot-scope="scope">
-                <div class="price">
-                  <div
-                    :class="
-                      scope.row.floatRate < 0
-                        ? 'green'
-                        : scope.row.floatRate == 0
-                        ? ''
-                        : 'red'
-                    "
-                  >
-                    <span v-if="scope.row.currentPoint === 0">-</span>
-                    <span v-else>{{
-                      Number(scope.row.currentPoint).toFixed(2)
-                    }}</span>
-                    <i
-                      v-if="scope.row.floatRate > 0"
-                      class="iconfont icon-direction-top"
-                    ></i>
-                    <i
-                      v-if="scope.row.floatRate < 0"
-                      class="iconfont icon-down"
-                    ></i>
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="floatRate" align="right" label="Quote change">
-              <template slot-scope="scope">
-                <div class="price">
-                  <div
-                    :class="
-                      scope.row.floatRate < 0
-                        ? 'green'
-                        : scope.row.floatRate == 0
-                        ? ''
-                        : 'red'
-                    "
-                  >
-                    <span v-if="scope.row.floatRate === 0">-</span>
-                    <span v-else
-                      >{{ Number(scope.row.floatRate).toFixed(2) }}%</span
-                    >
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- <div class="page-box text-center">
-              <a @click="toStock" class="more-btn" href="javascript:;">
-                加載更多
-                <i class="iconfont icon-xiasanjiao"></i>
-              </a>
-          </div>-->
-        </div>
-      </el-tab-pane>
       <!-- label="股票" -->
       <el-tab-pane :name="['first','four'].includes(activeName)?activeName:''">
         <div class="table transaction-table">
@@ -137,14 +28,13 @@
             </el-row>
           </div>
           <el-table
-            stripe
             v-loading="loading"
             :data="list.list"
             @row-click="toTransaction"
             :height="windowHeight"
             style="width: 100%"
           >
-            <el-table-column prop="name" label="name">
+            <el-table-column prop="name" label="Stock Name">
               <template slot-scope="scope">
                 <div class="tab-name">
                   <p style="display: flex; width: 100px;">
@@ -160,35 +50,16 @@
                       @click="quxiaoOptions(scope.row)"
                       ><i class="red-xx iconfont icon-wujiaoxing1"></i
                     ></a>
-                    {{ scope.row.name }}
+                    <span style="text-overflow: ellipsis;overflow: hidden; white-space:nowrap;">  {{ scope.row.name }}</span>
+                  
                   </p>
                   <span class="code">
-                    <!-- <i
-                      v-if="scope.row.stock_plate === '科創'"
-                      class="iconfont kechuang-stock"
-                      >科創</i
-                    >
-                    <i
-                      v-else-if="scope.row.stock_type === 'sh'"
-                      class="iconfont hu-stock"
-                      >滬</i
-                    >
-                    <i
-                      v-else-if="scope.row.stock_type === 'sz'"
-                      class="iconfont shen-stock"
-                      >深</i
-                    >
-                    <i
-                      v-else-if="scope.row.stock_type === 'tw'"
-                      class="iconfont shen-stock"
-                      >台</i
-                    > -->
                     {{ scope.row.code }}
                   </span>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="nowPrice" align="right" label="Current price">
+            <el-table-column prop="nowPrice" align="right" label="Latest price">
               <template slot-scope="scope">
                 <div class="price">
                   <div
@@ -221,7 +92,7 @@
                 </div>-->
               </template>
             </el-table-column>
-            <el-table-column prop="hcrate" align="right" label="Quote change">
+            <el-table-column prop="hcrate" align="right" label="Chg %">
               <template slot-scope="scope">
                 <div class="price">
                   <div
@@ -262,134 +133,6 @@
           </div>
         </div>
       </el-tab-pane>
-      <!-- label="科创" -->
-
-      <el-tab-pane
-        v-if="$store.state.productSetting.kcStockDisplay"
-        name="four"
-      >
-        <div class="table transaction-table">
-          <!-- <div class="table-search">
-            <el-row type="flex" justify='end'>
-              <el-col :span="24">
-                <el-input size="mini" clearable v-model="form.stock" placeholder="请输入股票代码和股票">
-                  <el-button size="mini" @click="getList" slot="append" icon="el-icon-search"></el-button>
-                </el-input>
-              </el-col>
-            </el-row>
-          </div>-->
-          <el-table
-            stripe
-            v-loading="loading"
-            :data="list.list"
-            @row-click="toTransaction"
-            :height="windowHeight + 30"
-            style="width: 100%"
-          >
-            <el-table-column prop="name" label="name">
-              <template slot-scope="scope">
-                <div class="tab-name">
-                  <p style="display: flex; width: 100px;">
-                    <a
-                      v-if="scope.row.isOption == 0"
-                      href="javascript:;"
-                      @click="tianjiaOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing"></i
-                    ></a>
-                    <a
-                      v-if="scope.row.isOption == 1"
-                      href="javascript:;"
-                      @click="quxiaoOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing1"></i
-                    ></a>
-                    {{ scope.row.name }}
-                  </p>
-                  <span class="code">
-                    <!-- <i
-                      v-if="scope.row.stock_plate === '科創'"
-                      class="iconfont kechuang-stock"
-                      >科創</i
-                    > -->
-                    {{ scope.row.code }}
-                  </span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="nowPrice" align="right" label="Current price">
-              <template slot-scope="scope">
-                <div class="price">
-                  <div
-                    :class="
-                      scope.row.hcrate < 0
-                        ? 'green'
-                        : scope.row.hcrate == 0
-                        ? ''
-                        : 'red'
-                    "
-                  >
-                    <span v-if="scope.row.nowPrice === 0">-</span>
-                    <span v-else>
-                      {{ Number(scope.row.nowPrice).toFixed(2) }}
-                      <i
-                        v-if="scope.row.hcrate > 0"
-                        class="iconfont icon-direction-top"
-                      ></i>
-                      <i
-                        v-if="scope.row.hcrate < 0"
-                        class="iconfont icon-down"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-                <!-- <div v-if="scope.row.now_price" :class="changeTextClass[scope.$index] === true?'heartBeat  tab-number':' tab-number'">
-                  <p :class="scope.row.now_price - scope.row.buyOrderPrice < 0?'green bounceIn':scope.row.now_price - scope.row.buyOrderPrice > 0?'bounceIn red':'bounceIn'">
-                    {{scope.row.now_price === 0?'-':scope.row.now_price}}
-                  </p>
-                </div>-->
-              </template>
-            </el-table-column>
-            <el-table-column prop="hcrate" align="right" label="Quote change">
-              <template slot-scope="scope">
-                <div class="price">
-                  <div
-                    :class="
-                      scope.row.hcrate < 0
-                        ? 'green'
-                        : scope.row.hcrate == 0
-                        ? ''
-                        : 'red'
-                    "
-                  >
-                    <span v-if="scope.row.nowPrice === 0">-</span>
-                    <span v-else
-                      >{{ Number(scope.row.hcrate).toFixed(2) }}%</span
-                    >
-                    <!-- <i v-if="scope.row.hcrate>0" class="iconfont icon-up"></i>
-                    <i v-if="scope.row.hcrate<0" class="iconfont icon-down"></i>-->
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="page-box text-center">
-            <a @click="toStock" class="more-btn" href="javascript:;">
-              load more
-              <i class="iconfont icon-xiasanjiao"></i>
-            </a>
-            <!-- <el-pagination
-            class="pull-right"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="list.pageNum"
-                :page-sizes="[10, 20, 30, 40,50]"
-                :page-size="list.pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="list.total">
-            </el-pagination>-->
-          </div>
-        </div>
-      </el-tab-pane>
-
       <!-- label="自選" -->
       <el-tab-pane v-if="$store.state.haslogin" name="second">
         <div v-show="$store.state.haslogin" class="table transaction-table">
@@ -413,7 +156,6 @@
             </el-row>
           </div>
           <el-table
-            stripe
             v-loading="loading"
             :data="list.list"
             @row-click="toTransaction"
@@ -446,12 +188,13 @@
               <template slot-scope="scope">
                 <div class="tab-name">
                   <p style="display: flex; width: 100px;">
-                    {{ scope.row.name }}
+                   
+                    <span style="text-overflow: ellipsis;overflow: hidden; white-space:nowrap;"> {{ scope.row.stockName }}</span>
                   </p>
                   <span class="code">
-                    <i class="iconfont kechuang-stock">台</i
+                    <i class="iconfont kechuang-stock">US</i
                     >
-                    {{ scope.row.code }}
+                    {{ scope.row.stockCode }}
                   </span>
                 </div>
               </template>
@@ -489,7 +232,7 @@
                 </div>-->
               </template>
             </el-table-column>
-            <el-table-column prop="hcrate" align="center" label="Quote change">
+            <el-table-column prop="hcrate" align="center" label="chg %">
               <template slot-scope="scope">
                 <div class="price">
                   <div
@@ -530,197 +273,6 @@
           </div>
         </div>
       </el-tab-pane>
-      <!-- label="期貨" -->
-      <!-- v-if="$store.state.productSetting.futuresDisplay"  -->
-      <el-tab-pane name="five">
-        <div class="table transaction-table">
-          <el-table
-            stripe
-            v-loading="loading"
-            :data="list.list"
-            @row-click="toTransaction5"
-            :height="windowHeight + 70"
-            style="width: 100%"
-          >
-            <el-table-column prop="futuresName" label="name">
-              <template slot-scope="scope">
-                <div class="tab-name">
-                  <p style="display: flex; width: 100px;">
-                    <a
-                      v-if="scope.row.isOption == 0"
-                      href="javascript:;"
-                      @click="tianjiaOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing"></i
-                    ></a>
-                    <a
-                      v-if="scope.row.isOption == 1"
-                      href="javascript:;"
-                      @click="quxiaoOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing1"></i
-                    ></a>
-                    {{ scope.row.futuresName }}
-                  </p>
-                  <!-- <p>{{scope.row.futuresName}}</p> -->
-                  <span class="qihuo-stock">{{ scope.row.futuresCode }}</span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="nowPrice" align="right" label="latest price">
-              <template slot-scope="scope">
-                <div class="price">
-                  <div
-                    :class="
-                      scope.row.floatRate < 0
-                        ? 'green'
-                        : scope.row.floatRate == 0
-                        ? ''
-                        : 'red'
-                    "
-                  >
-                    <span v-if="scope.row.nowPrice === 0">-</span>
-                    <span v-else>{{
-                      Number(scope.row.nowPrice).toFixed(2)
-                    }}</span>
-                    <!-- {{scope.row.coinCode}} -->
-                    <!-- <p class="code">{{(scope.row.nowPrice * scope.row.coinRate).toFixed(2)}} USD</p> -->
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- <div class="page-box text-center">
-              <a @click="toStock" class="more-btn" href="javascript:;">
-                加載更多
-                <i class="iconfont icon-xiasanjiao"></i>
-              </a>
-          </div>-->
-        </div>
-      </el-tab-pane>
-
-      <!-- label="創業版" -->
-      <!-- v-if="$store.state.productSetting.futuresDisplay"  -->
-      <el-tab-pane name="start">
-        <div class="table transaction-table">
-          <!-- <div class="table-search">
-			  <el-row type="flex" justify='end'>
-			    <el-col :span="24">
-			      <el-input size="mini" clearable v-model="form.stock" placeholder="請輸入股票代碼和股票">
-			        <el-button size="mini" @click="getList" slot="append" icon="el-icon-search"></el-button>
-			      </el-input>
-			    </el-col>
-			  </el-row>
-			</div>-->
-          <el-table
-            stripe
-            v-loading="loading"
-            :data="list.list"
-            @row-click="toTransaction"
-            :height="windowHeight + 30"
-            style="width: 100%"
-          >
-            <el-table-column prop="name" label="name">
-              <template slot-scope="scope">
-                <div class="tab-name">
-                  <p style="display: flex; width: 100px;">
-                    <a
-                      v-if="scope.row.isOption == 0"
-                      href="javascript:;"
-                      @click="tianjiaOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing"></i
-                    ></a>
-                    <a
-                      v-if="scope.row.isOption == 1"
-                      href="javascript:;"
-                      @click="quxiaoOptions(scope.row)"
-                      ><i class="red-xx iconfont icon-wujiaoxing1"></i
-                    ></a>
-                    {{ scope.row.name }}
-                  </p>
-                  <span class="code">
-                    <!-- <i
-                      v-if="scope.row.stock_plate === '創業'"
-                      class="iconfont kechuang-stock"
-                      >創業</i
-                    > -->
-                    {{ scope.row.code }}
-                  </span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="nowPrice" align="right" label="Current price">
-              <template slot-scope="scope">
-                <div class="price">
-                  <div
-                    :class="
-                      scope.row.hcrate < 0
-                        ? 'green'
-                        : scope.row.hcrate == 0
-                        ? ''
-                        : 'red'
-                    "
-                  >
-                    <span v-if="scope.row.nowPrice === 0">-</span>
-                    <span v-else>
-                      {{ Number(scope.row.nowPrice).toFixed(2) }}
-                      <i
-                        v-if="scope.row.hcrate > 0"
-                        class="iconfont icon-direction-top"
-                      ></i>
-                      <i
-                        v-if="scope.row.hcrate < 0"
-                        class="iconfont icon-down"
-                      ></i>
-                    </span>
-                  </div>
-                </div>
-                <!-- <div v-if="scope.row.now_price" :class="changeTextClass[scope.$index] === true?'heartBeat  tab-number':' tab-number'">
-			        <p :class="scope.row.now_price - scope.row.buyOrderPrice < 0?'green bounceIn':scope.row.now_price - scope.row.buyOrderPrice > 0?'bounceIn red':'bounceIn'">
-			          {{scope.row.now_price === 0?'-':scope.row.now_price}}
-			        </p>
-			      </div>-->
-              </template>
-            </el-table-column>
-            <el-table-column prop="hcrate" align="right" label="Quote change">
-              <template slot-scope="scope">
-                <div class="price">
-                  <div
-                    :class="
-                      scope.row.hcrate < 0
-                        ? 'green'
-                        : scope.row.hcrate == 0
-                        ? ''
-                        : 'red'
-                    "
-                  >
-                    <span v-if="scope.row.nowPrice === 0">-</span>
-                    <span v-else
-                      >{{ Number(scope.row.hcrate).toFixed(2) }}%</span
-                    >
-                    <!-- <i v-if="scope.row.hcrate>0" class="iconfont icon-up"></i>
-			          <i v-if="scope.row.hcrate<0" class="iconfont icon-down"></i>-->
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="page-box text-center">
-            <a @click="toStock" class="more-btn" href="javascript:;">
-              load more
-              <i class="iconfont icon-xiasanjiao"></i>
-            </a>
-            <!-- <el-pagination
-			  class="pull-right"
-			      @size-change="handleSizeChange"
-			      @current-change="handleCurrentChange"
-			      :current-page="list.pageNum"
-			      :page-sizes="[10, 20, 30, 40,50]"
-			      :page-size="list.pageSize"
-			      layout="total, sizes, prev, pager, next, jumper"
-			      :total="list.total">
-			  </el-pagination>-->
-          </div>
-        </div>
-      </el-tab-pane>
     </el-tabs>
     <BuyIndex
       :handleOptions2="handleOptions2"
@@ -737,13 +289,11 @@
 
 <script>
 import * as api from "../../../axios/api";
-import ChartBox from "./chart";
 import BuyIndex from "./indexbuy-dialog";
 import BuyFutures from "./futuresbuy-dialog";
 
 export default {
   components: {
-    ChartBox,
     BuyIndex,
     BuyFutures
   },
@@ -1035,27 +585,26 @@ export default {
       // } else {
       //   this.$message.error(data.msg);
       // }
-      let code =
-        this.activeName === "first" ||
-        this.activeName === "four" ||
-        this.activeName == "start"
-          ? row.code
-          : row.stockCode;
-      if (row.stockCode != undefined && row.stockGid.indexOf("hf_") != -1) {
-        code = row.stockGid;
-      } else if (
-        row.stockCode !== undefined &&
-        row.stockCode.substring(0, 3) == "000"
-      ) {
-        code = row.stockGid;
-      }
+      // let code =
+      //   this.activeName === "first" ||
+      //   this.activeName === "four" ||
+      //   this.activeName == "start"
+      //     ? row.code
+      //     : row.stockCode;
+      // if (row.stockCode != undefined && row.stockGid.indexOf("hf_") != -1) {
+      //   code = row.stockGid;
+      // } else if (
+      //   row.stockCode !== undefined &&
+      //   row.stockCode.substring(0, 3) == "000"
+      // ) {
+      //   code = row.stockGid;
+      // }
       this.$emit("changeActiveName", "first");
-
       // 股票交易
       this.$router.push({
         path: "/transaction",
         query: {
-          code: code
+          code: row.stockCode ==undefined?row.code:row.stockCode
         }
       });
       this.$emit("toTransaction", row);
@@ -1256,34 +805,34 @@ export default {
       if(resultData){
         data=resultData
       }else{
-        data = await api.getTwStockPageList(opt);
+        // data = await api.getTwStockPageList(opt);
+				 data = await api.getStock(opt);
       }
-  
-      this.list = { ...data.data, list: [] };
+      this.list = { ...data.data};
 	    this.total=this.list.total
-      let stock_ids = data.data.list.map(item => item.code||item.stockCode).join(",");
+      // let stock_ids = data.data.list.map(item => item.code||item.stockCode).join(",");
       
-      const res1 = await api.getTwStockData(stock_ids);
-      let arr=[]
-      res1.data.forEach((item, index) => {
-        let newItem = {
-          nowPrice: item["當盤成交價"],
-          hcrate: item["Quote change"],
-          today_max: item["最高價"],
-          today_min: item["最低價"]
-        };
-        let obj = data.data.list[index];
-        arr.push({
-          name: obj.name||obj.stockName,
-          code: obj.code||obj.stockCode,
-          stock_type: 'tw',
-          isOption:obj.isOption||'1',
-          ...newItem
-        });
-      });
-      this.list.list=arr
+      // const res1 = await api.getTwStockData(stock_ids);
+      // let arr=[]
+      // res1.data.forEach((item, index) => {
+      //   let newItem = {
+      //     nowPrice: item["當盤成交價"],
+      //     hcrate: item["Quote change"],
+      //     today_max: item["最高價"],
+      //     today_min: item["最低價"]
+      //   };
+      //   let obj = data.data.list[index];
+      //   arr.push({
+      //     name: obj.name||obj.stockName,
+      //     code: obj.code||obj.stockCode,
+      //     stock_type: 'tw',
+      //     isOption:obj.isOption||'1',
+      //     ...newItem
+      //   });
+      // });
+      // this.list.list=arr
       console.log(this.list);
-	  return data
+	  // return data
     }
   }
 };

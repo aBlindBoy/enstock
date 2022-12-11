@@ -31,7 +31,7 @@
               <div class="order-title">
                 <span class="main">{{item.stockName}}</span>
                 <span class="secondary">({{item.stockCode}})</span>
-                <span :class="item.orderDirection=='Bullish'?'type type-up':'type type-down'">{{item.orderDirection=='Bullish'?'Bullish':'Bearish'}}</span>
+                <span :class="item.orderDirection=='bullish'?'type type-up':'type type-down'">{{item.orderDirection=='bullish'?'bullish':'bearish'}}</span>
                 <!-- <span v-if="item.stockPlate=='科創'" :class="item.stockPlate=='科創'?'type':''">科創</span> -->
                 <span class="pull-right">total profit and loss:<b
                   :class="item.allProfitAndLose<0?'space green':item.allProfitAndLose==0?'space':'space red'">{{item.allProfitAndLose}}</b></span>

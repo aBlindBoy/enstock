@@ -25,11 +25,11 @@ public class ArticleApiController {
         return this.iSiteArticleService.list(artTitle, artType, pageNum, pageSize);
     }
 
-    //查询指定企业公告信息
+    //查询详情
     @RequestMapping({"detail.do"})
     @ResponseBody
-    public ServerResponse detail(Integer artId) {
-        return this.iSiteArticleService.detail(artId);
+    public ServerResponse detail(Integer id) {
+        return this.iSiteArticleService.detail(id);
     }
 
     //top最新公告

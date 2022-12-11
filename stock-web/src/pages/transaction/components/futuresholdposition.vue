@@ -21,8 +21,8 @@
           <template slot-scope="scope">
             <div class="name">
               {{scope.row.futuresName}}
-              <i v-if="scope.row.orderDirection === 'Bullish'" class="red iconfont icon-up"></i>
-              <i v-if="scope.row.orderDirection  === 'Bearish'" class="green iconfont icon-down"></i>
+              <i v-if="scope.row.orderDirection === 'bullish'" class="red iconfont icon-up"></i>
+              <i v-if="scope.row.orderDirection  === 'bearish'" class="green iconfont icon-down"></i>
               <p class="exchange-p">
                 {{scope.row.futuresCode}}
               </p>

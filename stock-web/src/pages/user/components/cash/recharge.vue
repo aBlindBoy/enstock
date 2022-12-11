@@ -32,7 +32,6 @@
 
 <script>
 import HomeHeader from "../../../../components/HeaderOrder";
-import HomeFooter from "../../../../components/Footer";
 import AccountBox from "./pay1";
 import MenuBox from "../menu";
 import * as api from "../../../../axios/api";
@@ -40,7 +39,6 @@ import * as api from "../../../../axios/api";
 export default {
   components: {
     HomeHeader,
-    HomeFooter,
     AccountBox,
     MenuBox,
   },

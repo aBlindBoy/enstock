@@ -9,14 +9,16 @@
         style="width: 100%"
         empty-text="No Data"
       >
-        <el-table-column prop="name" width="200px" align="left" label="Stock Name">
+        <el-table-column prop="name" width="200px" align="left"
+         :label="$t('common.stockName')">
           <template slot-scope="scope">
             <span style="padding-right:6px">{{ scope.row.name }}</span>
          
           </template>
         </el-table-column>
 
-        <el-table-column prop="stockCode" width="200px" align="left" label="Stock Code">
+        <el-table-column prop="code" width="200px" align="left" 
+        :label="$t('common.stockCode')">
           <template slot-scope="scope">
             <span class="code">
               {{ scope.row.code }}
@@ -27,7 +29,7 @@
           prop="nowPrice"
           width="130px"
           align="left"
-          label="Current price"
+          :label="$t('common.lastPrice')"
         >
           <template slot-scope="scope">
             <div class="price" v-if="scope.row.nowPrice">
@@ -60,7 +62,9 @@
             </div> -->
           </template>
         </el-table-column>
-        <el-table-column prop="hcrate" align="left" label="Quote change">
+        <el-table-column prop="hcrate" align="left" 
+        :label="$t('common.chgRate')"
+      >
           <template slot-scope="scope">
             <div class="price"  v-if="scope.row.hcrate">
               <div
@@ -80,13 +84,16 @@
             <div v-else>--</div>
           </template>
         </el-table-column>
-        <el-table-column prop="today_max" align="left" label="Highest">
+        <el-table-column prop="today_max" align="left" 
+        
+        :label="$t('common.highest')">
           <template slot-scope="scope">
               <div :class="scope.row.hcrate<0?'green':scope.row.hcrate==0?'':'red'" v-if="scope.row.today_max">{{scope.row.today_max}}</div>
               <div v-else>--</div>
           </template>
         </el-table-column>
-        <el-table-column prop="today_min" align="left" label="Lowest">
+        <el-table-column prop="today_min" align="left" 
+        :label="$t('common.lowest')">
           <template slot-scope="scope">
               <div :class="scope.row.hcrate<0?'green':scope.row.hcrate==0?'':'red'" v-if="scope.row.today_min">{{scope.row.today_min}}</div>
               <div v-else>--</div>
@@ -170,11 +177,12 @@ export default {
       this.getData();
     },
     toTransaction(row, column, event) {
+      debugger
       // 去交易界面
       this.$router.push({
         path: "/transaction",
         query: {
-          code: row.stockCode
+          code: row.code
         }
       });
     }

@@ -67,7 +67,7 @@ DefaultData.GetMinuteOption = function() {
   var option = {
     Type: "分钟走势图", //创建图形类型
     //Type:'分钟走势图横屏',
-
+    Language:'EN',
     //窗口指标
     Windows: [{ Index: "MACD", Modify: false, Change: false, Close: false }],
 
@@ -134,7 +134,7 @@ DefaultData.GetKLineIndexMenu = function() {
 DefaultData.GetKLineOption = function() {
   var option = {
     Type: "历史K线图", //创建图形类型
-
+    Language:'EN',
     //窗口指标
     Windows: [
       { Index: "MA", Modify: true, Modify: true, Change: true },
@@ -272,7 +272,7 @@ export default {
   props: ["idx", "ucode", "NarBarArry"],
   watch: {
     ucode(newVal) {
-      this.ChangeSymbol(`${newVal}.tw`);
+      this.ChangeSymbol(`${newVal}.us`);
     },
     idx(newVal) {
       this.chartType = "kline";
@@ -336,6 +336,7 @@ export default {
     this.$nextTick(() => {
       this.CreateMinuteChart();
       this.CreateKLineChart();
+      this.ChangeSymbol(`${this.ucode}.us`);
     });
 
     window.onresize = _.debounce(this.OnSize, 200);
@@ -435,6 +436,7 @@ export default {
       this.IsShowRightMenu = isShowRightMenu;
 
       this.Symbol = symbol;
+      debugger
       this.Chart.ChangeSymbol(this.Symbol);
       this.KLineChart.ChangeSymbol(this.Symbol);
     },

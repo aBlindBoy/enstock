@@ -30,7 +30,7 @@
                   <span
                     class="iconfont icon-hangqing transaction-hangqing"
                   ></span>
-                  <span style="font-size: 14px;">Quotes</span>
+                  <span style="font-size: 14px;">{{$t('tradingFloor.quotes')}}</span>
                 </div>
                 <div
                   class="optional optional-item-hover"
@@ -41,64 +41,7 @@
                 <span
                     class="iconfont icon-hangqing transaction-hangqing"
                   ></span>
-                 Optional
-                </div>
-              </div>
-
-             <!--  <div class style="margin-left: 15px;display: flex;">
-                <div class="market transaction-red-bg zixun">
-                  <span
-                    class="iconfont icon-zixun transaction-information"
-                  ></span>
-                  <span style="font-size: 14px;margin-left: 5px; ">News</span>
-                </div>
-                <div class="optional-list">
-                  <div class="top">
-                    <div
-                      class="optional-item-hover"
-                      v-for="(item, index) in information"
-                      :key="index"
-                      v-if="index < 4"
-                      @click="optionalTablebox(item, index, '2')"
-                      :class="optionalIndex == index ? 'currIndex' : ''"
-                    >
-                      {{ item.name }}
-                    </div>
-                  </div>
-                  <div class="bottom">
-                    <div
-                      class="optional-item-hover"
-                      v-for="(item, index) in information"
-                      @click="optionalTablebox(item, index, '2')"
-                      :class="optionalIndex == index ? 'currIndex' : ''"
-                      :key="index"
-                      v-if="index >= 4"
-                    >
-                      {{ item.name }}
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-              <div class style="display: flex;text-align: ;">
-                <div class="market transaction-red-bg zhibo">
-                  <span class="iconfont icon-zhibo-"></span>
-                  <span style="font-size: 14px;margin-left: 5px; ">Live streaming</span>
-                </div>
-                <div class="optional-list">
-                  <div
-                    style="display: flex;  line-height: 40px; text-align: center;"
-                  >
-                    <div
-                      @click="qidai"
-                      class="optional-item-hover"
-                      style="cursor: pointer; width: 70px;border-right: 0.5px solid rgb(78, 78, 78);"
-                      v-for="(item, index) in direct"
-                      :key="index"
-                      v-if="index < 4"
-                    >
-                      {{ item.name }}
-                    </div>
-                  </div>
+                  >{{$t('tradingFloor.optional')}}
                 </div>
               </div>
             </div>
@@ -106,138 +49,8 @@
         </div>
 
         <el-row :gutter="3">
-          <el-col class="hei" :span="4" v-if="cutIndex == 2">
-            <div
-              :style="'height:' + (Number(windowHeight)+30) + 'px'"
-              class="listhi-cont"
-              style="margin-bottom: 2px; width: 100%;height: 800px;  padding: 20px 0 0 0;overflow: hidden auto;"
-            >
-              <div
-                style="display:flex;align-items: center; justify-content: center;"
-              >
-                <span class="buy-xian">——</span>
-                <span style="margin: 0 10px;">news</span>
-                <span class="buy-xian">——</span>
-              </div>
-
-              <div
-                style="width:100%;display: flex;justify-content: center;margin-top: 20px;position: relative;"
-              >
-                <input
-                  type="text"
-                  v-model="searchTran"
-                  placeholder="Enter search content"
-                  class="shous"
-                />
-                <span
-                  class="iconfont icon-search search-tran"
-                  @click="getSearch"
-                ></span>
-              </div>
-              <div
-                style="width:100%;margin-left:10px;display: flex;margin-top: 20px;position: relative;"
-              >
-                <div style="cursor: pointer;" @click="sort('date')">
-                  <span class="iconfont icon-shijian date-icon"></span>
-                  <span>by time</span>
-                  <span
-                    class="iconfont icon-shangxiajiantou shangxiajiantou"
-                  ></span>
-                </div>
-                <!-- <div
-                  style="margin-left:30px;cursor: pointer;"
-                  @click="sort('redu')"
-                >
-                  <span class="iconfont icon-redu redu"></span>
-                  <span>按熱度</span>
-                  <span
-                    class="iconfont icon-shangxiajiantou shangxiajiantou"
-                  ></span>
-                </div> -->
-              </div>
-              <div
-                style="display: flex;justify-content: center;margin-top: 20px;"
-                v-if="newsList.length <= 0"
-              >
-              No data
-              </div>
-
-              <div
-                class="newsList-item"
-                style="margin:0 10px 10px 10px; padding-bottom: 10px;cursor: pointer;"
-                v-for="(item, index) in newsList"
-                :key="index"
-                @click="selectDetails(item, index)"
-              >
-                <div style="display: flex;margin-top: 20px;">
-                  <div style="font-size: 12px;position: relative;">
-                    <span
-                      class="iconfont icon-triangle-left sanjiao"
-                      :class="index < 3 ? 'red' : 'ccc'"
-                    ></span>
-                    <span class="quantity" :class="index < 3 ? '' : 'bg-cc'">{{
-                      index + 1
-                    }}</span>
-                  </div>
-                  <div
-                    style="font-weight: bolder;font-size: 12px;"
-                    class="history-title"
-                  >
-                    {{ item.title }}
-                  </div>
-                </div>
-                <div
-                  style="display: flex; justify-content: space-between;margin-top: 12px;margin-left:28px;"
-                >
-                  <div>
-                    <span style="font-size: 12px;color:rgb(131, 131, 131);"
-                      >{{ item.source }}：</span
-                    >
-                    <span style="font-size: 12px;color:rgb(131, 131, 131);">{{
-                      item.date
-                    }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- <div class="more" @click="toStock" v-if="newsList.length > 0">
-              <a class="more-btn" href="javascript:;">點擊加載更多內容</a>
-            </div> -->
-          </el-col>
-          <el-col
-            class="hei"
-            :span="20"
-            v-if="cutIndex == 2"
-            :style="'height:' + windowHeight1 + 'px'"
-          >
-            <div class="detail" style="height: 100%; overflow: auto;">
-              <div class="detail-cont">
-                <div class="detail-title">
-                  <h3>{{ detailsCont.title }}</h3>
-                </div>
-                <div class="detail-explain">
-                  <div>
-                    <span class="iconfont icon-fabuxuqiu date-icon"></span>
-                    <span>source:{{ detailsCont.source }}</span>
-                  </div>
-                  <div>
-                    <span class="iconfont icon-shijian date-icon"></span>
-                    <!-- <span class="iconfont icon-shijian"></span> -->
-                    <span>time:{{ detailsCont.date }}</span>
-                  </div>
-                 
-                </div>
-              </div>
-              <div class="detail-box" style="padding-bottom: 100px;">
-                <div v-html="detailsCont.content"></div> 
-                <div
-                  style="display:flex;align-items: center;flex-direction: column;"
-                >
-                  <img :src="detailsCont.img" />
-                </div>
-              </div>
-            </div>
-          </el-col>
+        
+        
           <el-col :span="5" v-if="cutIndex == 1">
             <!--  ==> 监听融资下单 -->
             <table-box
@@ -250,17 +63,11 @@
             ></table-box>
           </el-col>
           <el-col class="alterWidthCenter" :span="14" v-if="cutIndex == 1" style="height: calc(100vh - 103px);">
-            <chart-box
-              v-if="isChartOld"
-              :detail="detail"
-              :code="code"
-            ></chart-box>
-            <chart-new
-              v-if="!isChartOld"
+            <ChartNew
               :detail="detail"
               :code="code"
               :ucode="ucode"
-            ></chart-new>
+            ></ChartNew>
 
             <!-- 持仓单子 -->
 
@@ -273,7 +80,7 @@
               >
               <!--  v-if="$store.state.haslogin" -->
                 <el-tab-pane label="In/Out" name="zero">
-                  <buy-box1
+                  <BuyBox1
                     @selectDetailsItem="selectDetailsItem"
                     :cutIndex="cutIndex"
                     :detailsCont="detailsCont"
@@ -281,7 +88,7 @@
                     :handleOptions2="handleOptions2"
                     :settingInfo="settingInfo"
                     :code="code"
-                  ></buy-box1>
+                  ></BuyBox1>
                 </el-tab-pane>
                 <el-tab-pane label="Financing position" name="first">
                   <!-- 我的持仓 -->
@@ -298,13 +105,13 @@
                     :handleOptions="handleOptions"
                   ></sell-box>
                 </el-tab-pane>
-
-                <el-tab-pane
+               <!-- 我的持仓 指數 -->
+                <!-- <el-tab-pane
                   label="Index positions"
                   v-if="$store.state.productSetting.indexDisplay"
                   name="three"
                 >
-                  <!-- 我的持仓 指數 -->
+                
                   <index-hold-position
                     :haslogin="haslogin"
                     :hasGetNewOrder="hasGetNewOrder2"
@@ -320,20 +127,21 @@
                     :hasChangeSell="hasChangeSell2"
                     :handleOptions="handleOptionsindex"
                   ></index-sell-box>
-                </el-tab-pane>
-                <el-tab-pane
+                </el-tab-pane> -->
+                  <!-- 我的持仓 期貨 -->
+                <!-- <el-tab-pane
                   label="futures position"
                   v-if="$store.state.productSetting.futuresDisplay"
                   name="five"
                 >
-                  <!-- 我的持仓 期貨 -->
+                
                   <futures-hold-position
                     :haslogin="haslogin"
                     :hasGetNewOrder="hasChangeSell3"
                     :handleOptions="handleOptionsFutures"
                   ></futures-hold-position>
-                </el-tab-pane>
-                <el-tab-pane
+                </el-tab-pane> -->
+                <!-- <el-tab-pane
                   label="futures close"
                   v-if="$store.state.productSetting.futuresDisplay"
                   name="six"
@@ -342,21 +150,20 @@
                     :hasChangeSell="hasChangeSell3"
                     :handleOptions="handleOptionsFutures"
                   ></futures-sell-box>
-                </el-tab-pane>
-
+                </el-tab-pane> -->
+<!-- 
                 <el-tab-pane
                   label="Funding positions"
                   name="seven"
                   v-if="$store.state.productSetting.fundsDisplay"
                 >
-                  <!-- 配資持仓 -->
                   <funds-hold-position
                     :haslogin="haslogin"
                     :hasGetNewOrder="hasChangeSell4"
                     :handleOptions="handleOptionsFunds"
                   ></funds-hold-position>
-                </el-tab-pane>
-                <el-tab-pane
+                </el-tab-pane> -->
+                <!-- <el-tab-pane
                   label="Allotment and liquidation"
                   name="eight"
                   v-if="$store.state.productSetting.fundsDisplay"
@@ -365,36 +172,11 @@
                     :hasChangeSell="hasChangeSell4"
                     :handleOptions="handleOptionsFunds"
                   ></funds-sell-box>
-                </el-tab-pane>
+                </el-tab-pane> -->
               </el-tabs>
               </div>
           
-              <div v-if="false" class="account-state">
-                <span
-                  :class="
-                    $store.state.userInfo.allProfitAndLose > 0
-                      ? 'red'
-                      : $store.state.userInfo.allProfitAndLose < 0
-                      ? 'green'
-                      : ''
-                  "
-                  >The total profit and loss of the position:{{
-                    $store.state.userInfo.allProfitAndLose
-                  }}</span
-                >
-                <span style="color:#409EFF;"
-                  > freeze Margin：{{ $store.state.userInfo.allFreezAmt }}</span
-                >
-                <span style="color:#d06e45;"
-                  >mandatory Closing Line：{{
-                    (
-                      $store.state.userInfo.enableAmt +
-                      $store.state.userInfo.allFreezAmt *
-                        settingInfo.forceStopPercent
-                    ).toFixed(2)
-                  }}</span
-                >
-              </div>
+          
               <div v-show="!$store.state.haslogin" class="empty text-center">
 							  <div class="btn-wrap">
 							    <el-button
@@ -402,72 +184,22 @@
 							      type="primary"
 							      style="background-color: rgba(0,0,0,0)!important;"
 							      @click="toLogin"
-							    >Log in</el-button>
-							    <span>or</span>
+							    >{{$t('common.login')}}</el-button>
+							    <span>{{$t('tradingFloor.or')}}</span>
 							    <el-button
 							      class="btn-box"
 							      type="primary"
 							      style="background-color: rgba(0,0,0,0)!important;"
 							      @click="toRegister"
-							    >register</el-button>
+							    >{{$t('common.register')}}</el-button>
 							  </div>
 							</div>
-              <!-- <div
-                class="new-list-jiaoyi"
-                v-show="!$store.state.haslogin"
-                style="display: flex;"
-              >
-                <div class="news-cont">
-                  <div class="news-title">
-                    <span style="font-size: 14px;">新聞資訊</span>
-                    <span class="heng">——</span>
-                  </div>
-                  <div
-                    @click="selectDetails(item, index)"
-                    v-for="(item, index) in transactionNewList"
-                    :key="index"
-                    style="font-size: 12px;display: flex; justify-content: space-between;padding:6px 0;"
-                  >
-                    <div class="news-list">
-                      <span class="red">•</span>
-                      <span>•</span>
-                      <p>{{ item.title }}</p>
-                    </div>
-                    <div class="showTime" style="font-size:12px">{{ item.date}}</div>
-                  </div>
-                </div>
-                <div class="news-cont">
-                  <div class="news-title">
-                    <span style="font-size: 14px;">國際</span>
-                    <span class="heng">——</span>
-                  </div>
-                  <div
-                    @click="selectDetails(item, index)"
-                    v-for="(item, index) in transactionNoticeList"
-                    :key="index"
-                    style="font-size: 12px;display: flex; justify-content: space-between;padding:6px 0;"
-                  >
-                    <div class="news-list">
-                      <span class="red">•</span>
-                      <span>•</span>
-                      <p>{{ item.title }}</p>
-                    </div>
-                    <div class="showTime" style="font-size:12px">{{ item.date}}</div>
-                  </div>
-                </div>
-               <el-table :data="tableData" border height="290" style="width: 50%;">
-							    <el-table-column prop="date" label="新闻资讯 一"  style="width: 50%"></el-table-column>
-							  </el-table>
-              </div> -->
             </div>
           </el-col>
           <el-col class="alterWidthLeft" :span="5" v-if="cutIndex == 1">
-            <buy-box
-              :hasGetNewOrder="hasGetNewOrder"
-              :handleOptions2="handleOptions2"
-              :settingInfo="settingInfo"
+            <Company
               :code="code"
-            ></buy-box>
+            ></Company>
           </el-col>
         </el-row>
       </el-main>
@@ -477,22 +209,20 @@
 
 <script>
 import HomeHeader from "@/components/HeaderOrder";
-// import ChartBox from "./components/chart";
 import ChartNew from "./components/chart2";
 import TableBox from "./components/table";
 import HoldPosition from "./components/holdposition";
-import IndexHoldPosition from "./components/indexholdposition";
-import FuturesHoldPosition from "./components/futuresholdposition";
-import FundsHoldPosition from "./components/fundsholdposition";
+// import IndexHoldPosition from "./components/indexholdposition";
+// import FuturesHoldPosition from "./components/futuresholdposition";
+// import FundsHoldPosition from "./components/fundsholdposition";
 import SellBox from "./components/sell";
-import IndexSellBox from "./components/indexsell";
-import FuturesSellBox from "./components/futuressell";
-import FundsSellBox from "./components/fundssell";
-import BuyBox from "./components/buy";
+// import IndexSellBox from "./components/indexsell";
+// import FuturesSellBox from "./components/futuressell";
+// import FundsSellBox from "./components/fundssell";
+import Company from "./components/company";
 import BuyBox1 from "./components/buy1";
 
 import * as api from "@/axios/api";
-// import { formatDate } from "@/utils/utils.js";
 
 import {  format } from 'date-fns'
 
@@ -505,14 +235,14 @@ export default {
     ChartNew,
     TableBox,
     HoldPosition,
-    BuyBox,
-    IndexHoldPosition,
-    IndexSellBox,
+    Company,
+    // IndexHoldPosition,
+    // IndexSellBox,
     SellBox,
-    FuturesHoldPosition,
-    FundsHoldPosition,
-    FuturesSellBox,
-    FundsSellBox,
+    // FuturesHoldPosition,
+    // FundsHoldPosition,
+    // FuturesSellBox,
+    // FundsSellBox,
     BuyBox1
   },
   props: {},
@@ -527,117 +257,10 @@ export default {
       newsList: [],
       optionalIndex: -1,
       currIndex: 0,
-      // 中间底部通知公告列表
-      transactionNoticeList: [],
-      // 中间底部新闻列表
-      transactionNewList: [],
-      // 直播
       direct: [
-        // {
-        //   name: "財神到"
-        // },
-        // {
-        //   name: "王牌健言"
-        // }
-      ],
-      // 资讯
-      //  type：新闻类型：1、财经要闻，2、经济数据，3、全球股市，
-      // 4、7*24全球，5、商品资讯，6、上市公司，7、全球央行
-      information: [
-        {
-          name: "stock news",
-          type: 1
-        },
-        {
-          name: "comprehensive",
-          type: 2
-        },
-        {
-          name: "internationality",
-          type: 3
-        },
-        {
-          name: "Business",
-          type: 4
-        },
-        {
-          name: "economy",
-          type: 5
-        },
-        {
-          name: "financial management",
-          type: 6
-        },
-        {
-          name: "BBC",
-          type: 7
-        },
-        {
-          name: "general economy",
-          type: 8
-        }
-      ],
-      // 行情未登錄
-      // marketNot: [
-      //   {
-      //     name: "指數",
-      //     type: "three"
-      //   },
-      //   {
-      //     name: "股票",
-      //     type: "first"
-      //   },
-      //   {
-      //     name: "科創",
-      //     type: "four"
-      //   },
-      //   {
-      //     name: "期貨",
-      //     type: "five"
-      //   },
-      //   {
-      //     name: "創業版",
-      //     type: "start"
-      //   }
-      // ],
-      marketNot: [
-        
-        {
-          name: "上市",
-          type: "first"
-        },
-        {
-          name: "上櫃",
-          type: "four"
-        },
+   
       ],
       // 行情登錄
-      market: [
-        {
-          name: "滬深"
-        },
-        {
-          name: "上證"
-        },
-        {
-          name: "深證"
-        },
-        {
-          name: "板塊"
-        },
-        {
-          name: "科技版"
-        },
-        {
-          name: "創業板"
-        },
-        {
-          name: "中小半"
-        },
-        {
-          name: "全球指數"
-        }
-      ],
       code: "",
       ucode: "",
       activeName: "zero",
@@ -709,6 +332,8 @@ export default {
     // this.$store.state.productSetting = data
 
     this.code = this.$route.query.code;
+    this.ucode = this.$route.query.code;
+
     if (this.code.indexOf("hf_") != -1) {
       this.isChartOld = true;
     } else {
@@ -727,27 +352,14 @@ export default {
   },
   mounted() {
     window.activeName1 = "first";
-    this.getDetail();
-    this.getNewList();
-    this.getNoticeList();
+   
     // this.getNewsList();
   },
   methods: {
     qidai() {
       this.$message("Stay tuned");
     },
-    async selectDetailsItem(item) {
-      let res= await api.getTwNewsDetail({id:item.id})
-        let currentIndex=res.indexOf('<div class="p-0 sm:p-4 nstock-content">')
-        if(currentIndex==-1){
-          this.detailsCont={...item,content:'No data'}
-        }else{
-          res=res.substring(currentIndex)
-          let lastIndex=res.indexOf('</div>')
-          res=res.substring(0,lastIndex+6)
-          this.detailsCont={...item,content:res}
-        }
-    },
+   
     toUserCenter() {
       // 進入個人中心
       this.$router.push("/user");
@@ -820,106 +432,6 @@ export default {
       }
       this.newsList.push(...list);
     },
-    async sort(type) {
-      // 新闻列表排序
-      var query = {
-        pageNum: this.pageNum,
-        pageSize: 15,
-        type: this.newType
-      };
-      if (type == "sort") {
-        var q = Object.assign(query, {
-          sort: this.time1
-        });
-        this.newsList = await this.getNewsList(q);
-        this.switchData(this.newsList, "showTime");
-        this.time1 = this.time1 == "time1" ? "time0" : "time1";
-      } else {
-        var q = Object.assign(query, {
-          sort: this.views1
-        });
-        console.log(q);
-        this.newsList = await this.getNewsList(q);
-        this.switchData(this.newsList, "showTime");
-        this.views1 = this.views1 == "views1" ? "views0" : "views1";
-      }
-    },
-    async selectDetails(item, index) {
-      let res= await api.getTwNewsDetail({id:item.id})
-        let currentIndex=res.indexOf('<div class="p-0 sm:p-4 nstock-content">')
-        if(currentIndex==-1){
-          this.detailsCont={...item,content:'No data'}
-        }else{
-          res=res.substring(currentIndex)
-          let lastIndex=res.indexOf('</div>')
-          res=res.substring(0,lastIndex+6)
-          this.detailsCont={...item,content:res}
-        }
-    },
-    async getSearch() {
-      //  搜索新闻
-      var query = {
-        // keyword: this.searchTran,
-        pageNum: 1,
-        pageSize: 15
-      };
-      if (this.searchTran) {
-        var q = Object.assign(query, {
-          keyword: this.searchTran
-        });
-        this.newsList = await this.getNewsList(q);
-      } else {
-        this.newsList = this.getNewsList(query);
-      }
-    },
-    async getNewsList(query) {
-      // 获取资讯列表接口（交易大厅左侧小列表）
-
-      var data = await api.getNewsList(query);
-      if (data.status == 0) {
-        // this.newsList = data.data.list;
-        return data.data.list;
-      }
-    },
-    // async optionalTablebox(item, index, type) {
-    //   this.cutIndex = type;
-    //   this.optionalIndex = index;
-    //   this.currIndex = -1;
-    //   let data={}
-    //   switch (index) {
-    //     case 0:
-    //       data = await api.getTwNews({limit:30,categoryAll:true});
-    //       break;
-    //     case 1:
-    //       data = await api.getTwNewsByCategory({category:index});
-    //       break
-    //     case 6:
-    //     case 7:
-    //       data = await api.getTwNewsByCategory({category:index+4});
-    //       break;
-    //     default:
-    //       data = await api.getTwNewsByCategory({category:index+3});
-    //       break;
-    //   }
-    //   this.newType = item.type;
-     
-    //   this.newsList=data.data
-    //   if(this.newsList.length){
-    //     let obj=this.newsList[0]
-    //     let res= await api.getTwNewsDetail({id:obj.id})
-    //     let currentIndex=res.indexOf('<div class="p-0 sm:p-4 nstock-content">')
-    //     if(currentIndex==-1){
-    //       this.detailsCont={...obj,content:'No data'}
-    //     }else{
-    //       res=res.substring(currentIndex)
-    //       let lastIndex=res.indexOf('</div>')
-    //       res=res.substring(0,lastIndex+6)
-    //       this.detailsCont={...obj,content:res}
-    //     }
-        
-    //   }
-      
-    // },
     optTablebox(item, index, type, zi) {
       // 行情tab选项
       this.optionalIndex = -1;
@@ -941,13 +453,7 @@ export default {
       // 	this.$refs.tableBox.getlistStart()
       // }
     },
-    // @tab-click="handleClick"
-    // handleClick(val){
-    //   let name = window.localStorage.getItem('phone')
-    //   if(name){
-    //     this.activeName = val
-    //   }
-    // },
+ 
     // 时间转换
     switchData(list, time) {
       list.forEach(item => {
@@ -958,32 +464,7 @@ export default {
         item[time] = newDate.toLocaleDateString();
       });
     },
-    async getNoticeList() {
-      // 获取交易大厅-中间部分-通知公告
-      // let data = await api.getTransactionNoticeList({
-      //   pageSize: 10
-      // });
-      let data = await api.getTwNewsByCategory({
-        category:5
-      });
-      // if (data.status == 0) {
-        // this.switchData(data.data, "date");
-        this.transactionNoticeList = data.data;
-      // }
-    },
-    async getNewList() {
-      // 获取交易大厅-中间部分-新闻资讯
-      // let data = await api.getTransactionNewList({
-      //   pageSize: 10
-      // });
-      let data = await api.getTwNewsByCategory({
-        category:6
-      });
-      // this.switchData(data.data, "date");
-      // console.log( data.data);
-      this.transactionNewList = data.data;
-    },
-
+   
     handleOptions(opts) {
       // 监听平仓状态 融资
       this.hasChangeSell = opts;
@@ -1050,52 +531,33 @@ export default {
         code: this.$route.query.code
       };
       this.loading = true;
-      //let data = await api.getSingleStock(opts);
-      let [res1, res2] = await Promise.all([
-        api.getTwStockData(opts.code),
-        api.getTwStockExchange(opts.code)
-      ]);
-      let data = {};
-      let data1 = res1.data[0];
-      let data2 = res2.data[0]["五檔"];
-      data.name = data1["股票名稱"];
-      data.code = opts.code;
-      data.spell = "";
-      data.gid = opts.code;
-      data.nowPrice = data1["當盤成交價"];
-      data.hcrate = data1["Quote change"];
-      data.today_max = data1["最高價"];
-      data.today_min = data1["最低價"];
-      data.business_balance = data1["成交金額"];
-      data.business_amount = data1["當盤成交量"];
-      data.preclose_px =
-        parseFloat(data1["開盤價"]) + parseFloat(data1["漲跌"]);
-      data.open_px = data1["開盤價"];
-      data.buy1 = data2["買價1"].substring(1).replace(/\s+/g, "");
-      data.buy2 = data2["買價2"].substring(1).replace(/\s+/g, "");
-      data.buy3 = data2["買價3"].substring(1).replace(/\s+/g, "");
-      data.buy4 = data2["買價4"].substring(1).replace(/\s+/g, "");
-      data.buy5 = data2["買價5"].substring(1).replace(/\s+/g, "");
-      data.sell1 = data2["Selling price1"].substring(1).replace(/\s+/g, "");
-      data.sell2 = data2["Selling price2"].substring(1).replace(/\s+/g, "");
-      data.sell3 = data2["Selling price3"].substring(1).replace(/\s+/g, "");
-      data.sell4 = data2["Selling price4"].substring(1).replace(/\s+/g, "");
-      data.sell5 = data2["Selling price5"].substring(1).replace(/\s+/g, "");
-      data.buy1_num = data2["買量1"];
-      data.buy2_num = data2["買量2"];
-      data.buy3_num = data2["買量3"];
-      data.buy4_num = data2["買量4"];
-      data.buy5_num = data2["買量5"];
-      data.sell1_num = data2["賣量1"];
-      data.sell2_num = data2["賣量2"];
-      data.sell3_num = data2["賣量3"];
-      data.sell4_num = data2["賣量4"];
-      data.sell5_num = data2["賣量5"];
-
-      let code = data.code;
-      this.ucode = code;
+      let res1 = await api.getUsStockData(opts.code)
+      let stock = res1.data[0];
+      let stockDetail ={}
+      stockDetail.name = stock["200024"];//股票名稱
+      stockDetail.date = stock["200007"];//最近交易日期
+      // stockDetail.time = stock[""];//最近成交時刻
+      stockDetail.price = stock["6"];//最新價格
+      stockDetail.rate = stock["11"];//漲跌
+      stockDetail.hcrate = stock["56"];//漲跌幅
+      stockDetail.high = stock["12"];//最高價
+      stockDetail.low = stock["13"];//最低價
+      stockDetail.volumn = stock["800001"];//累積成交量
+      stockDetail.amount = stock[""];//成交金額
+      stockDetail.yes = stock["21"];//昨收
+      stockDetail.open = stock["19"];//開盤價
+      
+      if (stockDetail.rate > 0) {
+        stockDetail.color = "upColor";
+      }
+      if (stockDetail.rate < 0) {
+        stockDetail.color = "lowColor";
+      }
+      this.ucode = opts.code;
+      
+      this.code = opts.code;
       this.loading = false;
-      this.detail = data;
+      this.detail = stockDetail;
     },
     toRegister() {
       // 注册

@@ -11,31 +11,36 @@
     </div>
     <div class="login-box">
       <div class="form-box top-box">
-        <p class="animated fadeInDown">Dedicated line direct connection Institutional trading</p>
-        <p class="prompt animated fadeInUp">Institutional investment software tailored for investors</p>
-      </div>
+        <p class="animated fadeInDown">{{$t('forget.title')}}</p>
+        <p class="prompt animated fadeInUp">{{$t('forget.subTitle')}}</p>
+    </div>
       <div class="form-box">
-        <h2 style="text-align: center;">Forgot password</h2>
+        <h2 style="text-align: center;">{{$t('forget.forgotPassword')}}</h2>
         <el-form :hide-required-asterisk='true' :model="form" ref="ruleForm" :rules="rule" class="demo-form-inline">
           <el-form-item label="" prop="phone">
-            <el-input maxlength="24" max="24" type='text' class="user-phone" v-model="form.phone" placeholder="Please enter your mobile number or email">
+            <el-input maxlength="24" max="24" type='text' class="user-phone"
+             v-model="form.phone" :placeholder="$t('forget.forgotPassword')">
               <i slot="prepend" class="iconfont icon-shouji1"></i>
             </el-input>
           </el-form-item>
           <el-form-item label="" prop="code">
-            <el-input type='text' v-model="form.code"  class="user-phone"  placeholder="Verification code">
-              <el-button v-if="codeshow" @click="getCode" slot="append">Click for authentication code</el-button>
+            <el-input type='text' v-model="form.code"  class="user-phone"
+              :placeholder="$t('forget.verificationCode')">
+              <el-button v-if="codeshow" @click="getCode" slot="append">
+                {{$t('forget.verificationCode')}}</el-button>
               <el-button v-if="!codeshow" slot="append">{{count}}S</el-button>
               <i slot="prepend" class="iconfont icon-tongguo5"></i>
             </el-input>
           </el-form-item>
           <el-form-item label="" prop="pwd">
-            <el-input type='password' class="user-phone" v-model="form.pwd" placeholder="The password is 6~12 digits, letters or symbols">
+            <el-input type='password' class="user-phone" v-model="form.pwd" 
+            :placeholder="$t('forget.passwordPlaceholder')">
               <i slot="prepend" class="iconfont icon-zu" style="font-size: 15px;"></i>
             </el-input>
           </el-form-item>
           <el-form-item label="" prop="pwd2">
-            <el-input type='password' class="user-phone" v-model="form.pwd2" placeholder="Please confirm the password again">
+            <el-input type='password' class="user-phone" v-model="form.pwd2" 
+            :placeholder="$t('forget.confirmPassword')">
               <i slot="prepend" class="iconfont icon-zu" style="font-size: 15px;"></i>
             </el-input>
           </el-form-item>
@@ -45,7 +50,7 @@
         </div>
         <div class="text-left">
           <!-- 已有帳號？ -->
-          <a @click="toLogin">Back to login</a>
+          <a @click="toLogin">{{$t('forget.backToLogin')}}</a>
         </div>
       </div>
     </div>
@@ -55,7 +60,7 @@
     <newFooter></newFooter>
     <!-- <home-footer :siteInfo="siteInfo"></home-footer> -->
     <!-- <code-dialog ref="codeDialog"></code-dialog> -->
-    <el-dialog
+    <!-- <el-dialog
       title="驗證碼"
       class="er-code-dialog"
       :center='true'
@@ -75,12 +80,11 @@
         </div>
       </div>
 
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
-  import HomeFooter from '@/components/Footer'
   import HomeHeader from '@/components/HeaderOrder'
 import newFooter from '@/components/newFooter'
 
@@ -89,7 +93,6 @@ import newFooter from '@/components/newFooter'
 
   export default {
     components: {
-      HomeFooter,
       HomeHeader,
       newFooter
       // CodeDialog
@@ -110,30 +113,30 @@ import newFooter from '@/components/newFooter'
       // }
       let validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("Please enter your mobile number or email"));
+        callback(new Error(this.$t('forget.phonePlaceholder')));
       } 
       callback()
     };
       let validatePass2 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('Please enter password'))
+          callback(new Error(this.$t('forget.passwordPlaceholder')))
         } else {
           let val = value.replace(/\s*/g, '')
           console.log(val)
           let valuereg = value.replace(/\s*/g, '')
           let myreg = /^[a-zA-Z0-9!@#$%^&*.]{6,12}$/ // 密碼
           if (!myreg.test(valuereg)) {
-            callback(new Error('Please enter the correct password'))
+            callback(new Error(this.$t('forget.passwordPlaceholder')))
           }
           callback()
         }
       }
       let validatePass3 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('Please confirm your password'))
+          callback(new Error(this.$t('forget.confirmPassword')))
         } else {
           if (value !== this.form.pwd) {
-            callback(new Error('The two entered passwords do not match'))
+            callback(new Error(this.$t('forget.confirmPassword')))
           }
           callback()
         }
@@ -153,20 +156,20 @@ import newFooter from '@/components/newFooter'
         },
         rule: {
           phone: [
-            { required: true, validator: validatePass, message: 'Please enter your mobile number or email', trigger: 'blur' }
+            { required: true, validator: validatePass, message: this.$t('forget.phonePlaceholder'), trigger: 'blur' }
           ],
           pwd: [
-            { required: true, validator: validatePass2, message: 'Please enter password', trigger: 'blur' }
+            { required: true, validator: validatePass2, message: this.$t('forget.passwordPlaceholder'), trigger: 'blur' }
             // { min: 6,max:12, message: '密碼最少爲6到12位數', trigger: 'blur' },
           ],
           code: [
             { required: true, message: 'please enter verification code', trigger: 'blur' }
           ],
           pwd2: [
-            { required: true, validator: validatePass3, message: 'Please confirm your password', trigger: 'blur' }
+            { required: true, validator: validatePass3, message: this.$t('forget.confirmPassword'), trigger: 'blur' }
           ],
           invitecode: [
-            { required: true, message: 'Please enter institution code', trigger: 'blur' }
+            { required: true, message: this.$t('forget.verificationCode'), trigger: 'blur' }
           ]
         },
         adminUrl: '',
@@ -220,7 +223,7 @@ import newFooter from '@/components/newFooter'
             this.islogin = true
             let data = await api.forgetPas(opts)
             if (data.status === 0) {
-              this.$message.success('Password changed successfully, please log in')
+              this.$message.success(this.$t('forget.changedSuccess'))
               this.$router.push('/login')
             } else {
               this.$message.error(data.msg)
@@ -231,19 +234,19 @@ import newFooter from '@/components/newFooter'
           }
         })
       },
-      getCode () {
-        if (!this.form.phone) {
-          this.$message.error('Please enter your phone number')
-        } else {
-          // let myreg = /^[1][3,4,5,7,8][0-9]{9}$/  //手機號碼驗證
-          let myreg = /^[0-9]{11}$/ // 手機號碼驗證
-          if (!myreg.test(this.form.phone)) {
-            this.$message.error('Please enter the correct phone number')
-          } else {
-            this.checkPhone()
-          }
-        }
-      },
+      // getCode () {
+      //   if (!this.form.phone) {
+      //     this.$message.error('Please enter your phone number')
+      //   } else {
+      //     // let myreg = /^[1][3,4,5,7,8][0-9]{9}$/  //手機號碼驗證
+      //     let myreg = /^[0-9]{11}$/ // 手機號碼驗證
+      //     if (!myreg.test(this.form.phone)) {
+      //       this.$message.error('Please enter the correct phone number')
+      //     } else {
+      //       this.checkPhone()
+      //     }
+      //   }
+      // },
       async checkPhone () {
         // 先驗證是否已經註冊
         let data = await api.checkPhone({ phoneNum: this.form.phone })
@@ -256,7 +259,7 @@ import newFooter from '@/components/newFooter'
           this.dialogVisible = false
         } else {
           // 如果用戶已存在返回 0
-          this.$message.error('The phone number is not registered')
+          this.$message.error(this.$t('forget.registered'))
           // this.$router.push('/register')
         }
       },

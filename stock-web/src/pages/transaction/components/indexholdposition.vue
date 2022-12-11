@@ -24,8 +24,8 @@
               <span>
               ({{scope.row.indexCode}})
             </span>
-              <i v-if="scope.row.orderDirection === 'Bullish'" class="red iconfont icon-up"></i>
-              <i v-if="scope.row.orderDirection  === 'Bearish'" class="green iconfont icon-down"></i>
+              <i v-if="scope.row.orderDirection === 'bullish'" class="red iconfont icon-up"></i>
+              <i v-if="scope.row.orderDirection  === 'bearish'" class="green iconfont icon-down"></i>
             </p>
           </template>
         </el-table-column>

@@ -12,7 +12,7 @@
         <div class="wrapper">
           <div class="user-center-title" style="text-align:left">
             <span class="iconfont icon-you" style="color:#C11815;font-size:18px;margin-right:10px"></span>
-            Funding Details
+           {{$t('fundingDetails.title')}}
           </div>
           <el-table
             :data="list.list"
@@ -20,30 +20,30 @@
             <el-table-column
               prop="positionId"
               width="60px"
-              label="id">
+              :label="$t('fundingDetails.id')">
             </el-table-column>
             <el-table-column
               prop="deType"
               width="200px"
-              label="Total profit and loss">
+              :label="$t('fundingDetails.type')">
             </el-table-column>
             <el-table-column
               prop="deAmt"
               width="100px"
-              label="amount">
+              :label="$t('fundingDetails.amount')">
               <template slot-scope="scope">
                 <el-tag :type="scope.row.deAmt>0?'danger':scope.row.deAmt<0?'success':''">{{scope.row.deAmt}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column
               prop="deSummary"
-              label="describe">
+              :label="$t('fundingDetails.describe')">
 
             </el-table-column>
             <el-table-column
               prop="addTime"
               width="166px"
-              label="time">
+              :label="$t('fundingDetails.time')">
               <template slot-scope="scope">
                 <b v-if="scope.row.addTime">{{scope.row.addTime | timeFormat}}</b>
                 <b v-else></b>
@@ -71,14 +71,14 @@
 
 <script>
   import HomeHeader from '../../../../components/HeaderOrder'
-  import HomeFooter from '../../../../components/Footer'
+  // import HomeFooter from '../../../../components/Footer'
   import MenuBox from '../menu'
   import * as api from '../../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
+      // HomeFooter,
       MenuBox
     },
     props: {},

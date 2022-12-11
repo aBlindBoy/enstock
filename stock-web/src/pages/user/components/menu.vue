@@ -5,21 +5,23 @@
 
       <el-menu-item class="banner-menu first" index="disabled" disabled>
         <i class="iconfont icon-user"></i>
-        personal center
+        {{$t('persionnalMenu.personalCenter')}}
       </el-menu-item>
       <router-link to="/user" tag="li">
-        <el-menu-item index="2-1"><span class="iconfont icon-yuandianxiao"></span>account assets</el-menu-item>
+        <el-menu-item index="2-1">
+          <span class="iconfont icon-yuandianxiao"></span>    {{$t('persionnalMenu.accountAssets')}}</el-menu-item>
       </router-link>
       <router-link to="/message" tag="li">
         <el-menu-item index="2-13">
-          <div class="el-badge item-mark"><span class="iconfont icon-yuandianxiao"></span>Station news
+          <div class="el-badge item-mark">
+            <span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.stationMessage')}}
             <!-- <sup class="el-badge__content el-badge__content--undefined is-fixed" style="position:absolute;transform: translateY(-50%) translateX(100%);top: 19px;left: 35px;right: auto;">
               {{unreadCount}}</sup> -->
           </div>
         </el-menu-item>
       </router-link>
-       <router-link to="/xingu" tag="li">
-        <el-menu-item index="2-14"><span class="iconfont icon-yuandianxiao"></span>IPO subscription</el-menu-item>
+       <router-link to="/ipo" tag="li">
+        <el-menu-item index="2-14"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.ipo')}}</el-menu-item>
       </router-link>
 
       <!-- <template v-if="$store.state.productSetting.fundsDisplay">
@@ -47,15 +49,15 @@
 
       <el-menu-item class="banner-menu" index="disabled" disabled>
         <i class="iconfont icon-jiaoyi1"></i>
-        Trade
+        {{$t('persionnalMenu.trade')}}
       </el-menu-item>
       <router-link to="/holdposition" tag="li">
-        <el-menu-item index="2-2"><span class="iconfont icon-yuandianxiao"></span>US stock holdings</el-menu-item>
+        <el-menu-item index="2-2"><span class="iconfont icon-yuandianxiao"></span>   {{$t('persionnalMenu.usHoldings')}}</el-menu-item>
       </router-link>
       <router-link to="/sell" tag="li">
-        <el-menu-item index="2-3"><span class="iconfont icon-yuandianxiao"></span>US stock closing</el-menu-item>
+        <el-menu-item index="2-3"><span class="iconfont icon-yuandianxiao"></span> {{$t('persionnalMenu.usClose')}}</el-menu-item>
       </router-link>
-      <router-link v-show="indexDisplay" to="/indexholdposition" tag="li">
+      <!-- <router-link v-show="indexDisplay" to="/indexholdposition" tag="li">
         <el-menu-item index="indexhold"><span class="iconfont icon-yuandianxiao"></span>Index positions</el-menu-item>
       </router-link>
       <router-link v-show="indexDisplay" to="/indexsell" tag="li">
@@ -66,54 +68,53 @@
       </router-link>
       <router-link v-show="futuresDisplay" to="/futuressell" tag="li">
         <el-menu-item index="futuressell"><span class="iconfont icon-yuandianxiao"></span>futures close</el-menu-item>
-      </router-link>
+      </router-link> -->
 
 
       <el-menu-item class="banner-menu" index="disabled" disabled>
         <i class="iconfont icon-zichanshuoming"></i>
-        asset Management
+        {{$t('persionnalMenu.assetManagement')}}
       </el-menu-item>
       <router-link to="/recharge" tag="li">
-        <el-menu-item index="2-8"><span class="iconfont icon-yuandianxiao"></span>Recharge</el-menu-item>
+        <el-menu-item index="2-8"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.recharge')}}</el-menu-item>
       </router-link>
       <router-link to="/withdraw" tag="li">
-        <el-menu-item index="2-7"><span class="iconfont icon-yuandianxiao"></span>Withdrawal</el-menu-item>
+        <el-menu-item index="2-7"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.withdrawal')}}</el-menu-item>
       </router-link>
-      <!--   -->
-      <router-link
+      <!-- <router-link
       v-show="indexDisplay || futuresDisplay"
                    to="/changeCash" tag="li">
-        <el-menu-item index="change"><span class="iconfont icon-yuandianxiao"></span>Asset transfer</el-menu-item>
-      </router-link>
+        <el-menu-item index="change"><span class="iconfont icon-yuandianxiao"></span>Asset transfer</el-menu-item> 
+      </router-link>-->
       <router-link to="/rechargelist" tag="li">
-        <el-menu-item index="2-5"><span class="iconfont icon-yuandianxiao"></span>Recharge records</el-menu-item>
+        <el-menu-item index="2-5"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.rechargeRecords')}}</el-menu-item>
       </router-link>
       <router-link to="/withdrawlist" tag="li">
-        <el-menu-item index="2-6"><span class="iconfont icon-yuandianxiao"></span>Withdrawal records</el-menu-item>
+        <el-menu-item index="2-6"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.withdrawalRecords')}}</el-menu-item>
       </router-link>
       <router-link to="/detaillist" tag="li">
-        <el-menu-item index="2-4"><span class="iconfont icon-yuandianxiao"></span>Funding Details</el-menu-item>
+        <el-menu-item index="2-4"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.fundingDetails')}}</el-menu-item>
       </router-link>
       
 
       
       <el-menu-item class="banner-menu" index="disabled" disabled>
-        <i class="iconfont icon-anquan"></i> Security center
+        <i class="iconfont icon-anquan"></i> {{$t('persionnalMenu.securityCenter')}}
       </el-menu-item>
       <router-link to="/auth" tag="li">
-        <el-menu-item index="2-9"><span class="iconfont icon-yuandianxiao"></span>Verified</el-menu-item>
+        <el-menu-item index="2-9"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.verified')}}</el-menu-item>
       </router-link>
       <router-link to="/bank" tag="li">
-        <el-menu-item index="2-10"><span class="iconfont icon-yuandianxiao"></span>financial account</el-menu-item>
+        <el-menu-item index="2-10"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.financialAccount')}}</el-menu-item>
       </router-link>
       <router-link to="/changepwd" tag="li">
-        <el-menu-item index="2-11"><span class="iconfont icon-yuandianxiao"></span>change Password</el-menu-item>
+        <el-menu-item index="2-11"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.changePassword')}}</el-menu-item>
       </router-link>
       <!-- <el-menu-item class="book" index="2-12">
         <a style="margin-left:-40px;"  href="javascript:;" @click="tradeDialogVisible = true">{{$store.state.siteInfo.tradeAgreeTitle}}</a>
       </el-menu-item> -->
     </el-menu>
-    <el-dialog
+    <!-- <el-dialog
       :title="$store.state.siteInfo.tradeAgreeTitle"
       class="agree-dialog"
       :center='true'
@@ -123,12 +124,11 @@
         <div class="content" style="margin:20px;background:#fff;border-radius:5px;margin-top:60px;line-height:200%;">
             <p v-for="item in $store.state.siteInfo.tradeAgreeText.split('。')" :key="item">{{item}}。</p>
         </div>
-        <!-- <iframe class="iframe-box" :src="$store.state.siteInfo.tradeAgree" frameborder="0"></iframe> -->
         <div slot="footer" class="text-center dialog-footer clearfix">
           <el-button type="primary" @click="agreeTrade">I have read and agree{{$store.state.siteInfo.tradeAgreeTitle}}</el-button>
         </div>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -152,7 +152,7 @@
         index: ['2'],
         unreadCount: 0,
         tradeDialogVisible: false,
-        indexDisplay:this. $store.state.productSetting.indexDisplay,
+        // indexDisplay:this. $store.state.productSetting.indexDisplay,
         futuresDisplay:$store.state.productSetting.futuresDisplay
       }
     },

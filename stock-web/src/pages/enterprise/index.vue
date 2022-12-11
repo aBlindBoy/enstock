@@ -4,13 +4,11 @@
       <home-header ref="header"></home-header>
     </el-header>
     <el-container class="main-wrapper">
-      <!-- <div>
         <backdrop1>
           <div class="title-stock">
-            <p class="stock-title-en">STOCK NEWS</p>
+            <p class="stock-title-en">{{$t('enterprise.title')}}</p>
           </div>
         </backdrop1>
-      </div> -->
       <el-main>
         <div class="fat">
           <div
@@ -26,14 +24,14 @@
                         @click="clickIndexTitle(1)"
                         :class="currIndexTitle == 1?'currIndexTitle':''"
                       >
-                        <span>News</span>
+                        <span>{{$t('enterprise.news')}}</span>
                       </div>
                       <div
                         class="notice-btn"
                         @click="clickIndexTitle(2)"
                         :class="currIndexTitle == 2?'currIndexTitle':''"
                       >
-                        <span>Notice</span>
+                        <span>{{$t('enterprise.notice')}}</span>
                       </div>
 
                       <!-- <el-input v-model="form.stock" placeholder="请输入股票代码和股票" class="search-public"> -->
@@ -55,13 +53,13 @@
                     <h3>{{item.title }}</h3>
                     <p v-html="item.content"></p>
                     <div class="more">
-                      <div class="more-cont" @click="toDetails(item,index)">
-                        <span>click to see more</span>
+                      <div class="more-cont" @click="toDetails(item,1)">
+                        <span>{{$t('enterprise.seeMore')}}</span>
                         <span class="iconfont icon-direction-right"></span>
                       </div>
                       <div class="browse">
                         <span class="iconfont icon-liulan"></span>
-                        <span>Views:{{item.views}}</span>
+                        <span>{{$t('enterprise.views')}}:{{item.views}}</span>
                       </div>
                     </div>
                   </div>
@@ -71,7 +69,7 @@
                   @mouseenter="mouseenter(item,index)"
                   @mouseleave="mouseleave(item,index)"
                   v-for="(item, index) in noticeList"
-                  @click="toDetails(item,index)"
+                  @click="toDetails(item,1)"
                   :key="index+1"
                 >
                   <div class="left">
@@ -86,7 +84,7 @@
                       <p v-html="item.content"></p>
                       <div class="browse">
                         <span class="iconfont icon-liulan"></span>
-                        <span>Views:{{item.views}}</span>
+                        <span>{{$t('enterprise.views')}}:{{item.views}}</span>
                       </div>
                     </div>
                   </div>
@@ -127,7 +125,7 @@
                   @mouseenter="mouseenter(item,index)"
                   @mouseleave="mouseleave(item,index)"
                   v-for="(item, index) in noticeList"
-                  @click="toDetails(item,index)"
+                  @click="toDetails(item,2)"
                   :key="index+1"
                 >
                   <div class="left">
@@ -142,7 +140,7 @@
                       <p>{{item.artSummary}}</p>
                       <div class="browse">
                         <span class="iconfont icon-liulan"></span>
-                        <span>Views:{{item.views}}</span>
+                        <span>{{$t('enterprise.views')}}:{{item.views}}</span>
                       </div>
                     </div>
                   </div>
@@ -211,11 +209,12 @@ export default {
     this.getNoticeList();
   },
   methods: {
-    toDetails(item, index) {
+    toDetails(item, type) {
       this.$router.push({
         path: "/enterprise-details",
         query: {
           id: item.id,
+          type:type
         },
       });
     },

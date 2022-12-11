@@ -15,52 +15,40 @@
         height="250"
         style="width: 100%">
         <el-table-column
-          prop="stockName"
-          width="180px"
-          label="stock">
+          :label="$t('common.stockName')"
+          width="180px">
           <template slot-scope="scope">
             <p class="name">
               {{scope.row.stockName}}
               <span>
               ({{scope.row.stockCode}})
             </span>
-              <i v-if="scope.row.orderDirection === 'Bullish'" class="red iconfont icon-up"></i>
-              <i v-if="scope.row.orderDirection  === 'Bearish'" class="green iconfont icon-down"></i>
+              <i v-if="scope.row.orderDirection === 'bullish'" class="red iconfont icon-up"></i>
+              <i v-if="scope.row.orderDirection  === 'bearish'" class="green iconfont icon-down"></i>
             </p>
           </template>
         </el-table-column>
-        <!-- <el-table-column
-          prop="orderDirection"
-          label="Direction">
-          <template slot-scope="scope">
-            <p>
-              {{scope.row.orderDirection}}
-
-            </p>
-          </template>
-        </el-table-column> -->
+     
         <el-table-column
           prop="now_price"
-          label="Current price">
+          :label="$t('common.lastPrice')">
           <template slot-scope="scope">
             <div v-if="scope.row.now_price"
                  :class="changeTextClass[scope.$index] === true?'heartBeat  tab-number':' tab-number'">
               <p
                 :class="scope.row.now_price - scope.row.buyOrderPrice < 0?'green bounceIn':scope.row.now_price - scope.row.buyOrderPrice > 0?'bounceIn red':'bounceIn'">
                 {{scope.row.now_price === 0?'-':scope.row.now_price}}
-                <!-- <i v-if="scope.row.now_price - scope.row.buyOrderPrice < 0" class="iconfont icon-down"></i> -->
-                <!-- <i v-if="scope.row.now_price - scope.row.buyOrderPrice > 0" class="iconfont icon-up"></i> -->
               </p>
             </div>
           </template>
         </el-table-column>
         <el-table-column
           prop="buyOrderPrice"
-          label="Buying price">
+          :label="$t('common.purchasePrice')">
         </el-table-column>
         <el-table-column
           prop="orderNum"
-          label="Quantity/股">
+          :label="$t('common.quantity')">
           <template slot-scope="scope">
             <div>
               {{scope.row.orderNum}}
@@ -69,7 +57,7 @@
         </el-table-column>
         <el-table-column
           prop="profitAndLose"
-          label="Floating profit and loss">
+          :label="$t('common.ploatingProfitAndLoss')">
           <template slot-scope="scope">
             <div class="bounceIn tab-number">
               <p :class="changeTextClass[scope.$index] === true?'heartBeat':''">
@@ -81,7 +69,7 @@
         </el-table-column>
         <el-table-column
           prop="allProfitAndLose"
-          label="Total profit and loss">
+          :label="$t('common.totalProfitAndLoss')">
           <template slot-scope="scope">
             <div class="bounceIn tab-number">
               <p :class="changeTextClass[scope.$index] === true?'heartBeat':''">
@@ -100,10 +88,10 @@
          label="The total market capitalization">
        </el-table-column> -->
         <el-table-column
-          label="平倉">
+          :label="$t('common.sell')">
           <template slot-scope="scope">
             <el-button class="btn-sell" plain title="I want to close my position" size="mini" @click="toSell(scope.row)"><i
-              class="iconfont icon-chakan"></i>close the position
+              class="iconfont icon-chakan"></i>Sell
             </el-button>
           </template>
         </el-table-column>
@@ -284,7 +272,7 @@
             positionSn: val.positionSn
           }
           console.log(opt)
-          let data = await api.sellTwStock(opt)
+          let data = await api.sellUsStock(opt)
           if (data.status === 0) {
             this.hasChangeSell++
             this.handleOptions(this.hasChangeSell)

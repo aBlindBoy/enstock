@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.format.DateParser;
 import cn.hutool.core.date.format.FastDateFormat;
+import cn.hutool.core.util.RandomUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -100,6 +101,7 @@ public class SiteNewsServiceImpl implements ISiteNewsService {
     /*新闻資讯-查询详情*/
     @Override
     public ServerResponse getDetail(int id) {
+        this.siteNewsMapper.updateViews(id);
         return ServerResponse.createBySuccess(this.siteNewsMapper.load(id));
     }
 

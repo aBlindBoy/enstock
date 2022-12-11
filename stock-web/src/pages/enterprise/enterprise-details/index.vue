@@ -6,8 +6,8 @@
     <el-container class="main-wrapper">
       <div>
         <backdrop1>
-          <div style="margin-top:200px;width: 1200px; margin: 200px auto;font-size: 36px;">
-            <span class="stock-title-en">STOCK DETAILS</span>
+          <div style="margin-top:200px;width: 1200px; margin: 240px  auto;font-size: 36px;">
+            <span class="stock-title-en">{{$t('enterprise.title')}}</span>
           </div>
         </backdrop1>
       </div>
@@ -25,28 +25,32 @@
                       <div class="detail">
                         <div class="detail-cont">
                           <div class="detail-title">
-                            <h3>{{detailsCont.title}}</h3>
+                            <h3 v-if="type==1">{{detailsCont.title}}</h3>
+                            <h3 v-else>{{detailsCont.artTitle}}</h3>
                           </div>
                           <div class="detail-explain">
                             <div>
                               <span class="iconfont icon-fabuxuqiu date-icon"></span>
-                              <span>Source:{{detailsCont.sourceName}}</span>
+                              <span v-if="type==1">{{$t('enterprise.source')}}:{{detailsCont.sourceName}}</span>
+                              <span v-else>{{$t('enterprise.source')}}:{{detailsCont.artType}}</span>
                             </div>
                             <div>
                               <span class="iconfont icon-shijian date-icon"></span>
                               <!-- <span class="iconfont icon-shijian"></span> -->
-                              <span>Time:{{detailsCont.showTime}}</span>
+                              <span>{{$t('enterprise.time')}}:{{formatDate(detailsCont.showTime)}}</span>
                             </div>
                             <div>
                               <!-- <span class="iconfont icon-redu"></span> -->
                               <span class="iconfont icon-redu redu"></span>
 
-                              <span>Heat:{{detailsCont.views}}</span>
+                              <span>{{$t('enterprise.time')}}:{{detailsCont.views}}</span>
                             </div>
                           </div>
                         </div>
                         <div class="detail-box">
-                          <div v-html="detailsCont.content"></div>
+                          
+                          <div v-if="type ==1 " v-html="detailsCont.content"></div>
+                          <div v-else v-html="detailsCont.artCnt"></div>
                           <div>{{detailsCont.description}}</div>
                           <div style="display:flex;align-items: center;flex-direction: column;">
                             <img :src="detailsCont.imgurl" />
@@ -79,6 +83,7 @@ import backdrop1 from "@/components/backdrop1.vue";
 import newFooter from "@/components/newFooter.vue";
 import HomeHeader from "@/components/HeaderOrder";
 import { mapState } from "vuex";
+const dayjs = require('dayjs')
 export default {
   components: {
     HomeHeader,
@@ -97,6 +102,7 @@ export default {
   data() {
     return {
       detailsCont: {},
+      type:1,
     };
   },
   methods: {
@@ -113,22 +119,20 @@ export default {
     async selectDetails() {
       // 选择详情
       var { id } = this.$route.query;
+      this.type = this.$route.query.type;
+
       this.cutIndex = 2;
-      var data = await api.getNewsDetailList({
-        id,
-      });
+      if (this.type == 1) {
+          var data = await api.getNewsDetailList({
+          id,
+        });
+      }else{
+          var data = await api.getArtDetail({
+          id,
+        });
+      }
       if (data.status == 0) {
-        // this.optionalIndex = item.type;
-        // this.currIndex = -1;
         this.detailsCont = data.data;
-        // var query = {
-        //   pageNum: this.pageNum,
-        //   pageSize: 15,
-        //   type: item.type,
-        // };
-        // this.newType = item.type;
-        // this.newsList = await this.getNewsList(query);
-        // this.switchData(this.newsList, "showTime");
       }
       var data = await api.updateNewsViews({
         id: item.id,
@@ -136,6 +140,9 @@ export default {
       if (data.status == 0) {
       }
     },
+    formatDate(date){
+       return dayjs(date).format('DD/MM/YYYY') // '25/01/2019'
+      }
   },
 };
 </script>

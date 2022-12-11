@@ -19,7 +19,7 @@
               <template slot-scope="props">
 
                 <el-form label-position="left" inline class="demo-table-expand">
-                  <div class="expand-row" v-if="props.row.orderDirection === 'Bullish'">
+                  <div class="expand-row" v-if="props.row.orderDirection === 'bullish'">
                     Floating profit and loss：( {{props.row.nowPrice}} - {{props.row.buyOrderPrice}} ) * {{props.row.orderNum}} *
                     {{props.row.eachPoint}} = {{((props.row.nowPrice -
                     props.row.buyOrderPrice)*props.row.orderNum*props.row.eachPoint).toFixed(2)}}{{props.row.coinCode}}
@@ -111,10 +111,10 @@
               prop="orderDirection"
               label="Direction">
               <template slot-scope="scope">
-                        <span :class="scope.row.orderDirection === 'Bullish' ? 'red':'green'">
+                        <span :class="scope.row.orderDirection === 'bullish' ? 'red':'green'">
                             {{scope.row.orderDirection}}
-                            <i v-if="scope.row.orderDirection === 'Bullish'" class="iconfont icon-up"></i>
-                            <i v-if="scope.row.orderDirection === 'Bearish'" class="iconfont icon-down"></i>
+                            <i v-if="scope.row.orderDirection === 'bullish'" class="iconfont icon-up"></i>
+                            <i v-if="scope.row.orderDirection === 'bearish'" class="iconfont icon-down"></i>
                         </span>
               </template>
             </el-table-column>
@@ -169,7 +169,6 @@
             :total="list.total">
           </el-pagination>
         </div>
-        <!-- <home-footer :siteInfo="siteInfo"></home-footer> -->
       </el-main>
     </el-container>
     </div>
@@ -179,14 +178,12 @@
 
 <script>
   import HomeHeader from '../../../../components/HeaderOrder'
-  import HomeFooter from '../../../../components/Footer'
   import MenuBox from '../menu'
   import * as api from '../../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
       MenuBox
     },
     props: {},

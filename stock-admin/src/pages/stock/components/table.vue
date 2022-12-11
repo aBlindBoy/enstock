@@ -2,19 +2,18 @@
   <div>
     <el-card class="box-card">
       <el-form :inline="true" :model="form" class="demo-form-inline" size="small">
-        <el-row>
+        <!-- <el-row>
           <el-radio-group v-model="form.stockPlate" @change="onSubmit">
-            <!-- <el-radio-button label="全部"></el-radio-button> -->
             <el-radio-button label="A股"></el-radio-button>
             <el-radio-button label="科创"></el-radio-button>
           </el-radio-group>
-        </el-row>
-        <el-form-item label="沪深股" prop="stockType">
+        </el-row> -->
+        <!-- <el-form-item label="沪深股" prop="stockType">
           <el-select v-model="form.stockType" placeholder="沪深股">
             <el-option label="沪股" value="sh"></el-option>
             <el-option label="深股" value="sz"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item  label="股票类型">
           <el-cascader
             :options="options"
@@ -84,8 +83,7 @@
             label="股票名字">
             <template slot-scope="scope">
               <p>
-                <span class="show red">{{scope.row.stockType == 'sz'?'深':'沪'}}</span>
-                <span v-if="scope.row.stockPlate == '科创'" class="show">科创</span>
+                <span class="show red">{{scope.row.stockType }}</span>
               </p>
               <p class="big-font">
                 {{scope.row.stockName}}
@@ -93,7 +91,7 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="nowPrice"
             label="现价">
             <template slot-scope="scope">
@@ -128,7 +126,7 @@
                 <span style="font-size:12px;" :class="scope.row.spreadRate<0?'green':scope.row.spreadRate == 0?'':'red'">{{scope.row.spreadRate*100}}%</span>
               </p>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <!-- <el-table-column
             prop="stockSpell"
             width="120px"

@@ -17,7 +17,7 @@
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
                   <div class="expand-row">
-                    <p v-if="props.row.orderDirection === 'Bullish'">
+                    <p v-if="props.row.orderDirection === 'bullish'">
                       Floating profit and loss：( {{props.row.sellOrderPrice}} - {{props.row.buyOrderPrice}} ) * {{props.row.orderNum}} *
                       {{props.row.eachPoint}} = {{((props.row.sellOrderPrice -
                       props.row.buyOrderPrice)*props.row.orderNum*props.row.eachPoint).toFixed(2)}}
@@ -119,10 +119,10 @@
               width="80px"
               label="Direction">
               <template slot-scope="scope">
-                        <span :class="scope.row.orderDirection === 'Bullish' ? 'red':'green'">
+                        <span :class="scope.row.orderDirection === 'bullish' ? 'red':'green'">
                             {{scope.row.orderDirection}}
-                            <i v-if="scope.row.orderDirection === 'Bullish'" class="iconfont icon-up"></i>
-                            <i v-if="scope.row.orderDirection === 'Bearish'" class="iconfont icon-down"></i>
+                            <i v-if="scope.row.orderDirection === 'bullish'" class="iconfont icon-up"></i>
+                            <i v-if="scope.row.orderDirection === 'bearish'" class="iconfont icon-down"></i>
                         </span>
               </template>
             </el-table-column>
@@ -179,14 +179,12 @@
 
 <script>
   import HomeHeader from '../../../../components/HeaderOrder'
-  import HomeFooter from '../../../../components/Footer'
   import MenuBox from '../menu'
   import * as api from '../../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
       MenuBox
     },
     props: {},

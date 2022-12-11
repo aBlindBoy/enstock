@@ -11,27 +11,27 @@
       <el-main style=" min-height: calc(100vh - 150px );">
         <div class="user-center-title" style="text-align:left;">
             <span class="iconfont icon-you" style="color:#C11815;font-size:18px;margin-right:10px"></span>
-            Recharge records
+            {{$t('rechargeRecords.title')}}
         </div>
         <div class="wrapper">
-          <el-table v-if="true"
-                    :data="list.list"
-                    style="width: 100%">
+          <el-table 
+            :data="list.list"
+            style="width: 100%">
             <el-table-column
               width="100px"
               prop="payChannel"
               >
               <template slot-scope="scope">
                 <!-- <span class="paytype" style="background-color: #138EB4;" v-if="scope.row.payChannel === '0'">支付寶</span> -->
-                <span class="paytype" style="background-color: ;" v-if="scope.row.payChannel === 1">對公轉帳</span>
+                <!-- <span class="paytype" style="background-color: ;" v-if="scope.row.payChannel === 1"></span> -->
                 <!-- <span class="paytype" style="background-color: #04823E;" v-else-if="scope.row.payChannel === 2">微信</span> -->
-                <span class="paytype" style="background-color: ;" v-else>{{scope.row.payChannel}}</span>
+                <span class="paytype"  >{{scope.row.payChannel}}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="payAmt"
-              
-              width="400px">
+              width="400px"
+              >
               <template slot-scope="scope">
                 <span class="number">Recharge: <span class="rmb">{{scope.row.payAmt}}</span></span>
               </template>
@@ -62,47 +62,16 @@
                                class="iconfont icon-failure animated bounceInDown"></i>
                             <i v-if="scope.row.orderStatus === 3"
                                class="iconfont icon-iconfontweitongguo animated bounceInDown"></i>
-                            {{scope.row.orderStatus === 1?'Recharge succeeded':scope.row.orderStatus === 2?'Recharge failed':
-                            scope.row.orderStatus === 3?'Cancel Recharge':'Under review'}}
+                               
+                               {{orderStatus[scope.row.orderStatus]}}
+                            <!-- {{scope.row.orderStatus === 1?'$t("rechargeRecords.title")':
+                            scope.row.orderStatus === 2?'Recharge failed':
+                            scope.row.orderStatus === 3?'Cancel Recharge':'Under review'}} -->
                         </span>
               </template>
             </el-table-column>
           </el-table>
           <el-card class="box-card">
-            <!-- <div class="user-center-title">
-              Recharge記錄
-            </div> -->
-
-
-
-            <!-- <div v-if="false" v-for="item in list.list" :key="item.key" class="box-card-item">
-              <div>
-                <el-tag :type="item.payChannel === '0'?'':item.payChannel === 1?'warning':'success'">
-                  <span v-if="item.payChannel === '0'">對公轉帳</span>
-                  <span v-else-if="item.payChannel === 1">對公轉帳</span>
-                  <span v-else>{{item.payChannel}}</span>
-                </el-tag>
-                <span class="money">{{item.payAmt}}</span>
-                <div class="pull-right">
-                            <span :class="item.orderStatus === 1?'green':item.orderStatus === 2?'red':'red'">
-                                <i v-if="item.orderStatus === 1" class="iconfont icon-tongguo4 animated bounceIn"></i>
-                                <i v-if="item.orderStatus==0" class="iconfont icon-dengdai animated bounceInDown"></i>
-                                <i v-if="item.orderStatus === 2"
-                                   class="iconfont icon-failure animated bounceInDown"></i>
-                                <i v-if="item.orderStatus === 3"
-                                   class="iconfont icon-iconfontweitongguo animated bounceInDown"></i>
-                                {{item.orderStatus === 1?'Recharge成功':item.orderStatus === 2?'Recharge失敗':item.orderStatus === 3?'取消Recharge':'Under review'}}
-                            </span>
-                </div>
-              </div>
-              <div>
-                <p>訂單號：{{item.orderSn}}</p>
-                <p class="mini-font">
-                  Recharge時間：{{item.addTime | timeFormat}}
-                </p>
-              </div>
-
-            </div> -->
             <el-pagination
               class="pull-right"
               @size-change="handleSizeChange"
@@ -126,14 +95,14 @@
 
 <script>
   import HomeHeader from '../../../../components/HeaderOrder'
-  import HomeFooter from '../../../../components/Footer'
+  // import HomeFooter from '../../../../components/Footer'
   import MenuBox from '../menu'
   import * as api from '../../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
+      // HomeFooter,
       MenuBox
     },
     props: {},
@@ -143,7 +112,9 @@
         pageSize: 15,
         list: {
           list: []
-        }
+        },
+        orderStatus:[this.$t('rechargeRecords.underReview'),this.$t('rechargeRecords.rechargeSucceeded'),
+        this.$t('rechargeRecords.rechargeFailed'),this.$t('rechargeRecords.cancelRecharge')]
       }
     },
     watch: {},

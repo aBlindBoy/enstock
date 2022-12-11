@@ -12,29 +12,18 @@
           <div class="header-chi" style="text-align: left;">
             <div class="user-center-title">
               <img src="../../../../assets/image/sanjao.png" alt />
-              <span>Withdrawal</span>
+              <span>{{$t('withdrawal.title')}}</span>
             </div>
           </div>
           <div class="wrapper">
             <div class="chongzhi-cont" style="display: flex;justify-content: center;">
               <div style="width:100%">
                 <el-form>
-                  <div style="width:80%" class="left">
-                    <!-- <div class="chongzhi-img">
-                      <img
-                        src="../../../../assets/image/chongzhi.png"
-                        v-if="color == 'black-bg'"
-                        alt
-                      />
-                      <img
-                        src="../../../../assets/image/chongzhi1.png"
-                        v-if="color == 'red-bg'"
-                        alt
-                      />
-                    </div> -->
+                  <div class="left">
                     <div class="chongzhi-input">
-                      <span>Withdrawal Amount:</span>
-                      <el-input type="text" v-model="form.number" placeholder="Please enter Withdrawal amount"></el-input>
+                      <span>{{$t('withdrawal.withdrawalAmount')}}:</span>
+                      <el-input type="text" v-model="form.number" 
+                      :placeholder="$t('withdrawal.pleaseAmount')"></el-input>
                       <!-- <el-input v-model="form.amt" type="number" placeholder="最小Recharge金額為100USD"></el-input> -->
                     </div>
                     <el-form
@@ -46,31 +35,33 @@
                     >
                       <div class="chongzhi-type">
                         <p class="enable">
-                          Current account available balance:
+                          {{$t('withdrawal.availableBalance')}}:
                           <span class="qian">{{$store.state.userInfo.enableAmt}}</span>
-                          <a @click="selectAll" href="javascript:;">All Withdrawal</a>
+                          <a @click="selectAll" href="javascript:;">
+                          {{$t('withdrawal.allWithdrawal')}}
+                          </a>
                         </p>
                       </div>
                     </el-form>
 
                     <div class="money-cont">
                       <p class="enable">
-                        Available:
+                        {{$t('withdrawal.available')}}:
                         <span class="k">{{$store.state.userInfo.enableAmt}}</span>
                       </p>
                       <p class="enable">
-                        freeze:
+                        {{$t('withdrawal.freeze')}}:
                         <span class="k">{{$store.state.hide?'****':$store.state.userInfo.allFreezAmt}}</span>
                       </p>
                     </div>
                     <!-- @click="chongzhi" -->
                     <div class="chongzhi-btn-cont" @click="Onsubmit('ruleForm')">
-                      <div class="chongzhi-btn">Withdrawal</div>
+                      <div class="chongzhi-btn">{{$t('withdrawal.title')}}</div>
                     </div>
                   </div>
                 </el-form>
 
-                <div class="chongzhi-bizhi">
+                <!-- <div class="chongzhi-bizhi">
                   <div class="chongzhi-bizhi-cont">
                     <div>Deposit notice</div>
                     <div class="chongzhi-item">
@@ -102,7 +93,7 @@
                       alt
                     />
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -155,7 +146,6 @@
 
 <script>
 import HomeHeader from "../../../../components/HeaderOrder";
-import HomeFooter from "../../../../components/Footer";
 import MenuBox from "../menu";
 import * as api from "../../../../axios/api";
 import { mapState } from "vuex";
@@ -163,7 +153,6 @@ import { mapState } from "vuex";
 export default {
   components: {
     HomeHeader,
-    HomeFooter,
     MenuBox,
   },
   props: {},
@@ -187,7 +176,7 @@ export default {
       },
       rule: {
         number: [
-          { required: true, message: "Please enter Withdrawal amount", trigger: "blur" },
+          { required: true, message: this.$t('withdrawal.pleaseAmount'), trigger: "blur" },
         ],
       },
       settingInfo: {
@@ -227,7 +216,7 @@ export default {
       if (data.status === 0) {
         this.$store.state.bankInfo = data.data;
       } else {
-        this.$message.error("You have not yet bound a bank account, please bind a bank account first");
+        this.$message.error(this.$t('withdrawal.notBank'));
         this.$router.push("/bank");
         // this.$message.error(data.msg)
       }
@@ -255,15 +244,8 @@ export default {
       // 提交
       //   this.$refs[formName].validate(async(valid) => {
       //     if (valid) {
-      if (!this.$store.state.userInfo.idCard) {
-        this.$message.error("Please verify your real name first");
-        this.$router.push("/auth");
-      } else if (!this.$store.state.bankInfo.bankNo) {
-        this.$message.error("Please bind a financial account first");
-        this.$router.push("/bank");
-      } else {
         if (!this.form.number) {
-          this.$message.error("Please enter Withdrawal amount");
+          this.$message.error(this.$t('withdrawal.pleaseAmount'));
           this.$router.push("/bank");
           return;
         }
@@ -274,15 +256,14 @@ export default {
         let data = await api.outMoney(opts);
         if (data.status === 0) {
           // 成功
-          this.$message.success("The application is successful, please wait for the review!");
+          this.$message.success(this.$t('withdrawal.withdrawalSuccess'));
           this.$router.push("/withdrawlist");
         } else {
           this.$message.error(
-            data.msg ? data.msg : "Withdrawal failed, please re-Withdrawal or contact customer service"
+            data.msg ? data.msg : this.$t('withdrawal.withdrawalFailed')
           );
         }
         this.isloading = false;
-      }
       //     } else {
       //         return false;
       //     }
@@ -301,6 +282,7 @@ export default {
 .red-bg {
   .chongzhi-cont {
     position: relative;
+    width: 199px;
     .money-cont {
       display: flex;
     }

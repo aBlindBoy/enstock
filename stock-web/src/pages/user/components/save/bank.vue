@@ -15,7 +15,7 @@
               class="iconfont icon-you"
               style="color: rgb(193, 24, 21); font-size: 18px; margin-right: 10px;"
             ></span>
-            Financial Account Information
+            {{$t('financialAccount.title')}}
           </div>
           <div class="yhk-cont yanzeng-cont">
             <div class="yhk-list" style="display: flex; justify-content: center;">
@@ -48,24 +48,24 @@
               </div>
               <el-card class="box-card" style="color:#cccccc">
                 <div slot="header" class="clearfix">
-                  <span>Financial Account Information</span>
+                  <span>{{$t('financialAccount.title')}}</span>
                 </div>
                 <div class="text item">
                   <el-row>
                     <el-col>
-                      <span class="name">Financial name:</span>
+                      <span class="name">{{$t('financialAccount.financialName')}}:</span>
                       <span class="info">{{$store.state.bankInfo.bankName}}</span>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col>
-                      <span class="name">Branch address:</span>
+                      <span class="name">{{$t('financialAccount.branchAddress')}}:</span>
                       <span class="info">{{$store.state.bankInfo.bankAddress}}</span>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col>
-                      <span class="name">Financial Account:</span>
+                      <span class="name">{{$t('financialAccount.financialAccount')}}:</span>
                       <span class="info">{{$store.state.bankInfo.bankNo}}</span>
                     </el-col>
                   </el-row>
@@ -74,17 +74,17 @@
               <div v-if="false" class="auth-box authed-box">
                 <el-row>
                   <el-col>
-                    Financial name:{{$store.state.bankInfo.bankName}}
+                    {{$t('financialAccount.financialName')}}:{{$store.state.bankInfo.bankName}}
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col>
-                    Branch address:{{$store.state.bankInfo.bankAddress}}
+                    {{$t('financialAccount.branchAddress')}}:{{$store.state.bankInfo.bankAddress}}
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col>
-                    Financial Account Number:{{$store.state.bankInfo.bankNo}}
+                    {{$t('financialAccount.financialAccountNumber')}}:{{$store.state.bankInfo.bankNo}}
                   </el-col>
                 </el-row>
               </div>
@@ -94,21 +94,24 @@
               <div class="auth-box">
                 <el-form :hide-required-asterisk='true' :model="form" label-width="100px" ref="ruleForm" :rules="rule"
                          class="demo-form-inline">
-                  <el-form-item label="financial name" prop="bankName">
-                    <el-input type='text' class="chongzhi-input" v-model="form.bankName" placeholder="Please enter financial name">
+                  <el-form-item :label="$t('financialAccount.financialName')" prop="bankName">
+                    <el-input type='text' class="chongzhi-input" v-model="form.bankName" 
+                    :placeholder="$t('financialAccount.financialNamePlaceholder')">
                     </el-input>
                   </el-form-item>
-                  <el-form-item label="Branch address" prop="bankAddress">
-                    <el-input type='text'  class="chongzhi-input"  v-model="form.bankAddress" placeholder="Please enter the branch address">
+                  <el-form-item :label="$t('financialAccount.branchAddressPlaceholder')" prop="bankAddress">
+                    <el-input type='text'  class="chongzhi-input"  v-model="form.bankAddress" 
+                    :placeholder="$t('financialAccount.branchAddressPlaceholder')">
                     </el-input>
                   </el-form-item>
-                  <el-form-item label="financial account number" prop="bankNo">
-                    <el-input type='text'  class="chongzhi-input"  v-model="form.bankNo" placeholder="Please enter financial account number">
+                  <el-form-item :label="$t('financialAccount.financialAccountNumber')" prop="bankNo">
+                    <el-input type='text'  class="chongzhi-input"  v-model="form.bankNo"
+                     :placeholder="$t('financialAccount.accountNumberPlaceholder')">
                     </el-input>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                  <el-button type="primary"  :loading="isloading" @click="submit('ruleForm')">Certification</el-button>
+                  <el-button type="primary"  :loading="isloading" @click="submit('ruleForm')">{{$t('financialAccount.certification')}}</el-button>
                 </div>
               </div>
 
@@ -120,18 +123,18 @@
 
           <div class="chongzhi-bizhi">
             <div class="chongzhi-bizhi-cont">
-              <div class="youyi">Friendship Tips:</div>
+              <div class="youyi">{{$t('financialAccount.friendshipTips')}}:</div>
               <div class="chongzhi-item">
                 <span class="circle">1</span>
-                <span>New users must register by adding a financial account.</span>
+                <span>{{$t('financialAccount.friendshipTipsContent1')}}</span>
               </div>
               <div class="chongzhi-item">
                 <span class="circle">2</span>
-                <span>Users can only add one personal financial account.</span>
+                <span>{{$t('financialAccount.friendshipTipsContent2')}}</span>
               </div>
               <div class="chongzhi-item">
                 <span class="circle">3</span>
-                <span>The real name must be the same as the name of the financial account for withdrawal.</span>
+                <span>{{$t('financialAccount.friendshipTipsContent3')}}</span>
               </div>
             </div>
             <div class="right"></div>
@@ -145,25 +148,23 @@
 
 <script>
 import HomeHeader from '../../../../components/HeaderOrder'
-import HomeFooter from '../../../../components/Footer'
 import MenuBox from '../menu'
 import * as api from '../../../../axios/api'
 
 export default {
   components: {
     HomeHeader,
-    HomeFooter,
     MenuBox
   },
   props: {},
   data() {
     let validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Please enter financial account number'))
+        callback(new Error(this.$t('financialAccount.accountNumberPlaceholder')))
       } else {
         let myreg = /^([1-9]{1})(\d{14,18})$/ // 卡號校驗
         if (!myreg.test(value)) {
-          callback(new Error('Please enter the correct financial account number'))
+          callback(new Error(this.$t('financialAccount.correctAccountNumber')))
         }
         callback()
       }
@@ -177,20 +178,7 @@ export default {
         bankNo: ''
       },
       rule: {
-        bankName: [
-          { required: true, message: 'Please enter financial name', trigger: 'blur' }
-        ],
-        bankNo: [
-          {
-            required: true,
-            validator: validatePass,
-            message: 'Please enter financial account number',
-            trigger: 'blur'
-          }
-        ],
-        bankAddress: [
-          { required: true, message: 'Please enter the branch address', trigger: 'blur' }
-        ]
+     
       }
     }
   },
@@ -236,7 +224,7 @@ export default {
           if (this.$route.query.type === 'edit') {
             let data = await api.updateBankCard(opts)
             if (data.status === 0) {
-              this.$message.success('Successfully modified!')
+              this.$message.success(this.$t('financialAccount.modifiedSuccess'))
               this.isloading = false
               this.getCardDetail()
             } else {
@@ -245,7 +233,7 @@ export default {
           } else {
             let data = await api.addBankCard(opts)
             if (data.status === 0) {
-              this.$message.success('Added successfully!')
+              this.$message.success(this.$t('financialAccount.addSuccess'))
               this.hasAuth = true
               this.getCardDetail()
               this.isloading = false

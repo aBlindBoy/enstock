@@ -39,4 +39,6 @@ public class Stock {
 
     private BigDecimal chgRate;
 
+//    private String isOption;
+
 }

@@ -12,7 +12,7 @@
           <div class="header-chi" style="margin: 15px 10px 10px 10px;">
             <div class="user-center-title">
               <img src="../../../../assets/image/sanjao.png" alt />
-              <span>Certification Information</span>
+              <span>{{$t('auth.title')}}</span>
             </div>
           </div>
           <div class="wrapper">
@@ -27,28 +27,28 @@
                   </div>
                   <div class="yanzeng-right">
                     <div>
-                      <span>actual name:{{$store.state.userInfo.realName}}</span>
+                      <span>{{$t('auth.actualName')}}:{{$store.state.userInfo.realName}}</span>
                       <span class="tongguo" v-if="$store.state.userInfo.isActive === 2">
                         <span class="iconfont icon-duihao"  ></span>
-                        examination passed
+                        {{$t('auth.examinationPassed')}}
                         </span>
                       <span class="renzheng" v-else>
                         <span class="iconfont icon-quan-cuo"></span>
-                        not certified
+                        {{$t('auth.notCertified')}}
                       </span>
                     </div>
                     <div>
-                      <span>ID number:{{$store.state.userInfo.idCard}}</span>
+                      <span>{{$t('auth.idNumber')}}:{{$store.state.userInfo.idCard}}</span>
                     </div>
                     <div class="zfz">
-                        <span>Front of ID card:</span>
+                        <span>{{$t('auth.frontIdCard')}}:</span>
 
                       <div class="img-auth">
                         <!-- <img src="../../../../assets/image/banner-down.png" alt /> -->
 
                         <img :src="$store.state.userInfo.img1Key" alt />
                       </div>
-                      <span class="fan">Reverse side of ID card:</span>
+                      <span class="fan">{{$t('auth.reverseIdCard')}}:</span>
                       <div >
                         <span class="img-auth">
                           <!-- <img src="../../../../assets/image/banner-down.png" alt /> -->
@@ -160,23 +160,23 @@
                     :rules="rule"
                     class="demo-form-inline"
                   >
-                    <el-form-item label="actual name" prop="name">
+                    <el-form-item :label="$t('auth.actualName')" prop="name">
                       <el-input
                         type="text"
                         class="chongzhi-input"
                         v-model="form.name"
-                        placeholder="please enter your real name"
+                        :placeholder="$t('auth.realNamePlaceholder')"
                       ></el-input>
                     </el-form-item>
-                    <el-form-item label="ID number" prop="idCard">
+                    <el-form-item :label="$t('auth.idNumber')" prop="idCard">
                       <el-input
                         type="text"
                         class="chongzhi-input"
                         v-model="form.idCard"
-                        placeholder="Please enter your ID number"
+                        :placeholder="$t('auth.idCardPlaceholder')"
                       ></el-input>
                     </el-form-item>
-                    <el-form-item label="ID card front" prop="idCard">
+                    <el-form-item :label="$t('auth.frontIdCard')" prop="idCard">
                       <el-row>
                         <el-col :span="10">
                           <el-upload
@@ -198,7 +198,7 @@
                         </el-col>
                       </el-row>
                     </el-form-item>
-                    <el-form-item label="ID card back" prop="idCard">
+                    <el-form-item :label="$t('auth.idCardBack')" prop="idCard">
                       <el-row>
                         <el-col :span="10">
                           <el-upload
@@ -250,18 +250,18 @@
               </div>
               <div class="chongzhi-bizhi">
                 <div class="chongzhi-bizhi-cont">
-                  <div class="youyi">Friendship Tips:</div>
+                  <div class="youyi">{{$t('auth.friendshipTips')}}:</div>
                   <div class="chongzhi-item">
                     <span class="circle">1</span>
-                    <span>New users must register by adding a financial account。</span>
+                    <span>{{$t('auth.friendshipTipsContent1')}}</span>
                   </div>
                   <div class="chongzhi-item">
                     <span class="circle">2</span>
-                    <span>Users can only add one personal financial account。</span>
+                    <span>{{$t('auth.friendshipTipsContent2')}}</span>
                   </div>
                   <div class="chongzhi-item">
                     <span class="circle">3</span>
-                    <span>The real name must be the same as the name of the withdrawal financial account。</span>
+                    <span>{{$t('auth.friendshipTipsContent3')}}</span>
                   </div>
                 </div>
                 <div class="right">
@@ -279,7 +279,6 @@
 
 <script>
 import HomeHeader from "../../../../components/HeaderOrder";
-import HomeFooter from "../../../../components/Footer";
 import MenuBox from "../menu";
 import * as api from "../../../../axios/api";
 import url from '@/axios/api.url'
@@ -287,7 +286,6 @@ import url from '@/axios/api.url'
 export default {
   components: {
     HomeHeader,
-    HomeFooter,
     MenuBox,
   },
   props: {},
@@ -305,7 +303,7 @@ export default {
     // };
     let validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("Please enter your ID number"));
+        callback(new Error(this.$t('auth.idCardPlaceholder')));
       }
       callback();
     };
@@ -319,23 +317,23 @@ export default {
         img3key: "",
       },
       rule: {
-        name: [{ required: true, message: "please enter your real name", trigger: "blur" }],
+        name: [{ required: true, message: this.$t('auth.realNamePlaceholder'), trigger: "blur" }],
         idCard: [
           {
             required: true,
             validator: validatePass,
-            message: "Please enter your ID",
+            message: this.$t('auth.idCardPlaceholder'),
             trigger: "blur",
           },
         ],
         img1key: [
-          { required: true, message: "Please upload a picture of your ID card", trigger: "blur" },
+          { required: true, message: this.$t('auth.idCardUpload'), trigger: "blur" },
         ],
         img2key: [
-          { required: true, message: "Please upload a picture of your ID card", trigger: "blur" },
+          { required: true, message: this.$t('auth.idCardUpload'), trigger: "blur" },
         ],
         img3key: [
-          { required: false, message: "Please upload a picture of your ID card", trigger: "blur" },
+          { required: false, message:this.$t('auth.idCardUpload'), trigger: "blur" },
         ],
       },
       islogin: false,
@@ -371,7 +369,7 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error("Please select jpg or png image format!");
+        this.$message.error(this.$t('auth.imageFormat'));
       }
       // if (!isLt2M) {
       //     this.$message.error('上傳頭像圖片大小不能超過 2MB!');
@@ -395,7 +393,7 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error("Please select jpg or png image format!");
+        this.$message.error(this.$t('auth.imageFormat'));
       }
       return isJPG && isLt2M;
     },
@@ -426,7 +424,7 @@ export default {
           this.islogin = true;
           let data = await api.userAuth(opts);
           if (data.status === 0) {
-            this.$message.success("Authentication succeeded!");
+            this.$message.success(this.$t('auth.authenticationSucceeded'));
             this.getUserInfo();
           } else {
             this.$message.success(data.msg);

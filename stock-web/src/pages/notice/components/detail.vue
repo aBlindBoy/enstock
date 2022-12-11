@@ -32,7 +32,7 @@
             </div>
           </div>
         </div>
-        <home-footer :siteInfo="siteInfo"></home-footer>
+        <!-- <home-footer :siteInfo="siteInfo"></home-footer> -->
       </el-main>
     </el-container>
   </el-container>
@@ -40,13 +40,13 @@
 
 <script>
   import HomeHeader from '../../../components/HeaderOrder'
-  import HomeFooter from '../../../components/Footer'
+  // import HomeFooter from '../../../components/Footer'
   import * as api from '../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter
+      // HomeFooter
     },
     props: {},
     data () {

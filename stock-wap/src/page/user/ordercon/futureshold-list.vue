@@ -18,7 +18,7 @@
             <div class="order-title">
               <span @click="toDetail(item.futuresCode)" class="main">{{item.futuresName}}</span>
               <span class="secondary">({{item.futuresCode}})</span>
-              <span :class="item.orderDirection=='Bullish'?'type type-up':'type type-down'">{{item.orderDirection=='Bullish'?'Bullish':'Bearish'}}</span>
+              <span :class="item.orderDirection=='bullish'?'type type-up':'type type-down'">{{item.orderDirection=='bullish'?'bullish':'bearish'}}</span>
               <span class="direction pull-right big-font">
                         total profit and loss:
                         <b v-if="item.nowPrice == 0">-</b>

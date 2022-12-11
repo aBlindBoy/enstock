@@ -18,7 +18,7 @@
             <div class="order-title">
               <span @click="toDetail(item.stockCode)" class="main">{{item.stockName}}</span>
               <span class="secondary">({{item.stockCode}})</span>
-              <span :class="item.orderDirection=='Bullish'?'type type-up':'type type-down'">{{item.orderDirection=='Bullish'?'Bullish':'Bearish'}}</span>
+              <span :class="item.orderDirection=='bullish'?'type type-up':'type type-down'">{{item.orderDirection=='bullish'?'bullish':'bearish'}}</span>
               <span class="direction pull-right big-font">
                 latest price:
                         <b v-if="item.now_price == 0">-</b>
@@ -38,8 +38,8 @@
               </p>
               <!-- <p class="clearfix">
                   <span class="col-xs-4">方嚮:
-                      <b v-if="item.orderDirection=='Bullish'">{{item.orderDirection}}<i style="color:red" class="iconfont icon-up"></i></b>
-                      <b v-if="item.orderDirection=='Bearish'">{{item.orderDirection}}<i style="color:green" class="iconfont icon-down"></i></b>
+                      <b v-if="item.orderDirection=='bullish'">{{item.orderDirection}}<i style="color:red" class="iconfont icon-up"></i></b>
+                      <b v-if="item.orderDirection=='bearish'">{{item.orderDirection}}<i style="color:green" class="iconfont icon-down"></i></b>
                   </span>
                   <span class="col-xs-4 text-center">市值:<b class="space">{{item.orderTotalPrice}}</b></span>
                   <span class="col-xs-4 text-right">Days to stay:<b class="space">{{item.orderStayDays}}</b></span>

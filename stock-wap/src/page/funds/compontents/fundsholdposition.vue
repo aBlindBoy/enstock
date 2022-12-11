@@ -20,7 +20,7 @@
             <div class="order-title">
               <span @click="toDetail(item.stockCode)" class="main">{{item.stockName}}</span>
               <span class="secondary">({{item.stockCode}})</span>
-              <span :class="item.orderDirection=='Bullish'?'type type-up':'type type-down'">{{item.orderDirection=='Bullish'?'Bullish':'Bearish'}}</span>
+              <span :class="item.orderDirection=='bullish'?'type type-up':'type type-down'">{{item.orderDirection=='bullish'?'bullish':'bearish'}}</span>
               <!-- <span v-if="item.stockPlate=='科創'" :class="item.stockPlate=='科創'?'type':''">科創</span> -->
               <span class="direction pull-right big-font">
                         Latest price:

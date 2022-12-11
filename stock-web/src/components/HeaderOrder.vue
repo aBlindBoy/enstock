@@ -9,14 +9,16 @@
 				</a>
 				<div class="nav-menu pull-left">
 					<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="text-align: center;display: flex;align-items: center;">
-						<el-menu-item :class="activeIndex === 'home'?'is-active':''" index="home">Home</el-menu-item>
-						<el-menu-item index="stock">Stock</el-menu-item>
-						<el-menu-item index="transaction">Trading Floor</el-menu-item>
-						<el-menu-item index="product">Product Description</el-menu-item>
-						<el-menu-item index="down">Software Download</el-menu-item>
-						<el-menu-item index="introduce">Company Profile</el-menu-item>
-						<el-menu-item index="enterprise">News</el-menu-item>
-						<el-menu-item index="/transaction?code=6414" style="color:#000; display: flex;align-items: center;">
+						<el-menu-item :class="activeIndex === 'home'?'is-active':''" index="home">
+							{{$t('header.home')}}
+							</el-menu-item>
+						<el-menu-item index="stock">{{$t('header.stock')}}</el-menu-item>
+						<el-menu-item index="transaction">{{$t('header.trade')}}</el-menu-item>
+						<el-menu-item index="product">{{$t('header.productDescription')}}</el-menu-item>
+						<el-menu-item index="down">{{$t('header.softwareDownload')}}</el-menu-item>
+						<el-menu-item index="introduce">{{$t('header.companyProfile')}}</el-menu-item>
+						<el-menu-item index="enterprise">{{$t('header.news')}}</el-menu-item>
+						<el-menu-item index="/transaction?code=A" style="color:#000; display: flex;align-items: center;">
 							<div class="market-data">
 								<img src="../assets/image/dp.png" v-if="this.$store.state.systemColor == 'red-bg'" alt />
 								<img src="../../static/img/gupiao.png" v-if="this.$store.state.systemColor == 'black-bg'" alt="">
@@ -48,16 +50,26 @@
 					 </span>
 					<a href="javascript:;"  id="google_translate_element" style="width: 40px;"></a>
 					<!-- <a href="javascript:;" class="language" type="primary" @click="isEn1">En</a> -->
-					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toLogin">Login</a>
-					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toRegister">Register</a>
+					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toLogin">{{$t('common.login')}}</a>
+					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toRegister">{{$t('common.register')}}</a>
 					<!-- <a href="javascript:;" class="iconfont icon-lingdang xiaoxiding" style=" margin-right: 10px;"></a> -->
 					<el-dropdown trigger="click" @command="selectColor">
-						<span class="el-dropdown-link" style="color:#fff;line-height: 30px;font-size: 16px;">Style<i class="el-icon-arrow-down el-icon--right"></i>
+						<span class="el-dropdown-link" style="color:#fff;line-height: 30px;font-size: 16px;">{{$t('header.style')}}<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item command="black-bg">Dark</el-dropdown-item>
-							<el-dropdown-item command="red-bg">Red</el-dropdown-item>
-
+							<el-dropdown-item command="black-bg">{{$t('header.dark')}}</el-dropdown-item>
+							<el-dropdown-item command="red-bg">{{$t('header.red')}}</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
+					<el-dropdown trigger="click" @command="selectLocale">
+						<span class="el-dropdown-link" style="color:#fff;line-height: 30px;font-size: 16px;">
+							
+							{{this.locale == 'en'?'English':'中文繁体'}}
+							<i class="el-icon-arrow-down el-icon--right"></i>
+						</span>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item command="en">English</el-dropdown-item>
+							<el-dropdown-item command="zh-TW">中文繁体</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
 
@@ -68,14 +80,14 @@
 							<i class="el-icon-arrow-down el-icon--setting"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item v-if="!this.$store.state.haslogin" command="c">Login</el-dropdown-item>
+							<el-dropdown-item v-if="!this.$store.state.haslogin" command="c">{{$t('common.login')}}</el-dropdown-item>
 							<!-- <el-dropdown-item v-if="this.$store.state.haslogin" command="d">用戶中心</el-dropdown-item> -->
 							<!-- <el-dropdown-item v-if="this.$store.state.haslogin" command="a">重置密碼</el-dropdown-item> -->
-							<el-dropdown-item v-if="this.$store.state.haslogin" command="b">Logout</el-dropdown-item>
+							<el-dropdown-item v-if="this.$store.state.haslogin" command="b">{{$t('header.logout')}}</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
 					<div class="" v-if="this.$store.state.haslogin" style="display: flex; align-items: center;width: 100px;">
-						<a v-if="this.$store.state.haslogin" @click="toUserCenter" class="user-center">Personal Center</a>
+						<a v-if="this.$store.state.haslogin" @click="toUserCenter" class="user-center">{{$t('header.personalCenter')}}</a>
 					</div>
 				</div>
 
@@ -108,7 +120,7 @@
 				outMoneyOrder: 0, // 出金待審核金額
 				timer: null,
 				siteInfo: {},
-				newLanguage:'en'
+				locale:'en'
 			};
 		},
 		watch: {
@@ -137,143 +149,7 @@
 		},
 		methods: {
 			
-			isEn1(){
-				// var language = this.newLanguage
-				transformLanguage();
-				// this.newLanguage = this.newLanguage == 'en' ? 'zh':'en'
-				function transformLanguage(newLanguage) {
-				    // 獲取所有dom元素中文
-				    let transformStr = '';
-				    // 獲取所有dom元素
-				    function getChildDom(dom, type, data = {}) {
-				        if(type == 'read') {
-				            [...dom.children].forEach(v => {
-				                // 判斷中文
-				                // /^[\u0391-\uFFE5]+$/
-				                let re= /^[0-9A-Za-z\u4E00-\u9FFF]+$/;
-				                // 防止某些標簽有內容並且有標簽 ，或者有空格 
-				                let vHtml = $(v).contents().filter(function (index, content) {return content.nodeType === 3}).text().trim();
-				                // 跳過script標簽
-				                if (re.test(vHtml) && v.tagName != 'SCRIPT' && v.tagName != 'STYLE') {
-				                    transformStr += `${vHtml},`
-				                }
-				                // 遞歸獲取元素
-				                getChildDom(v, type, data);
-				            })
-				        }else {
-				   //          let transOld = data.trans_result[0].src.split(',');
-							// // 英文
-				   //          let transNew = data.trans_result[0].dst.split(',');
-							var strTemp
-							var strTemp1
-							data.trans_result.forEach(item=>{
-								strTemp += item.src
-							})
-							data.trans_result.forEach(item=>{
-								strTemp1 += item.dst
-							})
-							// 中文
-							var transOld1 = strTemp.split(',')
-							// 英文
-							let transNew1 = strTemp1.split(',');
-							console.log(transOld1,transNew1);
-							// let transOld1 = data.trans_result[0].src.split(',');
-							// let transNew1 = data.trans_result[0].dst.split(',');
-							// console.log(transOld,transOld1);
-							 // let transOld = data.trans_result;
-							// console.log(transOld,transNew);
-							// dom  元素 
-							// type 
-							// console.log(dom, type, data);
-				            [...dom.children].forEach(v => {
-				                // 判斷中文
-				                // /^[\u0391-\uFFE5]+$/
-				                let re= /^[0-9A-Za-z\u4E00-\u9FFF]+$/;
-				                let vHtml = $(v).contents().filter(function (index, content) {
-									return content.nodeType === 3
-								}).text().trim();
-				                // 跳過script標簽
-				                if (re.test(vHtml) && v.tagName != 'SCRIPT' && v.tagName != 'STYLE') {
-				                    // 防止標簽裏面還有標簽，所以只替換裏面的html,使用replace
-									// var transOld,transNew;
-									// data.trans_result.forEach((item,index)=>{
-									// 	   transOld = item.src.split(',');
-									// 	   transNew = item.dst.split(',');
-									// })
-									// // console.log(transOld,transNew)
-									
-				                   
-										// $(v).html(
-										//     $(v).html().replace(
-										//     transOld[transOld.findIndex(arrList => {
-												
-										// 		return arrList == vHtml
-										// 	})]
-										//     ,
-										//     transNew[transOld.findIndex(arrList => {
-												
-										// 		return arrList == vHtml
-										// 	})]
-										//     )
-											
-										// )
-								
-										$(v).html(
-										    $(v).html().replace(
-										    transOld1[transOld1.findIndex(arrList => arrList == vHtml)]
-										    ,
-										    transNew1[transOld1.findIndex(arrList => arrList == vHtml)]
-										    )
-											
-										)
-									
-				                }
-				                // 遞歸獲取元素
-				                getChildDom(v, type, data);
-				            })
-				        }
-				    }
-				    getChildDom(document,'read');
-					// console.log(transformStr)
-				    getTranslateData();
-				    // 獲取翻譯
-				    function getTranslateData() {
-						
-						var appid = '20200822000549413';
-						var key = 'h4holNDIhvibu_EEmVRh';
-						var salt = (new Date).getTime();
-						var query =transformStr;
-						// query = encodeURIComponent(query);
-						// 多個query可以用\n連接  如 query='apple\norange\nbanana\npear'
-						var from = 'en';
-						var to = 'zh';
-						var str1 = appid + query + salt +key;
-						var sign = md5(str1);
-						$.ajax({
-						    url: '/api/trans/vip/translate',
-						    type: 'post',
-						    // dataType: 'jsonp',
-							// headers:{"application/x-ww":'application/x-www-form-urlencoded'},
-						    data: {
-						        q: query,
-						        appid: appid,
-						        salt: salt,
-						        from: from,
-						        to: to,
-						        sign: sign
-						    },
-						    success: function (data) {
-						               data.trans_result && getChildDom(document,'write',data);
-						               console.log(data);
-						    } 
-						});
-						
-						
-						
-				    }
-				}
-			
-			},
+		
 			
 			// 選擇色系
 			selectColor(command) {
@@ -337,7 +213,7 @@
 						// 退出登錄清除本地存儲 清除用戶數據
 						window.localStorage.clear();
 						this.$store.state.haslogin = false;
-						this.$message.success("您已退出登錄");
+						this.$message.success($t('header.quit'));
 						this.$store.state.userInfo = {};
 						this.$router.push("/login");
 					} else {
@@ -355,13 +231,13 @@
 				this.$store.state.activeIndex = key;
 			},
 			async toTransform() {
-				let opt = {
+				 let opt = {
 					pageNum: 1,
-					pageSize: 1,
-					stockPlate:'上市'
+					pageSize: 1
 				};
 				this.loading = true;
-				let data = await api.getTwStockPageList(opt);
+				let data = await api.getStock(opt);
+				debugger
 				if (data.status === 0) {
 					this.$router.push({
 						path: "/transaction",
@@ -373,23 +249,17 @@
 					this.$message.error(data.msg);
 				}
 			},
-			onCopy: function (e) {
-				this.$message.success("復製成功！");
+			selectLocale(locale){
+				debugger
+				this.$i18n.locale = locale
+				this.locale = locale
+				localStorage.setItem("locale",locale) 
 			},
-			onError: function (e) {
-				this.$message.error("復製失败，请重试！");
-			},
+
 		},
 		mounted() {
 			this.getInfoSite();
-			//  if(this.$store.state.haslogin){
 			this.getUserInfo();
-			// setInterval(()=>{
-			// 	this.isEn()
-				
-			// },900)
-
-			//  }
 		},
 	};
 </script>

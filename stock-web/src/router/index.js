@@ -29,7 +29,7 @@ import Login from '../pages/login/login' // 登录
 import Register from '../pages/login/register' // 注册
 import Forget from '../pages/login/forget' // 忘记密码
 import Message from '../pages/user/components/table/message' // 站内消息
-import Xingu from '../pages/user/components/table/xingu' // 新股申購
+import Ipo from '../pages/user/components/table/ipo' // 新股申購
 
 //============================分仓配资-相关，2020年7月25日19:14:55=========================================
 import Funds from '../pages/funds/index' // 分仓配资
@@ -115,10 +115,10 @@ export default new Router({
       meta: { title: 'Station news' },
       component: Message
     }, {
-      path: '/xingu',
-      name: 'xingu',
+      path: '/ipo',
+      name: 'ipo',
       meta: { title: 'IPO subscription' },
-      component: Xingu
+      component: Ipo
     },{
       path: '/cashdetail',
       name: 'cashdetail',

@@ -13,6 +13,32 @@
 
 import $, { hasData } from "jquery";
 import HQChart from "hqchart";
+//格式化时间
+function formatMinutes(dat){
+  //获取年月日，时间
+  // var year = dat.getFullYear();
+  // var mon = (dat.getMonth()+1) < 10 ? "0"+(dat.getMonth()+1) : dat.getMonth()+1;
+  // var day = dat.getDate()  < 10 ? "0"+(dat.getDate()) : dat.getDate();
+  var hour = dat.getHours()  < 10 ? "0"+(dat.getHours()) : dat.getHours();
+  var min =  dat.getMinutes()  < 10 ? "0"+(dat.getMinutes()) : dat.getMinutes();
+  var sec = dat.getSeconds() < 10 ? "0"+(dat.getSeconds()) : dat.getSeconds();
+  var newDate = hour +""+ min +""+ sec
+  return newDate;
+}
+
+function formatDay(dat){
+  //获取年月日，时间
+  var year = dat.getFullYear();
+  var mon = (dat.getMonth()+1) < 10 ? "0"+(dat.getMonth()+1) : dat.getMonth()+1;
+  var day = dat.getDate()  < 10 ? "0"+(dat.getDate()) : dat.getDate();
+  // var hour = dat.getHours()  < 10 ? "0"+(dat.getHours()) : dat.getHours();
+  // var min =  dat.getMinutes()  < 10 ? "0"+(dat.getMinutes()) : dat.getMinutes();
+  // var seon = dat.getSeconds() < 10 ? "0"+(dat.getSeconds()) : dat.getSeconds();
+  var newDate = year +""+ mon +""+ day
+  return newDate;
+}
+
+
 
 //源码调试用
 //import Chart from '../../jscommon/umychart.vue/umychart.vue.js'
@@ -210,53 +236,6 @@ HQData.RequestMinuteData = function(data, callback) {
   });
 };
 
-HQData.RecvMinuteData = function(recvData, callback, option) {
-  var data = recvData.data[0]["分K"];
-  console.log(data);
-  var stock = { symbol: option.Obj.Symbol, minute: [] };
-  stock.name = "";
-  stock.yclose = parseFloat(data[0]["參考價"]);
-  for (var i = 0; i < data.length; ++i) {
-    var item = data[i];
-    var date = item["交易日"];
-    var hour = parseFloat(item["交易時間"].substring(0, 2));
-    var minu = item["交易時間"].substring(2, 4);
-    var time = hour + minu;
-    var stockItem = {
-      date: parseFloat(date),
-      time: parseFloat(time),
-      open: parseFloat(item["開盤價"]),
-      high: parseFloat(item["最高價"]),
-      low: parseFloat(item["最低價"]),
-      price: parseFloat(item["收盤價"]),
-      vol: parseFloat(item["成交量"]),
-      amount: parseFloat(item["成交量"]),
-      avprice: (parseFloat(item["最高價"]) + parseFloat(item["最低價"])) / 2
-    };
-    stock.date = date;
-    stock.minute.push(stockItem);
-    if (i < data.length - 1) {
-      let nextItem = data[i + 1];
-      minu =parseInt(minu)
-      hour=item["交易時間"].substring(0, 2)
-      let nextMinu = parseInt(nextItem["交易時間"].substring(2, 4));
-      if (minu == 59) {
-        minu = -1;
-      }
-      if (minu + 1 !== nextMinu) {
-        let fullMin = minu + 1 < 10 ? `0${minu + 1}` : minu + 1;
-        data.splice(i + 1, 0, { ...item, '交易時間': `${hour}${fullMin}00` });
-      }
-    }
-  }
-  console.log(stock, "------------");
-  var hqchartData = { stock: [stock], code: 0 };
-
-  if (option.Data.Self.IsDestroy == false) {
-    HQData.Log("[HQData.RecvMinuteDaysData] hqchartData ", hqchartData);
-    callback(hqchartData);
-  }
-};
 
 HQData.RequestMinuteDaysData = function(data, callback) {
   data.PreventDefault = true;
@@ -376,118 +355,118 @@ HQData.RecvMinuteDaysData = function(recvData, callback, option) {
 };
 
 //期货模式
-HQData.RecvMinuteDaysDataV2 = function(recvData, callback, option) {
-  var data = recvData.data;
-  var aryDayData = [];
-  var yClose = data.preClose;
-  var symbol = option.Obj.Symbol;
-  var symbolUpper = symbol.toUpperCase();
-  var yClearing = data.preSettlement; //期货昨结算价
+// HQData.RecvMinuteDaysDataV2 = function(recvData, callback, option) {
+//   var data = recvData.data;
+//   var aryDayData = [];
+//   var yClose = data.preClose;
+//   var symbol = option.Obj.Symbol;
+//   var symbolUpper = symbol.toUpperCase();
+//   var yClearing = data.preSettlement; 
 
-  var xDatetime = HQChart.Chart.JSChart.GetMinuteTimeStringData().GetTimeData(
-    symbol
-  );
-  var endTime = xDatetime[xDatetime.length - 1]; //最后个数据的时间
-  var minuteCount = xDatetime.length;
+//   var xDatetime = HQChart.Chart.JSChart.GetMinuteTimeStringData().GetTimeData(
+//     symbol
+//   );
+//   var endTime = xDatetime[xDatetime.length - 1]; //最后个数据的时间
+//   var minuteCount = xDatetime.length;
 
-  var itemDay = {
-    minute: [],
-    date: null,
-    yclose: yClose,
-    yclearing: yClearing
-  };
-  for (var i = 0; i < data.trends.length; ++i) {
-    var strItem = data.trends[i];
-    var item = strItem.split(",");
-    var today = new Date(Date.parse(item[0]));
-    var date =
-      today.getFullYear() * 10000 +
-      (today.getMonth() + 1) * 100 +
-      today.getDate();
-    var time = today.getHours() * 100 + today.getMinutes();
+//   var itemDay = {
+//     minute: [],
+//     date: null,
+//     yclose: yClose,
+//     yclearing: yClearing
+//   };
+//   for (var i = 0; i < data.trends.length; ++i) {
+//     var strItem = data.trends[i];
+//     var item = strItem.split(",");
+//     var today = new Date(Date.parse(item[0]));
+//     var date =
+//       today.getFullYear() * 10000 +
+//       (today.getMonth() + 1) * 100 +
+//       today.getDate();
+//     var time = today.getHours() * 100 + today.getMinutes();
 
-    var price = parseFloat(item[4]);
-    var stockItem = {
-      date: date,
-      time: time,
-      open: price,
-      high: price,
-      low: price,
-      price: price,
-      amount: parseFloat(item[6]),
-      vol: parseFloat(item[5]),
-      avprice: parseFloat(item[7])
-    };
+//     var price = parseFloat(item[4]);
+//     var stockItem = {
+//       date: date,
+//       time: time,
+//       open: price,
+//       high: price,
+//       low: price,
+//       price: price,
+//       amount: parseFloat(item[6]),
+//       vol: parseFloat(item[5]),
+//       avprice: parseFloat(item[7])
+//     };
 
-    itemDay.date = date;
-    itemDay.minute.push([
-      stockItem.time,
-      stockItem.open,
-      stockItem.high,
-      stockItem.low,
-      stockItem.price,
-      stockItem.vol,
-      stockItem.amount,
-      stockItem.avprice,
-      stockItem.date
-    ]);
+//     itemDay.date = date;
+//     itemDay.minute.push([
+//       stockItem.time,
+//       stockItem.open,
+//       stockItem.high,
+//       stockItem.low,
+//       stockItem.price,
+//       stockItem.vol,
+//       stockItem.amount,
+//       stockItem.avprice,
+//       stockItem.date
+//     ]);
 
-    if (time == endTime) {
-      if (itemDay && itemDay.minute.length > 0) aryDayData.push(itemDay);
-      itemDay = {
-        minute: [],
-        date: null,
-        yclose: yClose,
-        yclearing: yClearing
-      };
-    }
-  }
+//     if (time == endTime) {
+//       if (itemDay && itemDay.minute.length > 0) aryDayData.push(itemDay);
+//       itemDay = {
+//         minute: [],
+//         date: null,
+//         yclose: yClose,
+//         yclearing: yClearing
+//       };
+//     }
+//   }
 
-  if (itemDay && itemDay.minute.length > 0) aryDayData.push(itemDay);
+//   if (itemDay && itemDay.minute.length > 0) aryDayData.push(itemDay);
 
-  var preClose = null,
-    preAvprice = null,
-    preDate = null;
-  for (var i = 0; i < aryDayData.length - 1; ++i) {
-    var itemDay = aryDayData[i];
-    var newMinuteData = HQData.CorrectMinuteData(itemDay.minute, xDatetime);
-    if (newMinuteData) {
-      for (var j = 0; j < newMinuteData.length; ++j) {
-        var item = newMinuteData[j];
-        if (item.length == 1) {
-          item[1] = item[2] = item[3] = item[4] = preClose;
-          item[5] = item[6] = 0;
-          item[7] = preAvprice;
-          item[8] = preDate;
-        } else {
-          preClose = item[4];
-          preAvprice = item[7];
-          preDate = item[8];
-        }
-      }
-      itemDay.minute = newMinuteData;
-    } else {
-      var item = itemDay.minute[itemDay.minute.length - 1];
-      preClose = item[4];
-      preAvprice = item[7];
-      preDate = item[8];
-    }
-  }
+//   var preClose = null,
+//     preAvprice = null,
+//     preDate = null;
+//   for (var i = 0; i < aryDayData.length - 1; ++i) {
+//     var itemDay = aryDayData[i];
+//     var newMinuteData = HQData.CorrectMinuteData(itemDay.minute, xDatetime);
+//     if (newMinuteData) {
+//       for (var j = 0; j < newMinuteData.length; ++j) {
+//         var item = newMinuteData[j];
+//         if (item.length == 1) {
+//           item[1] = item[2] = item[3] = item[4] = preClose;
+//           item[5] = item[6] = 0;
+//           item[7] = preAvprice;
+//           item[8] = preDate;
+//         } else {
+//           preClose = item[4];
+//           preAvprice = item[7];
+//           preDate = item[8];
+//         }
+//       }
+//       itemDay.minute = newMinuteData;
+//     } else {
+//       var item = itemDay.minute[itemDay.minute.length - 1];
+//       preClose = item[4];
+//       preAvprice = item[7];
+//       preDate = item[8];
+//     }
+//   }
 
-  aryDayData = aryDayData.reverse();
+//   aryDayData = aryDayData.reverse();
 
-  var hqchartData = {
-    symbol: option.Obj.Symbol,
-    name: data.name,
-    data: aryDayData,
-    code: 0
-  };
+//   var hqchartData = {
+//     symbol: option.Obj.Symbol,
+//     name: data.name,
+//     data: aryDayData,
+//     code: 0
+//   };
 
-  if (option.Data.Self.IsDestroy == false) {
-    HQData.Log("[HQData.RecvMinuteDaysData] hqchartData ", hqchartData);
-    callback(hqchartData);
-  }
-};
+//   if (option.Data.Self.IsDestroy == false) {
+//     HQData.Log("[HQData.RecvMinuteDaysData] hqchartData ", hqchartData);
+//     callback(hqchartData);
+//   }
+// };
 
 HQData.CorrectMinuteData = function(minuteData, xDatetime) {
   if (minuteData.length == xDatetime.length) return null;
@@ -653,18 +632,7 @@ HQData.GetInternalSymbol = function(
     */
 };
 
-HQData.GetMinuteApiUrl = function(symbol, dayCount) {
-  var internalSymbol = HQData.GetInternalSymbol(symbol);
-  //var url=`http://push2his.eastmoney.com/api/qt/stock/trends2/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58&secid=${internalSymbol.Market}.${internalSymbol.Symbol}&ndays=1&iscr=0&iscca=0`
-  var url = `/twstock/api/v2/minute-stock-data/data?stock_id=${internalSymbol.Symbol}`;
 
-  return {
-    Url: url,
-    Symbol: symbol,
-    InternalSymbol: internalSymbol,
-    DayCount: dayCount
-  };
-};
 
 HQData.IsSHSZ = function(
   symbol //是否是A股
@@ -1106,10 +1074,23 @@ HQData.GetETDecimal = function(symbol) {
 
   return 2;
 };
+function getEntAt(){
+  var myDate = new Date();
+  var year = myDate.getFullYear();//获取年
+  var month = myDate.getMonth() + 1;//获取月，默认从0开始，所以要加一
+  var date = myDate.getDate();//获取日
+  return year+'-'+month+'-'+date;
+}
+function getStartAt(subTime){
+  var myDate = new Date(new Date().getTime()-subTime);
+  var year = myDate.getFullYear();//获取年
+  var month = myDate.getMonth() + 1;//获取月，默认从0开始，所以要加一
+  var date = myDate.getDate();//获取日
+  return year+'-'+month+'-'+date;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////
-//K线数据对接
-//
+//K线数据对接，日k，月k，月k
 /////////////////////////////////////////////////////////////////////////////////
 HQData.GetKLineApiUrl = function(symbol, period, right, option) {
   //https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=0.300059&klt=101&fqt=0
@@ -1118,12 +1099,17 @@ HQData.GetKLineApiUrl = function(symbol, period, right, option) {
   var internalPeriod = HQData.GetInternalPeriod(period);
   var internalRight = HQData.GetInternalRight(right);
   var url = "";
+  var startAt = parseInt(new Date().getTime()/1000) 
+  var dayEndAt = parseInt(new Date().getTime()/1000-60*60*24*7*365) 
+  var weekEndAt = parseInt( new Date().getTime()/1000-60*60*24*7*365) 
+  var monthEndAt = parseInt(new Date().getTime()/1000-60*60*24*7*365) 
+
   if (period == 0) {
-    url = `/twstock/api/v2/daily-stock-data/data?stock_id=${internalSymbol.Symbol}`;
+    url = `/cnyesWs/ws/api/v1/charting/history?resolution=D&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${dayEndAt}`;
   } else if (period == 1) {
-    url = `/twstock/api/v2/weekly-stock-data/data?stock_id=${internalSymbol.Symbol}`;
+    url = `/cnyesWs/ws/api/v1/charting/history?resolution=W&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${weekEndAt}`;
   } else if (period == 2) {
-    url = `/twstock/api/v2/monthly-stock-data/data?stock_id=${internalSymbol.Symbol}`;
+    url = `/cnyesWs/ws/api/v1/charting/history?resolution=M&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${monthEndAt}`;
   }
 
   return {
@@ -1134,7 +1120,19 @@ HQData.GetKLineApiUrl = function(symbol, period, right, option) {
     Right: right
   };
 };
+/**实时 */
+HQData.GetMinuteApiUrl = function(symbol, dayCount) {
+  var internalSymbol = HQData.GetInternalSymbol(symbol);
+  var url = `/cnyesWs/ws/api/v1/charting/history?resolution=1&symbol=USS:${internalSymbol.Symbol}:STOCK`;
+  return {
+    Url: url,
+    Symbol: symbol,
+    InternalSymbol: internalSymbol,
+    DayCount: dayCount
+  };
+};
 
+/**一分 */
 HQData.GetMinuteKLineApiUrl = function(symbol, period, right, option) {
   //https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=0.300059&klt=101&fqt=0
 
@@ -1151,7 +1149,10 @@ HQData.GetMinuteKLineApiUrl = function(symbol, period, right, option) {
   // {
   //     var url=`/eastmoney/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol.Market}.${internalSymbol.Symbol}&klt=${internalPeriod}&fqt=${internalRight}`;
   // }
-  var url = `/twstock/api/v2/minute-stock-data/data?stock_id=${internalSymbol.Symbol}`;
+  //https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=USS:2330:STOCK&from=1668744085&to=1668629349
+  const endAt = getEntAt()
+  const startAt = getStartAt(1000*60*60*24*7)
+  var url = `cnyesWs/ws/api/v1/charting/history?resolution=1&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${endAt}`;
   return {
     Url: url,
     Symbol: symbol,
@@ -1235,51 +1236,6 @@ HQData.RequestHistoryData = function(data, callback) {
   });
 };
 
-HQData.RecvHistoryData = function(recvData, callback, option) {
-  var data = [];
-  var prop = "";
-  var period = option.Obj.Period;
-  if (period === 0) {
-    data = recvData.data[0]["日K"];
-    prop = "交易日";
-  }
-  if (period === 1) {
-    data = recvData.data[0]["週K"];
-    prop = "日期";
-  }
-  if (period === 2) {
-    data = recvData.data[0]["月K"];
-    prop = "年月";
-  }
-
-  var hqChartData = { code: 0, data: [] };
-  hqChartData.symbol = option.Obj.Symbol;
-  hqChartData.name = "";
-  var yClose = data[0]["收盤價"] + data[0]["漲跌"];
-  for (var i = 0; i < data.length; ++i) {
-    var item = data[i];
-    var date = item[prop];
-    if (period === 2) {
-      date += "01";
-    }
-    var open = parseFloat(item["開盤價"]);
-    var close = parseFloat(item["收盤價"]);
-    var high = parseFloat(item["最高價"]);
-    var low = parseFloat(item["最低價"]);
-    var vol = parseFloat(item["成交量"]);
-    var amount = parseFloat(item["成交量"] * item["開盤價"]);
-
-    var newItem = [date, yClose, open, high, low, close, vol, amount];
-    hqChartData.data.unshift(newItem);
-
-    yClose = close;
-  }
-
-  if (option.Data.Self.IsDestroy == false) {
-    HQData.Log("[HQData.RecvHistoryData] hqchartData ", hqChartData);
-    callback(hqChartData);
-  }
-};
 
 HQData.RequestRealtimeData = function(data, callback) {
   data.PreventDefault = true;
@@ -1350,7 +1306,6 @@ HQData.RequestHistoryMinuteData = function(data, callback) {
   var symbol = data.Request.Data.symbol; //请求的股票代码
   var period = data.Self.Period; //周期
   var right = data.Self.Right; //复权
-
   console.log(`[HQData::RequestHistoryMinuteData] Symbol=${symbol}`);
   var obj = HQData.GetMinuteKLineApiUrl(symbol, period, right, null);
 
@@ -1366,69 +1321,84 @@ HQData.RequestHistoryMinuteData = function(data, callback) {
   });
 };
 
+/**实时  全量下载 */
+HQData.RecvMinuteData = function(recvData, callback, option) {
+  var data = recvData.data;
+  var stock = { symbol: option.Obj.Symbol, minute: [] };
+  stock.name = option.Obj.Symbol.split(".")[0]+'.USA'
+  stock.symbol = option.Obj.Symbol.split(".")[0]+'.USA'
+  stock.yclose = parseFloat(data['c'][data['c'].length-1]);
+
+  for (var i = 0; i < data['c'].length; i++) {
+      var stockItem = {
+        time: formatMinutes(new Date(data['t'][i]*1000)),
+        // ,
+        //new Date(data['t'][i])
+        open: parseFloat(data['o'][i]),//開盤價
+        high: parseFloat(data['h'][i]),//最高價
+        low: parseFloat(data['l'][i]),//最低價
+        price: parseFloat(data["c"][i]),//收盤價
+        vol: parseFloat(data["v"][i]),//成交量
+        amount: parseFloat(data["v"][i]),
+        avprice: (parseFloat(data['h'][i]) + parseFloat(data['l'][i])) / 2
+      };
+      // stock.date = parseFloat(data['t'][i]);
+      stock.date = formatDay(new Date(data['t'][i]*1000))
+      stock.minute.push(stockItem);
+    }
+    stock.minute = stock.minute.reverse()
+    var hqchartData = { stock: [stock], code: 0 };
+    HQData.Log("[HQData.RecvMinuteDaysData] hqchartData ", hqchartData);
+    callback(hqchartData);
+};
+/**1分 5分k线 */
 HQData.RecvHistoryMinuteData = function(recvData, callback, option) {
-  var data = recvData.data[0]["分K"];
-  var hqChartData = { code: 0, data: [] };
-  
-  hqChartData.symbol = option.Obj.Symbol;
+  var data = recvData.data;
+  var hqChartData = { symbol: option.Obj.Symbol, data: [] };
+
+
+  hqChartData.name = option.Obj.Symbol.split(".")[0]+'.USA'
+  hqChartData.symbol = option.Obj.Symbol.split(".")[0]+'.USA'
+  hqChartData.yclose = parseFloat(data['c'][data['c'].length-1]);
   let period =option.Obj.Period
-  hqChartData.name = "";
-  var yClose = parseFloat(data[0]["參考價"]);
-  for (let i = 0; i < data.length; ++i) {
-    var item = data[i];
-    var date = item["交易日"];
-    var hour = parseFloat(item["交易時間"].substring(0, 2));
-    var minu = item["交易時間"].substring(2, 4);
-    var time = hour + minu;
-    var date = parseFloat(date);
-    time = parseFloat(time);
-    var open = parseFloat(item["開盤價"]);
-    var high = parseFloat(item["最高價"]);
-    var low = parseFloat(item["最低價"]);
-    var close = parseFloat(item["收盤價"]);
-    var vol = parseFloat(item["成交量"]);
-    var amount = parseFloat(item["成交量"]);
-    var newItem = [date, yClose, open, high, low, close, vol, amount, time];
-    if (i < data.length - 1) {
-      let nextItem = data[i + 1];
-      minu =parseInt(minu)
-      hour=item["交易時間"].substring(0, 2)
-      let nextMinu = parseInt(nextItem["交易時間"].substring(2, 4));
-      if (minu == 59) {
-        minu = -1;
-      }
-      if (minu + 1 !== nextMinu) {
-        let fullMin = minu + 1 < 10 ? `0${minu + 1}` : minu + 1;
-        data.splice(i + 1, 0, { ...item, '交易時間': `${hour}${fullMin}00` });
-      }
-    }
-    hqChartData.data.push(newItem);
 
-    yClose = close;
-  }
-  let chartList=[]
-  if(period ===5){
-    for (let index = 0; index < hqChartData.data.length; index++) {
-      const item = hqChartData.data[index];
-      if(index%5!==0){
-        continue
-      }
-      if(index+4<hqChartData.data.length){
-        let item4=hqChartData.data[index+4];
-        chartList.push({...item,close:item4.close})
-      }else{
-        chartList.push(item)
-      }  
+    for (var i = 0; i < data['c'].length; i++) {
+      var stockItem = {
+        time: parseFloat( formatMinutes(new Date(data['t'][i]*1000))),//时间
+        open: parseFloat(data['o'][i]),//開盤價
+        high: parseFloat(data['h'][i]),//最高價
+        low: parseFloat(data['l'][i]),//最低價
+        price: parseFloat(data["c"][i]),//收盤價
+        vol: parseFloat(data["v"][i]),//成交量
+        amount: parseFloat(data["v"][i]),
+        avprice: (parseFloat(data['h'][i]) + parseFloat(data['l'][i])) / 2
+      };
+      var newItem = [stockItem.time, hqChartData.yclose,stockItem.open, stockItem.high, 
+        stockItem.low, stockItem.price, stockItem.vol, stockItem.amount, stockItem.time];
+      // hqChartData.date = formatDay(new Date(data['t'][i]*1000))
+      hqChartData.data.push(newItem);
     }
-    hqChartData.data=chartList
-  }
-
-  if (option.Data.Self.IsDestroy == false) {
-    HQData.Log("[HQData.RecvHistoryMinuteData] hqchartData ", hqChartData);
-    callback(hqChartData);
-  }
+    hqChartData.data = hqChartData.data.reverse()
+    let chartList=[]
+    if(period ===5){
+      for (let index = 0; index < hqChartData.data.length; index++) {
+        const item = hqChartData.data[index];
+        if(index%5!==0){
+          continue
+        }
+        if(index+4<hqChartData.data.length){
+          let item4=hqChartData.data[index+4];
+          chartList.push({...item,close:item4.close})
+        }else{
+          chartList.push(item)
+        }  
+      }
+      hqChartData.data=chartList
+    }
+    callback(hqChartData)
 };
 
+/**分钟增量更新 */
 HQData.RequestMinuteRealtimeData = function(data, callback) {
   data.PreventDefault = true;
   var symbol = data.Request.Data.symbol[0]; //请求的股票代码
@@ -1454,6 +1424,74 @@ HQData.RequestMinuteRealtimeData = function(data, callback) {
     }
   });
 };
+
+HQData.RecvHistoryData = function(recvData, callback, option) {
+  var data = [];
+  var prop = "";
+  var period = option.Obj.Period;
+  if (period === 0) {
+    data = recvData.data;
+    prop = "交易日";
+  }
+  if (period === 1) {
+    data = recvData.data;
+    prop = "日期";
+  }
+  if (period === 2) {
+    data = recvData.data;
+    prop = "年月";
+  }
+
+  var hqChartData = { code: 0, data: [] };
+  // hqChartData.symbol = option.Obj.Symbol;
+  // hqChartData.name = data.quote["200024"];
+  // var yClose = parseFloat(data.quote["6"]);;
+  hqChartData.name = option.Obj.Symbol.split(".")[0]+'.USA'
+  hqChartData.symbol = option.Obj.Symbol.split(".")[0]+'.USA'
+  hqChartData.yclose = parseFloat(data['c'][data['c'].length-1]);
+  for (var i = 0; i < data['c'].length; i++) {
+    var stockItem = {
+      time:  formatDay(new Date(data['t'][i]*1000)),//时间
+      open: parseFloat(data['o'][i]),//開盤價
+      high: parseFloat(data['h'][i]),//最高價
+      low: parseFloat(data['l'][i]),//最低價
+      price: parseFloat(data["c"][i]),//收盤價
+      vol: parseFloat(data["v"][i]),//成交量
+      amount: parseFloat(data["v"][i]),
+      avprice: (parseFloat(data['h'][i]) + parseFloat(data['l'][i])) / 2
+    };
+    var newItem = [stockItem.time, hqChartData.yclose,stockItem.open, stockItem.high, 
+      stockItem.low, stockItem.price, stockItem.vol, stockItem.amount, stockItem.time];
+    hqChartData.date =  formatDay(new Date(data['t'][i]*1000));
+    hqChartData.data.push(newItem);
+  }
+  hqChartData.data = hqChartData.data.reverse()
+  // for (var i = 0; i < data.length; ++i) {
+    
+    // var item = data[i];
+    // var date = item[prop];
+    // if (period === 2) {
+    //   date += "01";
+    // }
+    // var open = parseFloat(item["開盤價"]);
+    // var close = parseFloat(item["收盤價"]);
+    // var high = parseFloat(item["最高價"]);
+    // var low = parseFloat(item["最低價"]);
+    // var vol = parseFloat(item["成交量"]);
+    // var amount = parseFloat(item["成交量"] * item["開盤價"]);
+
+    // var newItem = [date, yClose, open, high, low, close, vol, amount];
+    // hqChartData.data.unshift(newItem);
+
+    // yClose = close;
+  // }
+
+  if (option.Data.Self.IsDestroy == false) {
+    HQData.Log("[HQData.RecvHistoryData] hqchartData ", hqChartData);
+    callback(hqChartData);
+  }
+};
+
 
 HQData.RecvMinuteRealtimeData = function(recvData, callback, option) {
   var data = recvData.data;
@@ -1485,9 +1523,10 @@ HQData.RecvMinuteRealtimeData = function(recvData, callback, option) {
 
     var newItem = [date, yClose, open, high, low, close, vol, amount, time];
     hqChartData.data.push(newItem);
-
     yClose = close;
   }
+
+  hqChartData.data = hqChartData.data.reverse()
   if (option.Data.Self.IsDestroy == false) {
     HQData.Log("[HQData.RecvMinuteRealtimeData] hqchartData ", hqChartData);
     callback(hqChartData);

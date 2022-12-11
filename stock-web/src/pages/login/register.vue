@@ -11,36 +11,45 @@
     </div>
     <div class="login-box">
       <div class="form-box top-box">
-      <!--  <p class="animated fadeInDown">专线直连 机构版交易</p>
-        <p class="prompt animated fadeInUp">为投资者量身定做机构版投资软件</p> -->
+        <p class="animated fadeInDown">{{$t('register.title')}}</p>
+      <p class="prompt animated fadeInUp">{{$t('register.subTitle')}}</p>
       </div>
       <div class="form-box">
-        <h2 style="text-align: center;">Register</h2>
+        <h2 style="text-align: center;">{{$t('commome.register')}}</h2>
         <el-form :hide-required-asterisk='true' :model="form" ref="ruleForm" :rules="rule" class="demo-form-inline">
           <el-form-item label="" prop="phone">
-            <el-input maxlength='24' class="user-phone" max="24" type='text' v-model="form.phone" placeholder="Please enter your mobile number or email">
+            <el-input maxlength='24' class="user-phone" max="24" 
+            type='text' v-model="form.phone" 
+            :placeholder="$t('register.phonePlaceholder')">
               <i slot="prepend" class="iconfont icon-shouji1" style="font-size:14px"></i>
             </el-input>
           </el-form-item>
-          <el-form-item label=""  prop="code" v-if="$store.state.siteInfo.smsDisplay">
-            <el-input type='text' class="user-phone" v-model="form.code" placeholder="Verification code">
+          <el-form-item label=""  prop="code"
+           v-if="$store.state.siteInfo.smsDisplay">
+            <el-input type='text' class="user-phone" v-model="form.code" 
+              :placeholder="$t('register.verificationCode')">
               <el-button v-if="codeshow" @click="getCode" slot="append">Click for authentication code</el-button>
               <el-button v-if="!codeshow" slot="append">{{count}}S</el-button>
               <i slot="prepend" class="iconfont icon-tongguo5" ></i>
             </el-input>
           </el-form-item>
           <el-form-item label="" prop="pwd">
-            <el-input type='password' class="user-phone" v-model="form.pwd" placeholder="The password is 6~12 digits, letters or symbols">
+            <el-input type='password' class="user-phone"
+             v-model="form.pwd" 
+             :placeholder="$t('register.passwordPlaceholder')">
               <i slot="prepend" class="iconfont icon-zu" style="font-size: 15px;"></i>
             </el-input>
           </el-form-item>
           <el-form-item label="" prop="pwd2">
-            <el-input type='password' class="user-phone" v-model="form.pwd2" placeholder="Please confirm the password again">
+            <el-input type='password' class="user-phone" v-model="form.pwd2"
+            :placeholder="$t('register.againPasswordPlaceholder')" >
               <i slot="prepend" class="iconfont icon-zu" style="font-size: 15px;"></i>
             </el-input>
           </el-form-item>
           <el-form-item label="" prop="invitecode">
-            <el-input type='text' class="user-phone" v-model="form.invitecode" placeholder="Agency Code">
+            <el-input type='text' class="user-phone"
+             v-model="form.invitecode" 
+             :placeholder="$t('register.agentCode')">
               <i slot="prepend" class="iconfont icon-tuijian"></i>
             </el-input>
           </el-form-item>
@@ -54,7 +63,8 @@
           <el-button class="box-btn" type="primary" :loading="islogin" @click="submit('ruleForm')">Register</el-button>
         </div>
         <div class="text-left" style="text-align: right;">
-          Already have an account?<a @click="toLogin">Back to login</a>
+          {{$t('register.alreadyAccount')}}?<a @click="toLogin">
+            {{$t('register.backToLogin')}}</a>
         </div>
       </div>
     </div>
@@ -64,7 +74,7 @@
     <newFooter></newFooter>
     <!-- <home-footer :siteInfo="siteInfo"></home-footer> -->
     <!-- <code-dialog ref="codeDialog"></code-dialog> -->
-    <el-dialog
+    <!-- <el-dialog
       title="Verification code"
       class="er-code-dialog"
       :center='true'
@@ -84,8 +94,8 @@
         </div>
       </div>
 
-    </el-dialog>
-    <el-dialog
+    </el-dialog> -->
+    <!-- <el-dialog
       title="Registration Agreement"
       class="agree-dialog"
       :center='true'
@@ -95,12 +105,11 @@
         <div class="content" style="margin:20px;background:#fff;border-radius:5px;margin-top:60px;line-height:200%;">
             <p v-for="item in regAgreeText.split('。')" :key="item">{{item}}。</p>
         </div>
-        <!-- <iframe class="iframe-box" :src="$store.state.siteInfo.regAgree" frameborder="0"></iframe> -->
         <div slot="footer" class="text-center dialog-footer">
           <el-button type="primary" @click="agreeRegister">I have read and agree to the registration agreement</el-button>
         </div>
       </div>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog
       :title="siteInfo.tradeAgreeTitle"
       class="agree-dialog"
@@ -121,7 +130,6 @@
 </template>
 
 <script>
-  import HomeFooter from '../../components/Footer'
   import HomeHeader from '../../components/HeaderOrder'
   // import CodeDialog from './code'
   import * as api from '../../axios/api'
@@ -129,7 +137,6 @@ import newFooter from '@/components/newFooter'
 
   export default {
     components: {
-      HomeFooter,
       HomeHeader,
       newFooter
       // CodeDialog
@@ -150,29 +157,29 @@ import newFooter from '@/components/newFooter'
       // }
       let validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("Please enter your mobile number or email"));
+        callback(new Error( this.$t('register.phonePlaceholder')));
       } 
       callback()
     };
       let validatePass2 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('Please enter password'))
+          callback(new Error( this.$t('register.passwordPlaceholder')))
         } else {
           // let val = value.replace(/\s*/g, '')
           let valuereg = value.replace(/\s*/g, '')
           let myreg = /^[a-zA-Z0-9!@#$%^&*.]{6,12}$/ // 密碼
           if (!myreg.test(valuereg)) {
-            callback(new Error('Please enter the correct password'))
+            callback(new Error( this.$t('register.passwordPlaceholder')))
           }
           callback()
         }
       }
       let validatePass3 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('Please confirm your password'))
+          callback(new Error( this.$t('register.confirmPassword')))
         } else {
           if (value !== this.form.pwd) {
-            callback(new Error('The two entered passwords do not match'))
+            callback(new Error( this.$t('register.passwordNotMatch')))
           }
           callback()
         }
@@ -196,20 +203,18 @@ import newFooter from '@/components/newFooter'
         },
         rule: {
           phone: [
-            { required: true, validator: validatePass, message: 'Please enter your mobile number or email', trigger: 'blur' }
+            { required: true, validator: validatePass, message: this.$t('register.passwordNotMatch'), trigger: 'blur' }
           ],
           pwd: [
-            { required: true, validator: validatePass2, message: 'Please enter password', trigger: 'blur' }
+            { required: true, validator: validatePass2, message: this.$t('register.passwordPlaceholder'), trigger: 'blur' }
             // { min: 6,max:12, message: '密碼最少爲6到12位數', trigger: 'blur' },
           ],
-          code: [
-            { required: true, message: 'Please enter verification code', trigger: 'blur' }
-          ],
+      
           pwd2: [
-            { required: true, validator: validatePass3, message: 'Please confirm your password', trigger: 'blur' }
+            { required: true, validator: validatePass3, message: this.$t('register.confirmPassword'), trigger: 'blur' }
           ],
           invitecode: [
-            { required: true, message: 'Please enter institution code', trigger: 'blur' }
+            { required: true, message:  this.$t('register.agentCode'), trigger: 'blur' }
           ]
         },
         adminUrl: '',
@@ -263,9 +268,7 @@ import newFooter from '@/components/newFooter'
         // 提交
         this.$refs[formName].validate(async (valid) => {
           if (valid) {
-            if (!this.agree) {
-              this.$message.error('Please agree to the registration agreement first')
-            }
+         
             let opts = {
               // agentCode:'4023', // SR330001
               phone: this.form.phone,
@@ -276,7 +279,7 @@ import newFooter from '@/components/newFooter'
             this.islogin = true
             let data = await api.register(opts)
             if (data.status === 0) {
-              this.$message.success('Registration is successful, please log in')
+              this.$message.success(this.$t('register.registerSuccess'))
               this.$router.push('/login')
             } else {
               this.$message.error(data.msg)
@@ -305,7 +308,7 @@ import newFooter from '@/components/newFooter'
         let data = await api.checkPhone({ phoneNum: this.form.phone })
         if (data.status === 0) {
           // 如果用戶已存在返回 0
-          this.$message.error('Registered, please log in')
+          this.$message.error(this.$t('register.registered'))
           this.$router.push('/login')
         } else {
           this.adminUrl = process.env.API_HOST

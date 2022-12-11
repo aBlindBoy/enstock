@@ -10,7 +10,7 @@
         <el-table-column
           width="180px"
           prop="stockName"
-          label="stock name">
+          :label="$t('common.stockName')">
           <template slot-scope="scope">
             <p class="name">
               <span>{{scope.row.stockName}}/{{scope.row.stockCode}}</span>
@@ -19,7 +19,7 @@
         </el-table-column>
         <el-table-column
           prop="profitAndLose"
-          label="Floating profit and loss">
+          :label="$t('common.ploatingProfitAndLoss')">
           <template slot-scope="scope">
             <p class="bounceIn">
               <span :class="scope.row.profitAndLose<0?'green':'red'">{{scope.row.profitAndLose}}</span>
@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column
           prop="allProfitAndLose"
-          label="Total profit and loss">
+          :label="$t('common.totalProfitAndLoss')">
           <template slot-scope="scope">
             <p class="bounceIn">
               <span :class="scope.row.allProfitAndLose<0?'green':'red'">{{scope.row.allProfitAndLose}}</span>
@@ -37,47 +37,29 @@
         </el-table-column>
         <el-table-column
           prop="buyOrderPrice"
-          label="Buying price">
+          :label="$t('common.purchasePrice')">
         </el-table-column>
         <el-table-column
           prop="sellOrderPrice"
-          label="Selling price">
+          :label="$t('common.sellPrice')">
         </el-table-column>
         <el-table-column
           width="110px"
           prop="orderNum"
-          label="Quantity">
+          :label="$t('common.quantity')">
         </el-table-column>
         <el-table-column
           prop="orderDirection"
-          label="Direction">
+          :label="$t('common.direction')">
           <template slot-scope="scope">
             <p>
               {{scope.row.orderDirection}}
-              <i v-if="scope.row.orderDirection === 'Bullish'" class="red iconfont icon-up"></i>
-              <i v-if="scope.row.orderDirection  === 'Bearish'" class="green iconfont icon-down"></i>
+              <i v-if="scope.row.orderDirection === 'bullish'" class="red iconfont icon-up"></i>
+              <i v-if="scope.row.orderDirection  === 'bearish'" class="green iconfont icon-down"></i>
             </p>
           </template>
         </el-table-column>
-        <!-- <el-table-column
-         width="120px"
-         prop="orderTotalPrice"
-         label="总市值">
-       </el-table-column> -->
       </el-table>
-      <!-- <div class="page-box">
-        <el-pagination
-        class="pull-right"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="list.pageNum"
-            :page-sizes="[10, 20, 30, 40,50]"
-            :page-size="list.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="list.total">
-          </el-pagination>
-      </div> -->
-
     </div>
   </div>
 

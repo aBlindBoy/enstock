@@ -9,7 +9,7 @@
           <div class="description">
             <div class="tit">
               <!-- <span class="zh">公司簡介</span> -->
-              <span class="en">COMPANY PROFILE</span></div>
+              <span class="en">{{$t('introduce.companyProfile')}}</span></div>
           </div>
         </div>
       </slot>
@@ -20,20 +20,26 @@
           <layout>
             <div slot='left'><div class="img"><img src="../../../static/newimg/jianjie1.png" alt=""></div></div>
             <div slot='right'>
-              <div class="text"><div class="hongtiao"></div><div class="word">{{siteInfo.siteIntro}}</div></div>
+              <!-- {{siteInfo.siteIntro}} -->
+              <div class="text"><div class="hongtiao"></div><div class="word">
+                {{$t('introduce.one')}}</div></div>
               </div>
           </layout>
         </div>
         <div class="two">
           <layout>
-            <div slot='left'><div class="text"><div class="hongtiao"></div><div class="word">{{companyInfoOne}}</div></div></div>
-            <div slot='right'><div class="img"><img src="../../../static/newimg/jianjie2.png" alt=""></div></div>
+            <div slot='left'><div class="text"><div class="hongtiao"></div><div class="word">
+              {{$t('introduce.two')}}</div></div></div>
+            <div slot='right'><div class="img"><img src="../../../static/newimg/jianjie2.png" alt="">
+            
+            </div></div>
           </layout>
         </div>
         <div class="three">
           <layout>
             <div slot='left'><div class="img"><img src="../../../static/newimg/jianjie3.png" alt=""></div></div>
-            <div slot='right'><div class="text"><div class="hongtiao"></div><div class="word">{{companyInfoTwo}}</div></div></div>
+            <div slot='right'><div class="text"><div class="hongtiao"></div><div class="word">
+              {{$t('introduce.three')}}</div></div></div>
           </layout>
         </div>
       </div>

@@ -153,7 +153,7 @@
     </div> --> 
     <div class="agree">
       <p style="line-height: 0.4rem;padding: 0 0.2rem;">
-        When the index rises to<span class="red">daily limit</span>When, can not Bullish; reach<span class="green">Limit down</span>When not Bearish.
+        When the index rises to<span class="red">daily limit</span>When, can not bullish; reach<span class="green">Limit down</span>When not bearish.
       </p>
       <!-- <p>
           <i @click="isAgree" :class="agree?'glyphicon glyphicon glyphicon-ok-sign red':'glyphicon glyphicon-ok-circle'"></i>
@@ -226,8 +226,8 @@ export default {
       selectNumber: '',
       autoNumber: '',
       type: [
-        { label: 'Bullish', value: '0' },
-        { label: 'Bearish', value: '1' }
+        { label: 'bullish', value: '0' },
+        { label: 'bearish', value: '1' }
       ],
       selectType: '',
       // number:0,// 股

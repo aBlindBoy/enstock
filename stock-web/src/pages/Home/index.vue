@@ -3,64 +3,20 @@
 		<el-header>
 			<home-header></home-header>
 		</el-header>
-		<el-container class="main-wrapper">
-			<el-main style="padding-top: 60px;padding: 0;">
-				<div class="bgd" style='width:100%'>
-					<backdrop>
-						<div class="bgdcontent">
-								<!-- <div class="text">
-								<div class="en">VICTORY GROUP</div>
-								<div class="company">{{siteInfo.siteName}}</div>
-								<div class="brief">{{siteInfo.siteIntro}}</div>
-							</div> -->
-						
-					
-							 <!-- poster="/static/img/bg-image-sailing.jpg" -->
-							<!-- <div class="cot" style="position: relative;">
-								<div class="notice" style="display:flex;width:100%;box-sizing:border-box;">
-									<i class="iconfont icon-gonggao" style="margin-right:50px;width:8%;margin-right: 5px;overflow: hidden;">公告</i>
-									<div class="bpx" style="width:80%;overflow:hidden">
-										<div ref="marqueeBox" class="marquee-box" style='display:flex;white-space: nowrap;'>
-											<div ref="marquee" class="marquee-list" style="margin-right:60px;" v-for="(item,index) in noticeList" :key="index">
-												<router-link style="color:#fff" :to="{path:'/enterprise-details/',query:{id:item.id}}">
-													{{item.title}}
-												</router-link>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="numtop">
-									<div class="numtoplis" v-for="(item,index) in numtoplis" :key="index" v-if="index<4">
-										<div class="tit">{{item.name}}</div>
-										<div class="num">{{item.nowPrice}}<span class="iconfont" :class="item.increaseRate>0?'icon-direction-top icon-direction-top_red':'el-icon-bottom icon-direction-bottom_green'"></span></div>
-										<div class="percentum"><span style="">{{item.increase}}</span><span>{{item.increaseRate}}%</span></div>
-									</div>
-								</div>
-								<div class="lobby" @click="toJiaoyi">
-									<div class="lobbtn"><i class="iconfont icon-gupiao"></i><i>進入交易大廳</i></div>
-								</div>
-							</div> -->
-						</div>
-					</backdrop>
-				</div>
-			</el-main>
-		</el-container>
 		<backVideo></backVideo>
 		<div class="contentIndex">
-			<!-- <div class="lobby">
-        <div class="lobbtn" @click="toJiaoyi"><i class="iconfont icon-gupiao"></i><i>進入交易大廳</i></div>
-      </div> -->
-			<div class="aboutus" style="pa">
+			<div class="aboutus">
 				<layout>
 					<div slot='left'>
 						<div class="hongtiao"></div>
 						<div class="tit">
-							 <span>ABOUT US</span>
+							 <span>{{$t('home.aboutUs')}}</span>
 						</div>
 						<div class="text">
-							{{siteInfo.companyInfo}}
+							<!-- {{siteInfo.companyInfo}} -->
+							{{$t('home.companyInfo')}}
 						</div>
-						<div class="more1" @click="toLj">Understand more <span class="iconfont icon-direction-right"></span> </div>
+						<div class="more1" @click="toLj">{{$t('home.understandMore')}}<span class="iconfont icon-direction-right"></span> </div>
 					</div>
 					<div slot='right'>
 						<div class="img"><img src="../../../static/newimg/gongsi.png" alt=""></div>
@@ -72,17 +28,16 @@
 					<div class="empt"></div>
 					<div class="detail">
 						<div class="hongtiao"></div>
-						<div class="tit">Easy to get what you want, able to move the world</div>
-						<div class="text">Adhering to the core development concept of "Easy to get where you want to be, to be able to move the world", with the tenet of "Fairness, Justice, Stability and Safety", with the service spirit of "Integrity, Professionalism, Value Creation and Innovation", service-oriented, courageous in innovation, global cross
-Provide professional and comprehensive services to foreign investors. Open a new era of global investment!</div>
+						<div class="tit">{{$t('home.infoTitle')}}</div>
+						<div class="text">{{$t('home.infoContent')}}</div>
 					</div>
 				</div>
 			</div>
 			<div class="productcot">
 				<div class="product">
-					<div class="tit">Product Description</div>
-					<div class="entit">PRODUCT MANUAL</div>
-					<div class="text">Our greatest asset is our people, and Victory Group employs only those experienced professionals who have demonstrated their top-notch customer service skills and tie-in skills in the financial services industry. Provide professional customer service. Our sales and operations representatives will answer any inquiries from customers in professional Chinese.</div>
+					<div class="tit">{{$t('home.productDescription')}}</div>
+					<div class="entit">{{$t('home.productManual')}}</div>
+					<div class="text">{{$t('home.productTitle')}}</div>
 				</div>
 				<div class="notice">
 					<layout>
@@ -91,15 +46,15 @@ Provide professional and comprehensive services to foreign investors. Open a new
 								<div class="not_l" style="width:100%;overflow: hidden;">
 									<span class="iconfont icon-kaihuhedui">
 									</span>
-									Account opening instructions
+									{{$t('home.accountOpening')}}
 									</div>
 								<div class="not_r">
 									<ul>
-										<li>Before opening a real account (registered member), you must carefully read and review the company's "Trading Rules" and "Risk Disclosure and Notification".</li>
-										<li>Account opening requirements for customers: Citizens over the age of 18 with full capacity for civil conduct. Customers must open an account in a real and legal identity and ensure the legality of the source of funds.</li>
-										<li>Customers should prepare their own financial accounts for mutual transfer (open online finance), and customers should keep their financial passwords and transaction passwords properly, and change the passwords regularly, and must not disclose the passwords to anyone.</li>
-										<li>Register yourself and follow the "One Person One Account Rule".</li>
-										<li>After the official account is successfully recharged, you can start trading.</li>
+										<li>{{$t('home.accountOpeningContent1')}}</li>
+										<li>{{$t('home.accountOpeningContent2')}}</li>
+										<li>{{$t('home.accountOpeningContent3')}}</li>
+										<li></li>
+										<!-- <li>After the official account is successfully recharged, you can start trading.</li> -->
 									</ul>
 								</div>
 							</div>
@@ -108,16 +63,17 @@ Provide professional and comprehensive services to foreign investors. Open a new
 							<div class="s_right">
 								<div class="not_l" style="width:100%;overflow: hidden;"><span class="iconfont icon-kaihuhedui"></span>
 									<!--  -->
-									Operating Instructions
+									<!-- Operating Instructions -->
+									{{$t('home.operatingInstructions')}}
 								</div>
 								<div class="not_r">
 									<ul>
-										<li>The principal you invest is the minimum1 USD;</li>
-										<li>After applying for funds, buy and sell at any time;</li>
-										<li>Once the accounts are matched, the same day can be traded;</li>
-										<li> Liquidation when funds are close to a loss Warning line, need to be replenished as soon as possibleMargin; If the position is not covered in time, it may be liquidated by the risk control system;</li>
-										<li>When the trading capital is lower than the Closing Line, we have the right to implement a stop loss operation on your account;</li>
-										<li>A single stock position shall not exceed the total funds in the account90.00% ;</li>
+										<li>{{$t('home.operatingInstructionContent1')}}</li>
+										<li>{{$t('home.operatingInstructionContent2')}}</li>
+										<li>{{$t('home.operatingInstructionContent3')}}</li>
+										<li>{{$t('home.operatingInstructionContent4')}}</li>
+										<li>{{$t('home.operatingInstructionContent5')}}</li>
+										<li>{{$t('home.operatingInstructionContent6')}}</li>
 									</ul>
 								</div>
 							</div>
@@ -125,12 +81,12 @@ Provide professional and comprehensive services to foreign investors. Open a new
 					</layout>
 				</div>
 				<div class="knowmore" @click="toCp">
-					<div class="text">Understand more <span class="iconfont icon-direction-right"></span> </div>
+					<div class="text">{{$t('home.understandMore')}} <span class="iconfont icon-direction-right"></span> </div>
 				</div>
 			</div>
 			<div class="news">
 				<!-- <div class="tit">新聞資訊</div> -->
-				<div class="en">NEWS CENTER</div>
+				<div class="en">{{$t('home.newsCenter')}}</div>
 				<div class="text">
 					<div class="block">
 						<el-carousel :autoplay='true' height="400px">
@@ -155,7 +111,7 @@ Provide professional and comprehensive services to foreign investors. Open a new
 						</el-carousel>
 					</div>
 				</div>
-				<!-- <div class="more1" style="margin:0 auto" @click="toNews">瞭解更多<span class="iconfont icon-direction-right"></span></div> -->
+				<div class="more1" style="margin:13px auto" @click="toNews">{{$t('home.understandMore')}}<span class="iconfont icon-direction-right"></span></div>
 			</div>
 		</div>
 		<newFooter />
@@ -164,7 +120,7 @@ Provide professional and comprehensive services to foreign investors. Open a new
 
 <script>
 	import HomeHeader from '../../components/HeaderOrder'
-	import HomeFooter from '../../components/Footer'
+	// import HomeFooter from '../../components/Footer'
 	import TableBox from './components/table'
 	import * as api from '../../axios/api'
 	import backdrop from '../../components/backdrop'
@@ -177,7 +133,7 @@ Provide professional and comprehensive services to foreign investors. Open a new
 		components: {
 			HomeHeader,
 			TableBox,
-			HomeFooter,
+			// HomeFooter,
 			backdrop,
 			layout,
 			newFooter,
@@ -195,25 +151,6 @@ Provide professional and comprehensive services to foreign investors. Open a new
 				siteInfo: {}, // 站点信息
 				timer: null,
 				currentIndex: 0,
-				// 数字指数
-				numtoplis: [{
-					num: 1
-				}, {
-					num: 1
-				}, {
-					num: 1
-				}, {
-					num: 1
-				}],
-				newlist: [{
-					num: 1
-				}, {
-					num: 1
-				}, {
-					num: 1
-				}, {
-					num: 1
-				}]
 			}
 		},
 		watch: {},
@@ -371,12 +308,12 @@ Provide professional and comprehensive services to foreign investors. Open a new
 				this.currentIndex = index
 			},
 			async toTransform() {
-				let opt = {
+				 let opt = {
 					pageNum: 1,
-					pageSize: 1,
-					stockPlate:'上市'
-				}
-				let data = await api.getTwStockPageList(opt);
+					pageSize: 1
+				};
+				this.loading = true;
+				let data = await api.getStock(opt);
 				if (data.status === 0) {
 					this.$router.push({
 						path: "/transaction",

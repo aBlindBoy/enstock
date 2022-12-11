@@ -117,14 +117,12 @@
 
 <script>
   import HomeHeader from '../../../components/HeaderOrder'
-  import HomeFooter from '../../../components/Footer'
   import MenuBox from '@/pages/user/components/menu'
   import * as api from '../../../axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
       MenuBox
     },
     props: {},

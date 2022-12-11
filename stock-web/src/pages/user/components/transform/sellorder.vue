@@ -12,7 +12,7 @@
         <div class="wrapper">
           <div class="user-center-title" style="text-align:left;">
             <span class="iconfont icon-you" style="color:#C11815;font-size:18px;margin-right:10px"></span>
-            Financing position
+            Financing close
           </div>
           <div class="table-search">
             <el-row type="flex" justify='end'>
@@ -64,7 +64,7 @@
             <el-table-column
               prop="stockName"
               width="126px"
-              label="Stock name/Symbol">
+              :label="$t('common.stockName')">
               <template slot-scope="scope">
                 <span>{{scope.row.stockName}}</span>
                 <p>
@@ -75,49 +75,49 @@
             </el-table-column>
             <el-table-column
               prop="buyOrderPrice"
-              label="Buying price">
+              :label="$t('common.purchasePrice')">
               <template slot-scope="scope">
                 <span>{{scope.row.buyOrderPrice}}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="sellOrderPrice"
-              label="Selling price">
+              :label="$t('common.sellPrice')">
             </el-table-column>
             <el-table-column
               prop="profitAndLose"
-              label="Floating profit and loss">
+              :label="$t('common.ploatingProfitAndLoss')">
               <template slot-scope="scope">
                 <span :class="scope.row.profitAndLose > 0 ? 'red':'green'">{{scope.row.profitAndLose}}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="allProfitAndLose"
-              label="Total profit and loss">
+              :label="$t('common.totalProfitAndLoss')">
               <template slot-scope="scope">
                 <span :class="scope.row.allProfitAndLose > 0 ? 'red':'green'">{{scope.row.allProfitAndLose}}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="orderDirection"
-              label="Direction">
+              :label="$t('common.direction')">
               <template slot-scope="scope">
-                        <span :class="scope.row.orderDirection === 'Bullish' ? 'red':'green'">
+                        <span :class="scope.row.orderDirection === 'bullish' ? 'red':'green'">
                             {{scope.row.orderDirection}}
-                            <i v-if="scope.row.orderDirection === 'Bullish'" class="iconfont icon-up"></i>
-                            <i v-if="scope.row.orderDirection === 'Bearish'" class="iconfont icon-down"></i>
+                            <i v-if="scope.row.orderDirection === 'bullish'" class="iconfont icon-up"></i>
+                            <i v-if="scope.row.orderDirection === 'bearish'" class="iconfont icon-down"></i>
                         </span>
               </template>
             </el-table-column>
             <el-table-column
               prop="orderNum"
-              label="Quantity">
+              :label="$t('common.quantity')">
             </el-table-column>
-            <el-table-column
+           <!--  <el-table-column
               prop="orderTotalPrice"
               label="The total market capitalization">
             </el-table-column>
-            <!-- <el-table-column
+            <el-table-column
                 prop="orderFee"
                 label="Handling fee">
             </el-table-column>
@@ -164,14 +164,12 @@
 
 <script>
   import HomeHeader from '@/components/HeaderOrder'
-  import HomeFooter from '@/components/Footer'
   import MenuBox from '../menu'
   import * as api from '@/axios/api'
 
   export default {
     components: {
       HomeHeader,
-      HomeFooter,
       MenuBox
     },
     props: {},
@@ -207,7 +205,7 @@
         let opt = {
           state: 1,
           stockCode: this.stockCode, // 代碼
-          stockSpell: this.stockSpell, // 簡拼
+          // stockSpell: this.stockSpell, // 簡拼
           pageNum: this.pageNum,
           pageSize: this.pageSize
         }

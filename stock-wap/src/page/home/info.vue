@@ -45,7 +45,7 @@ Interactive Brokers is headquartered in Greenwich Connecticut, USA, with 2,650 c
         </p>
         <h4><span>Transaction limit</span></h4>
         <p>
-          Use financing, securities lending, and Bullish Bearish buying and selling Minimum purchase amount: 10000 USD
+          Use financing, securities lending, and bullish bearish buying and selling Minimum purchase amount: 10000 USD
            Handling fee: charged when buying and selling, charged according to the total transaction price * 0.003
         </p>
 
