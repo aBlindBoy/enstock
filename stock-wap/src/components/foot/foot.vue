@@ -1,8 +1,6 @@
 <template>
   <div 
-    style="position: fixed;
-    bottom: 0;
-    width: 100%;"
+    style="position: fixed;bottom: 0;width: 100%;"
     :class="`footer ${$state.theme === 'red' ? 'red-theme' : 'black-theme'}`"
   >
     <mt-tabbar v-model="select">
@@ -19,8 +17,8 @@
           v-else
           :src="require(`../../../static/img/foot/${$state.theme}/home.png`)" alt=""
         >
-        <p v-if="$store.state.select == '/home'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">Home</p>
-        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">Home</p>
+        <p v-if="$store.state.select == '/home'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">{{$t('foot.home')}}</p>
+        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">{{$t('foot.home')}}</p>
 
       </mt-tab-item>
       <mt-tab-item id="list" :class="$store.state.select == '/list' || $store.state.select == '/indexlist'? 'on' : ''">
@@ -36,8 +34,8 @@
           v-else
           :src="require(`../../../static/img/foot/${$state.theme}/hangqing.png`)" alt=""
         >
-        <p v-if="$store.state.select == '/list'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">Market</p>
-        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">Market</p>
+        <p v-if="$store.state.select == '/list'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">{{$t('foot.market')}}</p>
+        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">{{$t('foot.market')}}</p>
         
       </mt-tab-item>
       <mt-tab-item id="orderlist" :class="$store.state.select == '/orderlist' ? 'on' : ''">
@@ -53,8 +51,9 @@
           v-else
           :src="require(`../../../static/img/foot/${$state.theme}/chicang.png`)" alt=""
         >
-        <p v-if="$store.state.select == '/orderlist'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">Position</p>
-        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">Position</p>
+           
+        <p v-if="$store.state.select == '/orderlist'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">{{$t('foot.position')}}</p>
+        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">{{$t('foot.position')}} </p>
       </mt-tab-item>
       <mt-tab-item id="mylist" :class="$store.state.select == '/mylist' ? 'on' : ''">
         <!-- <i v-if="$store.state.select == '/mylist'" class="iconfont icon-xuanze3" style="font-size: 0.40rem; padding-top: 0.04rem;"></i>
@@ -69,8 +68,8 @@
           v-else
           :src="require(`../../../static/img/foot/${$state.theme}/zixuan.png`)" alt=""
         >
-        <p v-if="$store.state.select == '/mylist'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">Optional</p>
-        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">Optional</p>
+        <p v-if="$store.state.select == '/mylist'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">{{$t('foot.optional')}}</p>
+        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">{{$t('foot.optional')}}</p>
         
       </mt-tab-item>
       <mt-tab-item id="user" :class="$store.state.select == '/user' ? 'on' : ''">
@@ -86,8 +85,8 @@
           v-else
           :src="require(`../../../static/img/foot/${$state.theme}/user.png`)" alt=""
         >
-        <p v-if="$store.state.select == '/user'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">Mine</p>
-        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">Mine</p>
+        <p v-if="$store.state.select == '/user'" :style="{color: $state.theme === 'black' ? '#138DB3' : '#C11815'}">{{$t('foot.mine')}}</p>
+        <p v-else :style="{color: $state.theme === 'black' ? '#FFFFFF' : '#656565'}">{{$t('foot.mine')}}</p>
         
       </mt-tab-item>
     </mt-tabbar>

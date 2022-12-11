@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="wrapper">
     <div v-if="list.length<=0" class="empty text-center">
       No order information yet!
@@ -65,10 +65,10 @@
       </ul>
       <div v-show="loading" class="load-all text-center">
         <mt-spinner type="fading-circle"></mt-spinner>
-        Loading...
+        {{$t('common.loading')}}...
       </div>
       <div v-show="!loading" class="load-all text-center">
-        all loaded
+        {{$t('common.allLoaded')}}
       </div>
     </div>
   </div>
@@ -213,4 +213,4 @@ export default {
     }
   }
 
-</style>
+</style> -->

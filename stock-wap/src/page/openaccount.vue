@@ -6,13 +6,13 @@
       </router-link>
     </mt-header> -->
     <div class="top-wrapper">
-      <div class="title-wrapper">Transaction process</div>
+      <div class="title-wrapper">{{$t('openAccount.title')}}</div>
       <div class="content-box">
         <el-steps :active="0" class="steps-box" align-center>
-          <el-step title="註冊"></el-step>
-          <el-step title="認證"></el-step>
-          <el-step title="Recharge"></el-step>
-          <el-step title="交易"></el-step>
+          <el-step :title="$t('common.register')"></el-step>
+          <el-step :title="$t('openAccount.certified')"></el-step>
+          <el-step :title="$t('common.recharge')"></el-step>
+          <el-step :title="$t('openAccount.trade')"></el-step>
         </el-steps>
         <ul class="list">
           <li class="list-item animated fadeInLeft">
@@ -20,8 +20,8 @@
               <img :src="openIcon1" alt="">
             </div>
             <div class="content">
-              <h3>Market distribution, extremely fast and stable</h3>
-              <p>The dedicated line is directly connected to the exchange, and the speed of placing orders in milliseconds</p>
+              <h3>{{$t('openAccount.marketTitle')}}</h3>
+              <p>{{$t('openAccount.marketContent')}}</p>
             </div>
           </li>
           <li class="list-item animated fadeInRight">
@@ -29,8 +29,8 @@
               <img :src="openIcon2" alt="">
             </div>
             <div class="content">
-              <h3>Customer first, excellent service</h3>
-              <p>Invest flexibly and maximize returns</p>
+              <h3>{{$t('openAccount.customerFirst')}}</h3>
+              <p>{{$t('openAccount.customerFirstContent')}}</p>
             </div>
           </li>
           <li class="list-item animated fadeInLeft">
@@ -38,45 +38,45 @@
               <img :src="openIcon3" alt="">
             </div>
             <div class="content">
-              <h3>Quick account opening, ultra-high quota</h3>
-              <p>Funding threshold, no need to witness offline</p>
+              <h3>{{$t('openAccount.quickOpen')}}</h3>
+              <p>{{$t('openAccount.quickOpenContent')}}</p>
             </div>
           </li>
         </ul>
       </div>
       <div class="btnbox animated fadeInUp text-center">
         <span class="login btnok" @click="toLogin">
-          login
+          {{$t('common.login')}}
         </span>
         <span class="register btnok" @click="toRegister">
-          register
+          {{$t('common.register')}}
         </span>
       </div>
     </div>
 
     <div class="bottom-prompt">
-      <h2 class="text-center">Please prepare before opening an account</h2>
+      <h2 class="text-center"> {{$t('openAccount.pleasePrepare')}}</h2>
       <ul class="list list2 clearfix">
         <li>
           <div class="icon">
             <img :src="dataIcon1" alt="">
           </div>
-          <h3>identity card</h3>
-          <p>Second-generation ID card within the validity period</p>
+          <h3>{{$t('openAccount.identityCard')}}</h3>
+          <p>{{$t('openAccount.identityCardContent')}}</p>
         </li>
         <li>
           <div class="icon">
             <img :src="dataIcon2" alt="">
           </div>
-          <h3>Debit Card</h3>
-          <p>Debit card with account name consistent with ID card</p>
+          <h3>{{$t('openAccount.debitCard')}}</h3>
+          <p>{{$t('openAccount.debitCardContent')}}</p>
         </li>
         <li>
           <div class="icon">
             <img :src="dataIcon3" alt="">
           </div>
-          <h3>WIFI network</h3>
-          <p>3G/4G network</p>
+          <h3>{{$t('openAccount.wifiNetwork')}}</h3>
+          <p>{{$t('openAccount.network')}}</p>
         </li>
       </ul>
     </div>

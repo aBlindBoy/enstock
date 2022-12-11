@@ -7,7 +7,7 @@
       <div class="register-form-item input-model" style="margin-top:1.11rem">
         <img class="register-ico" v-show="$state.theme != 'red'" src="../assets/ico/loginuser.png" alt="">
         <img class="register-ico" v-show="$state.theme == 'red'" src="../assets/ico/loginuser-red.png" alt="">
-        <input class="register-input" placeholder="Please enter your mobile number or email" type="tel" pattern="[0-9]*" v-model="phone">
+        <input class="register-input" :placeholder="$t('register.accountPlaceholder')" type="tel" pattern="[0-9]*" v-model="phone">
       </div>
       <!-- <div class="register-form-item input-model">
         <img class="register-ico" v-show="$state.theme != 'red'" src="../assets/ico/vertify.png" alt="">
@@ -19,17 +19,17 @@
       <div class="register-form-item input-model">
         <img class="register-ico" v-show="$state.theme != 'red'" src="../assets/ico/loginpwd.png" alt="">
         <img class="register-ico" v-show="$state.theme == 'red'" src="../assets/ico/loginpwd-pwd.png" alt="">
-        <input class="register-input" placeholder="The password is 6~12 digits, letters or symbols" type="password" pattern="[0-9]*" v-model="psd">
+        <input class="register-input" :placeholder="$t('register.password')" type="password" pattern="[0-9]*" v-model="psd">
       </div>
       <div class="register-form-item input-model">
         <img class="register-ico" v-show="$state.theme != 'red'" src="../assets/ico/loginpwd.png" alt="">
         <img class="register-ico" v-show="$state.theme == 'red'" src="../assets/ico/loginpwd-pwd.png" alt="">
-        <input class="register-input" placeholder="Please confirm the password again" type="password" pattern="[0-9]*" v-model="psd2">
+        <input class="register-input" :placeholder="$t('register.confirmPassword')" type="password" pattern="[0-9]*" v-model="psd2">
       </div>
       <div class="register-form-item input-model">
         <img class="register-ico" v-show="$state.theme != 'red'" src="../assets/ico/organization.png" alt="">
         <img class="register-ico" v-show="$state.theme == 'red'" src="../assets/ico/organization-red.png" alt="">
-        <input class="register-input" placeholder="Agency Code" type="tel" pattern="[0-9]*" v-model="invitecode">
+        <input class="register-input" :placeholder="$t('register.agentCode')" type="tel" pattern="[0-9]*" v-model="invitecode">
       </div>
       <!-- <div class="register-form-item agree-model">
         <i @click="isAgree"
@@ -38,11 +38,11 @@
         <a @click="toagreeUrl" style="color:#fff">《註冊協議》</a>
       </div> -->
       <div class="register-form-item submit-model" @click="gook">
-        Sign up now
+       {{$t('register.signInNow')}}
       </div>
       <div class="register-form-item " style="margin-top: .23rem;display:flex;justify-content:flex-end">
-        <div :style="{'font-size':'.2rem', color:$state.theme =='red'?'#000':'#86CBD1'}">Already have an account?<span
-            :style="{color:$state.theme =='red'?'#BB1815':'#fff'}" @click="goLogin">Back to login</span></div>
+        <div :style="{'font-size':'.2rem', color:$state.theme =='red'?'#000':'#86CBD1'}">{{$t('register.alreadyAccount')}}?<span
+            :style="{color:$state.theme =='red'?'#BB1815':'#fff'}" @click="goLogin">{{$t('register.backLogin')}}</span></div>
       </div>
     </div>
     <!-- <div class="text-center">
@@ -96,7 +96,7 @@
             <mt-button type="primary" @click="logindialogShow">我已閱讀併同意註冊協議</mt-button>
         </div>
     </mt-popup> -->
-    <mt-popup v-model="dialogShow" :closeOnClickModal="false" class="mint-popup-box mint-popup-white">
+    <!-- <mt-popup v-model="dialogShow" :closeOnClickModal="false" class="mint-popup-box mint-popup-white">
       <div class="clearfix">
         <a @click="dialogShow = false" class="pull-right"><i class="iconfont icon-weitongguo"></i></a>
       </div>
@@ -111,11 +111,10 @@
           <p class="red" v-if="!checkCodeState">The verification code you entered is incorrect, please re-enter</p>
           <div class="text-center">
             <mt-button type="primary" @click="checkImg">Confirm</mt-button>
-            <!-- <mt-button style="margin-left: 10%;width:22%" type="default" @click="dialogShow = false">返回</mt-button> -->
           </div>
         </div>
       </div>
-    </mt-popup>
+    </mt-popup> -->
 
   </div>
 </template>
@@ -176,7 +175,7 @@
       },
       checkCodeBox() {
         if (isNull(this.phone) || !isPhone(this.phone)) {
-          Toast('please enter a valid phone number')
+          Toast(this.$t('register.phoneIsNull'))
         } else {
           this.checkPhone()
         }
@@ -185,80 +184,75 @@
         let data = await api.checkCode({ code: this.code2 })
         this.ischeckImg = data
       },
-      async checkImg() {
-        if (!this.code2) {
-          Toast('The verification code you entered is incorrect, please re-enter')
-          this.checkCodeState = false
-          return
-        }
-        // await this.checkCode()
-        let data = await api.checkCode({ code: this.code2 })
-        if (data === 'true' || data === true) {
-          this.getcode()
-          this.dialogShow = false
-          this.checkCodeState = true
-        } else {
-          Toast('The verification code you entered is incorrect, please re-enter')
-          this.checkCodeState = false
-          this.adminUrl = process.env.API_HOST + '1'
-          this.adminUrl = process.env.API_HOST
-          if (this.adminUrl === undefined) {
-            this.adminUrl = ''
-          }
-        }
-      },
-      async getcode() {
-        // if(!this.checkCode()){
-        //     // 驗證圖形碼是否正確
-        //     Toast('請輸入正確圖形驗證碼')
-        //     return
-        // }
-        // 獲取驗證碼
-        if (this.clickFalg !== 0) {
-          this.clickFalg = 0
-          return
-        }
-        this.clickFalg++
-        //   var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/
-        let reg = /^[0-9]{11}$/ // 手機號碼驗證
-        if (isNull(this.phone)) {
-          Toast('Mobile number cannot be empty')
-        } else {
-          if (!reg.test(this.phone)) {
-            Toast('Please enter the correct mobile number or email')
-          } else {
-            //   var sign  = this.$md5(this.phone+'W&WzL42v').toUpperCase()
-            let result = await api.getCode({ phoneNum: this.phone })
-            if (result.status === 0) {
-              const TIME_COUNT = 60
-              if (!this.timer) {
-                this.count = TIME_COUNT
-                this.codeshow = false
-                this.clickFalg = 0
-                this.timer = setInterval(() => {
-                  if (this.count > 0 && this.count <= TIME_COUNT) {
-                    this.count--
-                  } else {
-                    this.codeshow = true
-                    clearInterval(this.timer)
-                    this.timer = null
-                  }
-                }, 1000)
-              } else {
-                Toast(result.msg)
-              }
-            } else {
-              Toast(result.msg)
-            }
-          }
-        }
-      },
+      // async checkImg() {
+      //   if (!this.code2) {
+      //     Toast('The verification code you entered is incorrect, please re-enter')
+      //     this.checkCodeState = false
+      //     return
+      //   }
+      //   let data = await api.checkCode({ code: this.code2 })
+      //   if (data === 'true' || data === true) {
+      //     this.getcode()
+      //     this.dialogShow = false
+      //     this.checkCodeState = true
+      //   } else {
+      //     Toast('The verification code you entered is incorrect, please re-enter')
+      //     this.checkCodeState = false
+      //     this.adminUrl = process.env.API_HOST + '1'
+      //     this.adminUrl = process.env.API_HOST
+      //     if (this.adminUrl === undefined) {
+      //       this.adminUrl = ''
+      //     }
+      //   }
+      // },
+      // async getcode() {
+     
+      //   // 獲取驗證碼
+      //   if (this.clickFalg !== 0) {
+      //     this.clickFalg = 0
+      //     return
+      //   }
+      //   this.clickFalg++
+      //   //   var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/
+      //   let reg = /^[0-9]{11}$/ // 手機號碼驗證
+      //   if (isNull(this.phone)) {
+      //     Toast('Mobile number cannot be empty')
+      //   } else {
+      //     if (!reg.test(this.phone)) {
+      //       Toast('Please enter the correct mobile number or email')
+      //     } else {
+      //       //   var sign  = this.$md5(this.phone+'W&WzL42v').toUpperCase()
+      //       let result = await api.getCode({ phoneNum: this.phone })
+      //       if (result.status === 0) {
+      //         const TIME_COUNT = 60
+      //         if (!this.timer) {
+      //           this.count = TIME_COUNT
+      //           this.codeshow = false
+      //           this.clickFalg = 0
+      //           this.timer = setInterval(() => {
+      //             if (this.count > 0 && this.count <= TIME_COUNT) {
+      //               this.count--
+      //             } else {
+      //               this.codeshow = true
+      //               clearInterval(this.timer)
+      //               this.timer = null
+      //             }
+      //           }, 1000)
+      //         } else {
+      //           Toast(result.msg)
+      //         }
+      //       } else {
+      //         Toast(result.msg)
+      //       }
+      //     }
+      //   }
+      // },
       async checkPhone() {
         // 先驗證是否已經註冊
         let data = await api.checkPhone({ phoneNum: this.phone })
         if (data.status === 0) {
           // 如果用戶已存在返回 0
-          Toast('User is registered, please login')
+          Toast(this.$t('register.isRegister'))
           this.$router.push('/login')
         } else {
           this.dialogShow = false
@@ -272,24 +266,27 @@
       },
       async gook() {
         // 註冊
-        if (!this.agree) {
-          Toast('You need to agree to the registration agreement to register!')
-        } else if (isNull(this.phone)) {
-          Toast('Please enter the correct mobile number or email')
+        // if (!this.agree) {
+        //   Toast('You need to agree to the registration agreement to register!')
+        // } else
+         if (isNull(this.phone)) {
+          Toast(this.$t('register.mobileIsNull'))
         } else if (isNull(this.psd)) {
-          Toast('Please enter password')
+          Toast(this.$t('register.passwordIsNull'))
         } else if (isNull(this.psd2)) {
-          Toast('Please confirm your password')
-        } else if (isNull(this.code)) {
-          Toast('please enter verification code')
-        } else if (this.psd !== this.psd2) {
-          Toast('The two entered passwords do not match')
+          Toast(this.$t('register.confirePasswordIsNull'))
+        } 
+        // else if (isNull(this.code)) {
+        //   Toast('please enter verification code')
+        // } 
+        else if (this.psd !== this.psd2) {
+          Toast(this.$t('register.passwordNotMatch'))
           this.password = 0
           this.password2 = 0
         } else if (!pwdReg(this.psd)) {
-          Toast('The password is 6~12 digits, numbers, letters or symbols')
+          Toast(this.$t('register.passwordNotFormat'))
         } else if (isNull(this.invitecode)) {
-          Toast('Please enter institution code')
+          Toast(this.$t('register.institutionCodeIsNull'))
         } else {
           let opts = {
             // agentCode:'4023', // SR330001
@@ -300,7 +297,7 @@
           }
           let data = await api.register(opts)
           if (data.status === 0) {
-            Toast('Registration is successful, please log in')
+            Toast(this.$t('register.registerSuccess'))
             this.$router.push('/login')
           } else {
             Toast(data.msg)

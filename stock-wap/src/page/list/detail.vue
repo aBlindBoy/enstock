@@ -7,16 +7,16 @@
     <div class="btn-list">
       <div class="btn btn1" @click="addOptions">
         <img :src="btnIcon1" alt="">
-        自選
+        {{$t('detail.optional')}}
       </div>
       <div class="btn btn2" @click="handleTwoBuyClick">
         <img :src="btnIcon2" alt="">
-        兩融交易
+        {{$t('detail.trade')}}
       </div>
-      <div class="btn btn3" @click="handleSubBuyClick" v-if="this.$store.state.settingForm.fundsDisplay">
+      <!-- <div class="btn btn3" @click="handleSubBuyClick" v-if="this.$store.state.settingForm.fundsDisplay">
         <img :src="btnIcon3" alt="">
         分倉交易
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

@@ -20,15 +20,15 @@
     <!-- 搜索框 -->
     <div class="home-search">
       <div class="home-search-me"
-      @click="$router.push('/user')"
+      @click="$router.push('/language')"
       >
-        <img src="../../assets/ico/wogerenziliao.png" >
+        <img src="../../assets/ico/international.png" >
       </div>
       <div class="home-search-input">
         <img src="../../assets/ico/fangdajing.png" alt="">
         <input type="text"
         @focus="$router.push('/Searchlist')"
-        placeholder="Name/Code Initials">
+        :placeholder="$t('common.searchStockCode')">
       </div>
       <div class="home-search-ctl">
         <img class="lingdang" src="../../assets/ico/lingdang.png" alt=""
@@ -68,7 +68,7 @@
           class="icon-img"
           src="../../assets/ico/hangqing.png" alt="">
         </a>
-        <p class="icon-title">Quotes</p>
+        <p class="icon-title">{{$t('home.quotes')}}</p>
       </div>
       <div class="col-xs-3 text-center">
         <a class='icon-wrap animated zoomIn' @click="goOrderlist" href="javascript:;">
@@ -76,7 +76,7 @@
           class="icon-img"
           src="../../assets/ico/jiaoyi.png" alt="">
         </a>
-        <p class="icon-title">Position</p>
+        <p class="icon-title">{{$t('home.position')}}</p>
       </div>
       <div class="col-xs-3 text-center">
         <a class='icon-wrap animated zoomIn' @click="goInfo" href="javascript:;">
@@ -85,7 +85,7 @@
           src="../../assets/ico/xuanze.png" alt="">
           <!-- <i class="iconfont icon-xinshou"></i> -->
         </a>
-        <p class="icon-title">Briefly</p>
+        <p class="icon-title">{{$t('home.briefly')}}</p>
       </div>
       <div class="col-xs-3 text-center">
         <a class='icon-wrap animated zoomIn' @click="goMyinfo" href="javascript:;">
@@ -94,7 +94,7 @@
           src="../../assets/ico/wo.png" alt="">
           <!-- <i class="iconfont icon-xinshou"></i> -->
         </a>
-        <p class="icon-title">Mine</p>
+        <p class="icon-title">{{$t('home.mine')}}</p>
       </div>
     </div>
     <div class="shadow-box">
@@ -914,13 +914,13 @@ export default {
     width: .6rem;
     height: .6rem;
     border-radius: .3rem;
-    border: 1px solid #234B6E;
+    // border: 1px solid #234B6E;
     display: flex;
     align-items: center;
     justify-content: center;
     >img{
-      width: .27rem;
-      height: .29rem;
+      width: .6rem;
+      height: .6rem;
     }
   }
   &-input {

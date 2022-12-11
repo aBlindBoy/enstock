@@ -19,40 +19,40 @@
     <div class="exchangeData" id="main">
       <div class="overall-box">
         <div class="left">
-          <div class="overall-item">
-            <span style="font-size: 0.30rem;">Last</span>
-            <strong :class="stockDetail.color"> {{ stockDetail.price }}</strong>
+          <div class="overall-item" style="height:100%;display: flex; align-items: center;">
+            <span style="font-size: 0.30rem;line-height: 100%;">{{$t('common.lastPrice')}}</span>
+            <strong :class="stockDetail.color" style="line-height: 100%;margin-left: 0.1rem;"> {{ stockDetail.price }}</strong>
             <!-- <span
               style="margin-left: 0.1rem;margin-right: 0.1rem;"
               :class="stockDetail.color"
               ></span
-            >
-            <span :class="stockDetail.color">Chg {{ stockDetail.rate }} </span> -->
+            > -->
+            <!-- <span :class="stockDetail.color">Chg {{ stockDetail.rate }} </span> -->
           </div>
-          <div class="overall-item">
-            <ul>
+            <!-- <div class="overall-item">
+             <ul>
               <li>
                 <h4>volume</h4>
                 <span>{{ stockDetail.volumn }}</span>
-              </li>
-              <!-- <li>
+              </li> 
+               <li>
                 <h4>turnover</h4>
                 <span>{{ stockDetail.amount }}</span>
-              </li> -->
+              </li>  
             </ul>
-          </div>
+          </div>-->
         </div>
         <div class="right">
           <div class="overall-item">
             <ul>
               <li>
-                <h4>Chg</h4>
+                <h4>{{$t('common.chgPirce')}}</h4>
                 <span>
                   <span v-if="(stockDetail.hcrate > 0)">+</span>
                   {{ stockDetail.rate }}</span>
               </li>
               <li>
-                <h4>Chg %</h4>
+                <h4>{{$t('common.chgRate')}}</h4>
                 <span >
                   <span v-if="(stockDetail.hcrate > 0)">+</span>
                   {{ stockDetail.hcrate }}%</span>
@@ -62,62 +62,19 @@
           <div class="overall-item">
             <ul>
               <li>
-                <h4>High</h4>
+                <h4>{{$t('common.highest')}}</h4>
                 <span>{{ stockDetail.high }}</span>
               </li>
               <li>
-                <h4>Low</h4>
+                <h4>{{$t('common.lowest')}}</h4>
                 <span>{{ stockDetail.low }}</span>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="clear" v-if="false">
-        <div class="priceCurrent">
-          <p class="priceCurrentNum" :class="StockData.Price.Color">
-            {{ StockData.Price.Text }}
-          </p>
-          <p class="riseInfo" :class="StockData.RiseFallPrice.Color">
-            <span class="riseNum">{{ StockData.RiseFallPrice.Text }}</span>
-            <span class="risePrecent">{{ StockData.Increase.Text }}</span>
-          </p>
-        </div>
-        <div class="priceHL">
-          <p class="high">
-            high<span :class="StockData.High.Color">{{
-              StockData.High.Text
-            }}</span>
-          </p>
-          <p class="low">
-            low<span :class="StockData.Low.Color">{{ StockData.Low.Text }}</span>
-          </p>
-        </div>
-        <div class="priceOpen">
-          <p class="open">
-            open<span :class="StockData.Open.Color">{{
-              StockData.Open.Text
-            }}</span>
-          </p>
-          <p class="change" v-if="!IsIndex">
-            chg<span :class="StockData.Excahngerate.Color">{{
-              StockData.Excahngerate.Text
-            }}</span>
-          </p>
-          <p class="change" v-if="IsIndex">
-            received yesterday<span>{{ StockData.YClose.Text }}</span>
-          </p>
-        </div>
-        <div class="priceAmount">
-          <p class="num">
-            forehead<span>{{ StockData.Amount.Text }}</span>
-          </p>
-          <p class="totalValue">
-            quantity<span>{{ StockData.Vol.Text }}</span>
-          </p>
-        </div>
-      </div>
-      <table
+   
+      <!-- <table
         :class="[IsIndex ? 'indexExchangeInfoT' : 'exchangeInfoT']"
         v-if="!IsIndex && ExchangeInfoTShow && false"
       >
@@ -163,8 +120,8 @@
             <td></td>
           </tr>
         </tbody>
-      </table>
-      <table
+      </table> -->
+      <!-- <table
         :class="[IsIndex ? 'indexExchangeInfoT' : 'exchangeInfoT']"
         v-if="IsIndex && ExchangeInfoTShow"
       >
@@ -188,7 +145,7 @@
             <td></td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
       <p class="shrinkWrap" @click="ShowOrHideExchangeInfoT">
         <img
           class="shrinkBtn"
@@ -251,8 +208,7 @@
             >
           </div>
         </div>
-        <div class="k-right-content">
-          <!-- 分时图右侧内容 -->
+        <!-- <div class="k-right-content">
           <div class="rightMinute" v-show="!IsIndex && Minute.IsShow">
             <div class="right-minute-content">
               <ul class="minute-tab clear tabsTitle">
@@ -264,13 +220,7 @@
                 >
                 fifth gear
                 </li>
-                <!-- <li
-                  class="tableBuy"
-                  @click="ChangeMinuteTab(1)"
-                  :class="{ active: MinuteMenuIndex == 1 }"
-                >
-                  明细
-                </li> -->
+              
               </ul>
               <div class="tabsContent">
                 <div
@@ -342,7 +292,6 @@
             </div>
           </div>
 
-          <!-- k线图右侧内容 -->
           <div class="phoneRight" v-show="!IsIndex && RightMenu.IsShow">
             <ul class="ulOne">
               <li
@@ -356,7 +305,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="tab-content tabs kLineTabs blockBg" v-if="false">
@@ -1186,7 +1135,7 @@ export default {
       var chartHeight = 300;
       if (this.Minute.IsShow) {
         // var chartWidth = this.IsIndex ? width : width - $('.rightMinute').outerWidth(true) - 20
-        var chartWidth = this.IsIndex ? width : width - 3.4 * unitRem;
+        var chartWidth = width - 0.5 * unitRem;
         $("#minuteChart").width(chartWidth);
         // $('#minuteChart').height(chartHeight)
         $("#minuteChart").height(290);

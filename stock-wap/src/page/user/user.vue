@@ -1,29 +1,15 @@
 <template>
   <div class="page wrapper">
-    <!-- <div class="header">
-      <mt-header title="">
-        <router-link to="" slot="left">
-          <span v-if="$store.state.userInfo.accountType == 1" class="status">(類比)</span>
-          <span @click="hideNumber" class="status">資產狀況
-                        <i v-show="$store.state.hide" class="iconfont icon-yanjing1"></i>
-                        <i v-show="!$store.state.hide" class="iconfont icon-yanjing"></i>
-                    </span>
-        </router-link>
-        <mt-button @click="tosetting" class="setting" slot="right">
-          <i class="iconfont icon-shezhi"></i>
-        </mt-button>
-      </mt-header>
-    </div> -->
     <div class="account-info">
       <div class="account-info_avatar">
         <img src="../../assets/ico/wogerenziliao.png" alt="">
       </div>
       <div class="account-info_detail">
-        <div class="account-phone">Trading account:{{$store.state.userInfo.phone || 'not logged in'}}</div>
-        <div class="account-name">user name:{{$store.state.userInfo.nickName || 'Not real name'}}</div>
+        <div class="account-phone">{{$t('mine.tradingAccount')}}:{{$store.state.userInfo.phone || 'not logged in'}}</div>
+        <div class="account-name">{{$t('mine.userName')}}:{{$store.state.userInfo.nickName || 'Not real name'}}</div>
       </div>
       <div class="account-info_ctl" @click="hideNumber">
-        Asset status
+        {{$t('mine.assetStatus')}}
         <i v-show="$store.state.hide" class="iconfont icon-yanjing"></i>
         <i v-show="!$store.state.hide" class="iconfont icon-yanjing1"></i>
       </div>
@@ -59,18 +45,18 @@
           <!-- <img v-show="$state.theme!='red'" src="../../assets/ico/zongzichan.png" alt="">
           <img v-show="$state.theme=='red'" src="../../assets/ico/zongzichan-red.png" alt=""> -->
           
-          <span class="ti">Total assets</span>
+          <span class="ti">{{$t('mine.totalAssets')}}</span>
           <span class="de">
             <div>
-              <p v-if="this.$store.state.settingForm.indexDisplay && !this.$store.state.settingForm.futuresDisplay "
+              <!-- <p v-if="this.$store.state.settingForm.indexDisplay && !this.$store.state.settingForm.futuresDisplay "
                 class="account">{{$store.state.hide?'****':
                 formartAmount( Number($store.state.userInfo.userAmt + $store.state.userInfo.userIndexAmt).toFixed(2))
-               }}</p>
+               }}</p> -->
               <!-- <p v-else-if="!this.$store.state.settingForm.indexDisplay && this.$store.state.settingForm.futuresDisplay"
                 class="account">{{$store.state.hide?'****':
                 formartAmount(Number($store.state.userInfo.userAmt + $store.state.userInfo.userFuturesAmt).toFixed(2))
                 }}</p> -->
-              <p v-else-if="!this.$store.state.settingForm.indexDisplay && !this.$store.state.settingForm.futuresDisplay"
+              <p v-if="!this.$store.state.settingForm.indexDisplay && !this.$store.state.settingForm.futuresDisplay"
                 class="account">{{$store.state.hide?'****':
                  formartAmount( Number($store.state.userInfo.userAmt).toFixed(2))
                }}</p>
@@ -84,19 +70,23 @@
           </span>
         </div>
         <div class="acc-pre-center">
-          <div>US stock account: <span>{{$store.state.hide?'****':
+          <div>{{$t('mine.usStockAssets')}}: <span>{{$store.state.hide?'****':
           formartAmount($store.state.userInfo.userAmt)
-          }}</span></div>
+          }}</span>
+<!--           
+        </div>
           <div>index account: <span>{{$store.state.hide?'****':
           formartAmount($store.state.userInfo.userIndexAmt)
           }}</span></div>
           <div>futures account: <span>{{$store.state.hide?'****':
           formartAmount( Number($store.state.userInfo.userFuturesAmt).toFixed(2))
-         }}</span></div>
+         }}</span> -->
+         
+        </div>
         </div>
         <div class="acc-pre-right">
-          <div class="redbtn btn" @click="toRecharge">Recharge</div>
-          <div class="bluebtn btn" @click="toCash">Withdrawal</div>
+          <div class="redbtn btn" @click="toRecharge">{{$t('common.recharge')}}</div>
+          <div class="bluebtn btn" @click="toCash">{{$t('common.withdraw')}}</div>
         </div>
       </div>
       <div v-for="item in account" :key="item.key">
@@ -117,92 +107,97 @@
             <img v-else class="iconfont"
             src="../../assets/ico/jia-red.png"
             >
-            <span :style="{color:$state.theme =='red'?'#000':'#fff'}">{{item.name}}account</span>
-            <span v-if="item.name == 'index'">({{$store.state.hide?'****':
+            <span :style="{color:$state.theme =='red'?'#000':'#fff'}">
+                {{item.name}}
+               {{$t('mine.account')}}</span>
+            <!-- <span v-if="item.name == 'index'">({{$store.state.hide?'****':
             formartAmount($store.state.userInfo.userIndexAmt)
-            }})</span>
-            <span v-if="item.name == 'US stocks'">({{$store.state.hide?'****':
+            }})</span> -->
+            <!-- v-if="item.name == 'US stocks'" -->
+            <span >({{$store.state.hide?'****':
             formartAmount($store.state.userInfo.userAmt)
             }})</span>
-            <span
+            <!-- <span
               v-if="item.name == 'futures'">({{$store.state.hide?'****':
                formartAmount( Number($store.state.userInfo.userFuturesAmt).toFixed(2))
              }})
-            </span>
+            </span> -->
             </div>
-            <a class="pull-right" @click="toTransfer(1)" v-if="false">
-              <span :style="{color:$state.theme == 'red'?'#000':'#fff'}">mutual fund transfer<i class="iconfont icon-you"></i></span>
-            </a>
+            <!-- <a class="pull-right" @click="toTransfer(1)">
+              <span :style="{color:$state.theme == 'red'?'#000':'#fff'}">
+                mutual fund transfer<i class="iconfont icon-you"></i></span>
+            </a> -->
           </div>
           <div v-show="item.isShow" class="content">
             <ul class="clearfix">
               <li>
                 <i class="iconfont icon-yingkuixuanzhong"></i>
-                <div class="name">Total assets</div>
-                <p v-if="item.name == 'index'" class="number yellow">
+                <div class="name">{{$t('mine.totalAssets')}}</div>
+                <!-- <p v-if="item.name == 'index'" class="number yellow">
                   {{$store.state.hide?'****':
                   formartAmount($store.state.userInfo.userIndexAmt)
-                  }}</p>
-                <p v-if="item.name == 'US stocks'" class="number yellow">
+                  }}</p> -->
+                <p  class="number yellow">
                   {{$store.state.hide?'****':
                   formartAmount($store.state.userInfo.userAmt)
                   }}</p>
-                <p v-if="item.name == 'futures'" class="number yellow">
+                <!-- <p v-if="item.name == 'futures'" class="number yellow">
                   {{$store.state.hide?'****':
                    formartAmount(Number($store.state.userInfo.userFuturesAmt).toFixed(2) )
-                  }}</p>
+                  }}</p> -->
               </li>
               <li>
                 <i class="iconfont icon-yingkuixuanzhong"></i>
-                <div class="name">Available funds</div>
-                <p v-if="item.name == 'index'" class="number yellow">
-                  {{$store.state.hide?'****': formartAmount($store.state.userInfo.enableIndexAmt)}}</p>
-                <p v-if="item.name == 'US stocks'" class="number yellow">
+                <div class="name">{{$t('common.availableFunds')}}</div>
+                <!-- <p v-if="item.name == 'index'" class="number yellow">
+                  {{$store.state.hide?'****': formartAmount($store.state.userInfo.enableIndexAmt)}}</p> -->
+                <p  class="number yellow">
                   {{$store.state.hide?'****': formartAmount($store.state.userInfo.enableAmt)}}</p>
-                <p v-if="item.name == 'futures'" class="number yellow">
-                  {{$store.state.hide?'****': formartAmount($store.state.userInfo.enableFuturesAmt)}}</p>
+                <!-- <p v-if="item.name == 'futures'" class="number yellow">
+                  {{$store.state.hide?'****': formartAmount($store.state.userInfo.enableFuturesAmt)}}</p> -->
               </li>
               <li>
                 <i class="iconfont icon-dongjiezijin"></i>
-                <div class="name">Freeze Margin</div>
-                <p v-if="item.name == 'index'" class="number yellow">
+                <div class="name">{{$t('mine.freezeMargin')}} </div>
+                <!-- <p v-if="item.name == 'index'" class="number yellow">
                   {{$store.state.hide?'****':
                   formartAmount($store.state.userInfo.allIndexFreezAmt)
-                  }}</p>
-                <p v-if="item.name == 'US stocks'" class="number yellow">
+                  }}</p> -->
+                <p class="number yellow">
                   {{$store.state.hide?'****':
                   formartAmount($store.state.userInfo.allFreezAmt)
                   }}</p>
-                <p v-if="item.name == 'futures'" class="number yellow">
+                <!-- <p v-if="item.name == 'futures'" class="number yellow">
                   {{$store.state.hide?'****':
                   formartAmount($store.state.userInfo.allFuturesFreezAmt)
-                  }}</p>
+                  }}</p> -->
               </li>
               <li>
                 <i class="iconfont icon-yingkuixuanzhong"></i>
-                <div class="name">total profit and loss</div>
-                <p v-if="item.name == 'index'"
+                <div class="name">{{$t('common.totalProfitAndLoss')}} </div>
+                <!-- <p v-if="item.name == 'index'"
                   :class="$store.state.userInfo.allIndexProfitAndLose>0?'number red':
                   $store.state.userInfo.allIndexProfitAndLose<0?'number green':'number'">
                   {{$store.state.hide?'****':
                   formartAmount($store.state.userInfo.allIndexProfitAndLose)
-                  }}</p>
-                <p v-if="item.name == 'US stocks'"
+                  }}</p> -->
+                  <!-- v-if="item.name == 'US stocks'" -->
+                <p 
                   :class="$store.state.userInfo.allProfitAndLose>0?'number red':$store.state.userInfo.allProfitAndLose<0?'number green':'number'">
                   {{$store.state.hide?'****':
                   formartAmount($store.state.userInfo.allProfitAndLose)
                   }}</p>
-                <p v-if="item.name == 'futures'"
+                <!-- <p v-if="item.name == 'futures'"
                   :class="$store.state.userInfo.allFuturesProfitAndLose>0?'number red':$store.state.userInfo.allFuturesProfitAndLose<0?'number green':'number'">
                   {{$store.state.hide?'****':
                   formartAmount(Number($store.state.userInfo.allFuturesProfitAndLose).toFixed(2))
-                  }}</p>
+                  }}</p> -->
               </li>
-              <li>
+              <!-- <li>
                 <i class="iconfont icon-dongjiezijin"></i>
                 <div class="name">New shares freeze Margin</div>
                 <p>{{shengoudj.djzj}}</p>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
@@ -211,21 +206,21 @@
         style="padding: 0.12rem 0.4rem 0.15rem;">
           <!-- 強制Closing Line為 ： 可用資金 + 凍結Margin * 0.6 -->
           <div style="background:#1A1E29">
-            Your {{item.name}}The mandatory stop loss line for the account is
-          <span v-if="item.name == 'index'" style="font-weight:bold;font-size:0.26rem;margin:0 0.1rem;">{{$store.state.hide?'****':
+            {{$t('mine.your')}} {{item.name}} {{$t('mine.lossLine')}}
+          <!-- <span v-if="item.name == 'index'" style="font-weight:bold;font-size:0.26rem;margin:0 0.1rem;">{{$store.state.hide?'****':
           formartAmount(Number(($store.state.userInfo.enableIndexAmt + $store.state.userInfo.allIndexFreezAmt)
            * indexSettingInfo.forceSellPercent).toFixed(2))
-          }} </span>
-          <span v-if="item.name == 'US stocks'" style="font-weight:bold;font-size:0.26rem;margin:0 0.1rem;">
+          }} </span> -->
+          <!-- v-if="item.name == 'US stocks'" -->
+          <span  style="font-weight:bold;font-size:0.26rem;margin:0 0.1rem;">
           {{$store.state.hide?'****':
              formartAmount(Number(($store.state.userInfo.enableAmt + $store.state.userInfo.allFreezAmt) 
             * settingInfo.forceStopPercent).toFixed(2))}}
            </span>
-          <span v-if="item.name == 'futures'" style="font-weight:bold;font-size:0.26rem;margin:0 0.1rem;">{{$store.state.hide?'****':
+          <!-- <span v-if="item.name == 'futures'" style="font-weight:bold;font-size:0.26rem;margin:0 0.1rem;">{{$store.state.hide?'****':
           formartAmount(Number(($store.state.userInfo.enableFuturesAmt + $store.state.userInfo.allFuturesFreezAmt) 
           * futuresSettingInfo.forceSellPercent).toFixed(2))
-          }} </span>
-          <!-- 請實時註意帳戶風險 -->
+          }} </span> -->
           <i @click="focePromptPopup = true" ref="button" class="iconfont icon-xinshou"></i>
           </div>
         </div>
@@ -233,15 +228,15 @@
     </div>
     <div class="panel" v-if="this.$store.state.settingForm.fundsDisplay">
       <div class="panel-head">
-        <span class="font-w">Distribution allocation</span>
+        <span class="font-w">{{$t('mine.distributionAllocation')}}</span>
       </div>
       <div class="panel-body">
         <div class="row">
           <div @click="goFunds(3)" class="col-xs-3">
             <i class="iconfont icon-rongzi2"></i>
-            IPO subscription
+            {{$t('mine.ipo')}}
           </div>
-          <div @click="goFunds(1)" class="col-xs-3">
+          <!-- <div @click="goFunds(1)" class="col-xs-3">
             <i class="iconfont icon-rongzi2"></i>
             Allotment
           </div>
@@ -260,25 +255,25 @@
           <div @click="goFundsList(3)" class="col-xs-3">
             <i class="iconfont icon-rongzi2"></i>
             Allotment and liquidation
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
     <div class="panel">
       <div class="panel-head">
-        <span class="font-w">my holdings</span>
+        <span class="font-w">{{$t('mine.myHolding')}}</span>
       </div>
       <div class="panel-body">
         <div class="row">
           <div @click="goOrderList(1)" class="col-xs-3">
             <i class="iconfont icon-rongzi2"></i>
-            US stock holdings
+           {{$t('mine.usStockHoldings')}}
           </div>
           <div @click="goOrderList(1)" class="col-xs-3">
             <i class="iconfont icon-rongzi2"></i>
-            US stock closing
+            {{$t('mine.usStockClosing')}}
           </div>
-          <div v-if="this.$store.state.settingForm.indexDisplay" @click="goOrderList(2)" class="col-xs-3">
+          <!-- <div v-if="this.$store.state.settingForm.indexDisplay" @click="goOrderList(2)" class="col-xs-3">
             <i class="iconfont icon-zhishuyidong"></i>
             Index positions
           </div>
@@ -293,7 +288,7 @@
           <div v-if="this.$store.state.settingForm.futuresDisplay" @click="goOrderList(4)" class="col-xs-3">
             <i class="iconfont icon-qihuo1"></i>
             futures close
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -306,18 +301,18 @@
                     <img src="../../assets/ico/shimin.png"
                     style="width:.28rem;height:.24rem;margin-right: 0.15rem;"
                     >
-                    Real-name authentication
+                    {{$t('mine.realName')}}
                     <span class="renzhen done"
                     v-if="$store.state.userInfo.isActive == 2"
                     >
                       <i class="iconfont el-icon-circle-check" ></i>
-                      examination passed
+                      {{$t('mine.examinationPassed')}}
                     </span>
                     <span class="renzhen ing"
                     v-if="$store.state.userInfo.isActive == 0 || $store.state.userInfo.isActive == 3" style="color:red;font-size: 0.2rem;"
                     >
                       <i class="iconfont el-icon-circle-close" ></i>
-                      Not reviewed
+                      {{$t('mine.notReviewed')}}
                     </span>
                     <!-- <i v-if="$store.state.userInfo.isActive == 1" style="color:red;font-size: 0.7rem;"
                        class="iconfont icon-shenhezhong"></i>
@@ -334,7 +329,7 @@
                      <img src="../../assets/ico/yinhangka.png"
                       style="width:.28rem;height:.24rem;margin-right: 0.15rem;"
                     >
-                    financial account
+                    {{$t('mine.financialAccount')}}
                     <!-- <i v-if="!$store.state.bankInfo.bankNo" style="color:red;font-size: 0.3rem;margin-left: 0.1rem;"
                        class="iconfont icon-iconfontweitongguo"></i>
                     <i v-if="$store.state.bankInfo.bankNo" style="color:red;font-size: 0.3rem;margin-left: 0.1rem;"
@@ -348,7 +343,7 @@
                  <img src="../../assets/ico/gaimima.png"
                       style="width:.24rem;height:.24rem;margin-right: 0.15rem;"
                     >
-                    change Password
+                    {{$t('mine.changePassword')}}
                 <!-- <i v-if="!$store.state.bankInfo.bankNo" style="color:red;font-size: 0.3rem;margin-left: 0.1rem;"
                     class="iconfont icon-iconfontweitongguo"></i>
                 <i v-if="$store.state.bankInfo.bankNo" style="color:red;font-size: 0.3rem;margin-left: 0.1rem;"
@@ -375,7 +370,7 @@
                   <img src="../../assets/ico/yinhangka.png"
                       style="width:.27rem;height:.24rem;margin-right: 0.15rem;"
                     >
-                    Funding Details
+                    {{$t('mine.fundingDetails')}}
                   <icon name="right66" class="right" slot="icon"></icon>
               </span>
         </li>
@@ -385,7 +380,7 @@
                     <img src="../../assets/ico/yinhangka.png"
                       style="width:.27rem;height:.27rem;margin-right: 0.15rem;"
                     >
-                    Recharge records
+                    {{$t('mine.rechargeRecords')}}
                     <icon name="right66" class="right" slot="icon"></icon>
                   </span>
         </li>
@@ -395,7 +390,7 @@
                     <img src="../../assets/ico/yinhangka.png"
                       style="width:.24rem;height:.24rem;margin-right: 0.15rem;"
                     >
-                    Withdrawal records
+                    {{$t('mine.withdrawalRecords')}}
                     <icon name="right66" class="right" slot="icon"></icon>
                 </span>
         </li>
@@ -416,30 +411,32 @@
         <div class="clearfix">
           <a @click="focePromptPopup = false" class="pull-right"><i class="iconfont icon-weitongguo"></i></a>
         </div>
-        <p class="font-title">What is a forced stop loss line?</p>
+        <p class="font-title"> {{$t('mine.whatIsLossLine')}}?</p>
         <!--  帳戶可用資金 +  -->
         <!-- <p v-if="$store.state.settingForm.stockDisplay" class="font-bold">(美股)強制Closing Line = (帳戶可用資金+凍結Margin) *
           {{settingInfo.forceStopPercent ? settingInfo.forceStopPercent:0}}</p> -->
-        <p v-if="$store.state.settingForm.indexDisplay" class="font-bold">(Index) Forced Stop Loss Line = (Account Available Funds + Freeze Margin) *
+        <!-- <p v-if="$store.state.settingForm.indexDisplay" class="font-bold">(Index) Forced Stop Loss Line = (Account Available Funds + Freeze Margin) *
           {{indexSettingInfo.forceSellPercent ? indexSettingInfo.forceSellPercent:0}}</p>
         <p v-if="$store.state.settingForm.futuresDisplay" class="font-bold">(Futures) Forced Stop Loss Line = (Account Available Funds + Freeze Margin) *
-          {{futuresSettingInfo.forceSellPercent ? futuresSettingInfo.forceSellPercent:0}}</p>
-        <p v-if="$store.state.settingForm.stockDisplay">When the total profit and loss of your US stock account positions is<span class="green number">
+          {{futuresSettingInfo.forceSellPercent ? futuresSettingInfo.forceSellPercent:0}}</p> -->
+        <p v-if="$store.state.settingForm.stockDisplay">
+          {{$t('mine.whatIsLossLineContent1')}}<span class="green number">
           - {{formartAmount(Number(($store.state.userInfo.enableAmt + $store.state.userInfo.allFreezAmt)
-           * settingInfo.forceStopPercent).toFixed(2))}}</span>When the system will force a stop loss, to ensure that your account will not expand losses
+           * settingInfo.forceStopPercent).toFixed(2))}}</span>
+           {{$t('mine.whatIsLossLineContent2')}}
         </p>
-        <p v-if="$store.state.settingForm.indexDisplay">When the total profit and loss of your index account positions is<span class="green number">
+        <!-- <p v-if="$store.state.settingForm.indexDisplay">When the total profit and loss of your index account positions is<span class="green number">
           -{{formartAmount(Number(($store.state.userInfo.allIndexFreezAmt + $store.state.userInfo.enableIndexAmt) 
           * indexSettingInfo.forceSellPercent).toFixed(2))}}</span>When the system will force a stop loss, to ensure that your account will not expand losses
         </p>
         <p v-if="$store.state.settingForm.futuresDisplay">When the total profit and loss of your futures account positions is<span class="green number">
           -{{formartAmount(Number(($store.state.userInfo.allFuturesFreezAmt + $store.state.userInfo.enableFuturesAmt)
            * futuresSettingInfo.forceSellPercent).toFixed(2))}}</span>When the system will force a stop loss, to ensure that your account will not expand losses
-        </p>
+        </p> -->
       </mt-popup>
       <div class="btnbox">
         <!-- {{$store.state.userInfo}} -->
-        <span class="text-center btnok loginout" @click="toRegister">logout</span>
+        <span class="text-center btnok loginout" @click="toRegister"> {{$t('mine.logout')}}</span>
       </div>
     </div>
     <foot></foot>
@@ -474,11 +471,7 @@ export default {
       futuresSettingInfo: {}, // 設定信息 期貨
       focePromptPopup: false, // 強制平倉提示框
       buttonBottom: 0,
-      account: [
-        { name: 'US stocks', link: 'stock', isShow: true, isDisplay: false },
-        { name: 'index', link: 'index', isShow: false, isDisplay: false },
-        { name: 'futures', link: 'futures', isShow: false, isDisplay: false }
-      ],
+    
       showChangeBtn: false, // 是否顯示資金互轉按鈕
       styleName: 'black',
       shengoudj:'',
@@ -486,11 +479,21 @@ export default {
     }
   },
   watch: {
+    
     //   changeHideStatus(newval){
     //     //   this.userAmt = hideNumberTo(this.$store.state.userInfo.userAmt)
     //   }
   },
-  computed: {},
+  computed: {
+    account(){
+      return [
+        { name: this.$t('mine.usStock'), link: 'stock', isShow: true, isDisplay: false },
+        // { name: 'index', link: 'index', isShow: false, isDisplay: false },
+        // { name: 'futures', link: 'futures', isShow: false, isDisplay: false }
+      ]
+    }
+
+  },
   created () {
     this.getUserInfo()
     this.styleName = window.localStorage.getItem('styleName') ? window.localStorage.getItem('styleName') : 'red'
@@ -524,7 +527,7 @@ export default {
         this.$router.push('/days')
       }
       if (type == 3){
-        this.$router.push('/xingu')
+        this.$router.push('/ipo')
       }
     },
     changeStyle () {
@@ -545,8 +548,8 @@ export default {
         this.$store.state.settingForm = data.data
         // if(this.$store.state.userInfo.accountType != 1){
         this.account[0].isDisplay = data.data.stockDisplay
-        this.account[1].isDisplay = data.data.indexDisplay
-        this.account[2].isDisplay = data.data.futuresDisplay
+        // this.account[1].isDisplay = data.data.indexDisplay
+        // this.account[2].isDisplay = data.data.futuresDisplay
         // }else{
         //     this.account[0].isDisplay = true
         //     this.account[1].isDisplay = true

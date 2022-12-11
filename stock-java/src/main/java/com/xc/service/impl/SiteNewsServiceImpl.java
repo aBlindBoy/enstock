@@ -126,7 +126,7 @@ public class SiteNewsServiceImpl implements ISiteNewsService {
 
         String getUrl = "https://www.tradingview.com/markets/stocks-usa/news/";
         Connection connect = Jsoup.connect(getUrl);
-        connect.proxy("127.0.0.1",7890);
+//        connect.proxy("127.0.0.1",7890);
         Document document = connect.execute().parse();
         Element first = document.getElementsByClass("js-news-category-page-container").first();
         Elements elementsByTag = first.getElementsByTag("a");
@@ -146,7 +146,7 @@ public class SiteNewsServiceImpl implements ISiteNewsService {
                 continue;
             }
             Connection detailConnect = Jsoup.connect(detailUrl);
-            detailConnect.proxy("127.0.0.1",7890);
+//            detailConnect.proxy("127.0.0.1",7890);
             Document detailDocument = detailConnect.execute().parse();
             Element article = detailDocument.getElementsByTag("article").first();
             Elements children = article.children();

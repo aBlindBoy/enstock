@@ -21,6 +21,10 @@
 export default {
   name: 'App',
   created () {
+    let locale = localStorage.getItem("locale") 
+    if (locale) {
+      this.$i18n.locale =  locale
+    }
     let title = this.$route.meta.title || 'Home'
     this.title = title
 
@@ -34,7 +38,6 @@ export default {
     } else{
       this.iconRight = 'default'
     }
-    // this.$store.state.className = window.localStorage.getItem('styleName')?window.localStorage.getItem('styleName'):'red'
   },
   watch: {
     $route(val) {

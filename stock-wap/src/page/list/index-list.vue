@@ -50,10 +50,10 @@
     </div>
     <div v-show="loading" class="load-all text-center">
       <mt-spinner type="fading-circle"></mt-spinner>
-      Loading...
+      {{$t('common.loading')}}...
     </div>
     <div v-show="!loading && list.length>0" class="load-all text-center">
-      all loaded
+      {{$t('common.allLoaded')}}
     </div>
     <div class="footer-btn">
       <p class="red">*Note: 

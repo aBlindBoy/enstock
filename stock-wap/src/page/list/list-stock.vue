@@ -31,9 +31,9 @@
         <li class="title">
           <div>
             <ul class="clearfix">
-              <li class="li-title">Stock Name</li>
-              <li class="li-base" @click="soltPrice()">Latest price</li>
-              <li class="li-base"  @click="soltAmplitude()">chg %</li>
+              <li class="li-title">{{$t('common.stockName')}}</li>
+              <li class="li-base" @click="soltPrice()">{{$t('common.lastPrice')}}</li>
+              <li class="li-base"  @click="soltAmplitude()">{{$t('common.chgRate')}}</li>
             </ul>
           </div>
         </li>
@@ -112,7 +112,7 @@
    
       <div v-show="loading" class="load-all text-center">
         <mt-spinner type="fading-circle"></mt-spinner>
-        Loading...
+        {{$t('common.loading')}}...
       </div>
       <!-- <div v-show="!loading && list.length > 0" class="load-all text-center">
         已全部加載

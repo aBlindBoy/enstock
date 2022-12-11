@@ -3,7 +3,7 @@
     <mt-navbar class="top-navbar" v-model="selected" fixed>
       <mt-tab-item
       class="top-nav-item"
-      v-if="this.$store.state.settingForm.stockDisplay" id="1">US Stock</mt-tab-item>
+      v-if="this.$store.state.settingForm.stockDisplay" id="1">{{$t('position.usStock')}}</mt-tab-item>
       <!-- <mt-tab-item
       class="top-nav-item"
       v-if="this.$store.state.settingForm.indexDisplay" id="2">index account</mt-tab-item> -->

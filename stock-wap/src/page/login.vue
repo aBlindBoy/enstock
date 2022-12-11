@@ -16,7 +16,7 @@
         <img v-show="$state.theme == 'red'" class="login-ico" src="../assets/ico/loginuser-red.png" alt="">
         <input
         class="login-input"
-        placeholder="username"
+        :placeholder="$t('login.usernamePlaceholder')"
         type="tel" pattern="[0-9]*"
         v-model="phone"
         >
@@ -24,15 +24,16 @@
       <div class="login-form-item input-model">
         <img v-show="$state.theme != 'red'" class="login-ico" src="../assets/ico/loginpwd.png" alt="">
         <img v-show="$state.theme == 'red'" class="login-ico" src="../assets/ico/loginpwd-pwd.png" alt="">
-        <input class="login-input" type="password" placeholder="password" v-model="psd">
+        <input class="login-input" type="password" 
+        :placeholder="$t('login.passwordPlaceholder')" v-model="psd">
       </div>
       <div class="login-form-item submit-model" @click="gook">
-        Sign in now<i v-show="isloading" style="color:#fff;" class="iconfont icon-jiazaizhong"></i>
+        {{$t('login.signInNow')}}<i v-show="isloading" style="color:#fff;" class="iconfont icon-jiazaizhong"></i>
       </div>
       <div class="login-form-item extra-model">
-        <div style="color:#0E6580"><span @click="toForget">forget password?</span></div>
+        <div style="color:#0E6580"><span @click="toForget">{{$t('login.forgetPassword')}}?</span></div>
         <div :style="{color:$state.theme =='red'?'#BB1815':'#86CBD1'}">
-          <span style="color:#0E6580">No account yet?</span><span @click="toRegister">Sign up now</span></div>
+          <span style="color:#0E6580">{{$t('login.noAccount')}}?</span><span @click="toRegister">{{$t('login.signInNow')}}</span></div>
       </div>
     </div>
     <!-- <div class="text-center">
@@ -120,7 +121,7 @@ export default {
         // 如果用戶已存在返回 0
         this.loginIN()
       } else {
-        Toast('User has not registered yet, please register first')
+        Toast(this.$t('login.notRegistered'))
         // this.$router.push('/register')
       }
     },
@@ -132,9 +133,9 @@ export default {
       }
       this.clickFalg++
       if (isNull(this.phone)) {
-        Toast('Please enter the correct mobile number or email')
+        Toast(this.$t('login.accountNotNull'))
       } else if (isNull(this.psd)) {
-        Toast('Please enter password')
+        Toast(this.$t('login.passwordNotNull'))
       } else {
         this.checkPhone()
       }

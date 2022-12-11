@@ -8,8 +8,9 @@
         </p>
       </div>
       <div class="clearfix">
-        <div class="pull-left hangqin-left col-xs-4">
+        <div class="pull-left hangqin-left col-xs-4" style="display: flex; align-items: center; line-height: 100%;">
           <p
+            style="line-height: 71px;"
             :class="
               detail.hcrate > 0
                 ? 'price red'
@@ -20,7 +21,7 @@
           >
             {{ Number(detail.nowPrice).toFixed(2) }}
           </p>
-          <p
+          <!-- <p
             :class="
               detail.hcrate > 0
                 ? 'gain red'
@@ -35,20 +36,20 @@
             <span style="margin-left: .1rem;"
               >{{ Number(detail.hcrate).toFixed(2) }}%</span
             >
-          </p>
+          </p> -->
         </div>
         <div class="pull-right hangqin-right col-xs-8">
           <ul class="price-detail text-center">
             <li>
               <!-- <p class="title"></p> -->
               <p :class="detail.hcrate < 0 ? 'number green' : 'number red'">
-                <span class="title">Chg</span>
+                <span class="title">{{$t('common.chgPirce')}}</span>
                 {{ Number(detail.hcrate * detail.nowPrice).toFixed(2) }}
               </p>
             </li>
             <li>
               <p class="number red">
-                <span class="title red">High</span>
+                <span class="title red">{{$t('common.highest')}}</span>
                 {{
                   (
                     Number(detail.nowPrice) * settingIndexInfo.riseLimit +
@@ -59,14 +60,14 @@
             </li>
             <li>
               <p :class="detail.hcrate < 0 ? 'number green' : 'number red'">
-                <span class="title">Chg %</span>
+                <span class="title">{{$t('common.chgRate')}}</span>
                 {{ Number(detail.hcrate).toFixed(2) }}%
               </p>
             </li>
             <li>
               <!-- <p class="title">最低</p> -->
               <p class="green">
-                <span class="title green">low </span>
+                <span class="title green">{{$t('common.lowest')}} </span>
                 {{
                   (
                     detail.nowPrice -
@@ -83,7 +84,7 @@
           <div class="col-xs-4 green">跌停限制 </div>
       </div> -->
     </div>
-    <div v-if="false" class="box-tab">
+    <!-- <div v-if="false" class="box-tab">
       <div class="tab-title"><span class="circle"></span>Stock Details</div>
       <div class="tab-con">
         <ul class="first clearfix">
@@ -106,7 +107,6 @@
         <ul class="first clearfix">
           <li class="pull-left">
             {{ detail.indexCode }}
-            <!-- <span>(Scrb1905)</span> -->
           </li>
           <li
             :class="
@@ -117,27 +117,18 @@
                 : 'pull-left red'
             "
           >
-            <!-- 當前價： -->
             <span>{{ detail.hcrate }}%</span>
           </li>
         </ul>
-        <!-- <div class='buy-price clearfix'>
-            <div class="col-xs-4">
-                <p>市價買入</p>
-            </div>
-            <div class="col-xs-4">
-                <p class="red">{{detail.nowPrice}}</p>
-            </div>
-            <div class="col-xs-4">
-                <p>說明</p>
-            </div>
-        </div> -->
       </div>
-    </div>
+    </div> -->
     <div class="box-tab">
       <div class="tab-title special">
         <!-- <div class="circle"></div>選擇張數 -->
-        <div class="notify">Minimum number of shares to buy {{settingInfo.buyMinNum}},Maximum number of shares that can be purchased{{settingInfo.buyMaxNum}} </div>
+        <div class="notify">
+          <p>{{$t('trade.minBuy')}}  {{settingInfo.buyMinNum}}</p>
+          <p>{{$t('trade.maxBuy')}}  {{settingInfo.buyMaxNum}}</p>
+           </div>
       </div>
       <div class="tab-con">
         <ul class="radio-group clearfix">
@@ -172,9 +163,10 @@
     </div>
     <div class="box-tab">
       <div class="tab-title">
-        <span class="circle"></span>buying and selling direction
+       
+        <p> <span class="circle"></span>{{$t('trade.directionDesc')}}</p>
         <span class="notify"
-          >Maximum purchase amount:{{
+          >{{$t('trade.maximumPurchaseAmount')}}:{{
             (
               settingInfo.buyMaxAmtPercent * $store.state.userInfo.enableAmt
             ).toFixed(2)
@@ -196,7 +188,7 @@
       </div>
     </div>
     <div class="box-tab">
-      <div class="tab-title"><span class="circle"></span>Choose leverage</div>
+      <div class="tab-title"><span class="circle"></span>{{$t('trade.chooseLeverage')}}</div>
       <div class="tab-con">
         <ul class="radio-group clearfix">
           <li
@@ -226,31 +218,27 @@
     </div> -->
     <div class="agree">
       <p style="line-height: 0.4rem;padding: 0 0.2rem;">
-        Choose leverage <span class="red">daily limit</span>, can not bullish; reach<span
+        {{$t('trade.chooseLeverage')}} <span class="red"> {{$t('trade.dailyLimit')}}
+         </span>, {{$t('trade.canNotBullish')}}; {{$t('trade.reach')}} <span
           class="green"
-          >Limit down</span
-        >When not bearish.
+          > {{$t('trade.limitDown')}} </span
+        > {{$t('trade.notBearish')}} 
       </p>
-      <!-- <p>
-          <i @click="isAgree" :class="agree?'glyphicon glyphicon glyphicon-ok-sign red':'glyphicon glyphicon-ok-circle'"></i>
-          我已閱讀併同意
-          <a @click="totrageUrl" >《指數交易交易⻛險揭示書》</a>
-      </p> -->
     </div>
     <div class="footer-btn">
       <div class="total">
         <p class="pay">
-          Pay Margin <span class="protem">{{ total ? total : 0 }}</span>
+          {{$t('trade.payMargin')}}  <span class="protem">{{ total ? total : 0 }}</span>
         </p>
         <p class="account">
-          (account balance :{{ $store.state.userInfo.enableAmt }}USD)
+          ({{$t('trade.accountBalance')}}:{{ $store.state.userInfo.enableAmt }} USD)
         </p>
       </div>
       <!-- <mt-button :disabled="buying" class="btn-red" size="small" type="danger" @click="toInquiry">下單</mt-button> -->
       <div class="right-btn">
         <div class="btn-buy" @click="toInquiry">
           <img src="../../assets/ico/hangqing-btn.png" alt="" srcset="" />
-          Two financial orders
+          {{$t('trade.trade')}}
         </div>
       </div>
     </div>
@@ -285,15 +273,15 @@ export default {
         { label: "30", value: "30" }
       ],
       selectCycle: "20",
-      numberList: [
-        { label: "100 share", value: "100" },
-        { label: "200 share", value: "200" },
-        { label: "500 share", value: "500" },
-        { label: "1000 share", value: "1000" },
-        { label: "2000 share", value: "2000" },
-        { label: "5000 share", value: "5000" },
-        { label: "Input", value: "" }
-      ],
+      // numberList: [
+      //   { label: "100 share", value: "100" },
+      //   { label: "200 share", value: "200" },
+      //   { label: "500 share", value: "500" },
+      //   { label: "1000 share", value: "1000" },
+      //   { label: "2000 share", value: "2000" },
+      //   { label: "5000 share", value: "5000" },
+      //   { label: "Input", value: "" }
+      // ],
       siteLeverList: [],
       selectNumber: "",
       autoNumber: "",
@@ -388,6 +376,17 @@ export default {
         return 0;
       }
       // 市值價 = Current price * 股（1手 = 100股）
+    },
+    numberList(){
+      return [
+        { label: "100 "+ this.$t('common.shares'), value: "100" },
+        { label: "200 "+this.$t('common.shares'), value: "200" },
+        { label: "500 "+this.$t('common.shares'), value: "500" },
+        { label: "1000 "+this.$t('common.shares'), value: "1000" },
+        { label: "2000 "+this.$t('common.shares'), value: "2000" },
+        { label: "5000 "+this.$t('common.shares'), value: "5000" },
+        { label: "Input", value: "" }
+      ]
     }
   },
   created() {
@@ -841,7 +840,7 @@ body {
 
   .price-detail {
     li {
-      width: 60%;
+      width: 50%;
       float: left;
       margin-bottom: 0.15rem;
       margin-top: 0.15rem;
@@ -850,7 +849,7 @@ body {
         background-color: #2d2e3b;
       }
       &:nth-child(odd) {
-        width: 40%;
+        width: 50%;
         text-align: left;
       }
     }
@@ -867,7 +866,7 @@ body {
   padding: 0 0.1rem 0 0.3rem;
   position: relative;
   .price {
-    padding-bottom: 0.35rem;
+    // padding-bottom: 0.35rem;
   }
   &:after {
     display: block;

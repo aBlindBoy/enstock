@@ -34,16 +34,14 @@ Vue.use(ElementUI,{locale,localeTW})
 
 
 Vue.use(VueI18n)
-// Vue.config.lang = 'zh-TW'
-// Vue.locale('zh-TW', localeTW)
-// Vue.locale('en', localeEN)
+
 const i18n = new VueI18n({
 	locale: 'zh-TW',
 	messages: {
 		en,
 		"zh-TW":zhTW
 	}
-  })
+})
 
   
 // Vue.use(MetaInfo)

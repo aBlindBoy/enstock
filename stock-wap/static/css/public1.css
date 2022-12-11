@@ -12965,11 +12965,11 @@ input::-ms-input-placeholder {
   background-size: 100% 100%
 }
 
-.mint-checkbox-input:checked + .mint-checkbox-core, .mint-radio-input:checked + .mint-radio-core {
+/* .mint-checkbox-input:checked + .mint-checkbox-core, .mint-radio-input:checked + .mint-radio-core {
   background: url(/static/img/car/car-sel.png) no-repeat #fff;
   border-color: #fff;
   background-size: 100% 100%
-}
+} */
 
 .mint-checkbox-core:after, .mint-radio-core:after {
   width: 0;
@@ -12977,9 +12977,9 @@ input::-ms-input-placeholder {
 }
 
 .mint-checkbox-core, .mint-radio-core {
-  width: 75px;
-  height: 30px;
-  border-radius: 0
+  width: 20px;
+  height: 20px;
+  /* border-radius: 0 */
 }
 
 .mint-checkbox, .mint-radio {

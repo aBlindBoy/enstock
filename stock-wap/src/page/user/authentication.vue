@@ -11,25 +11,27 @@
     <div class="box transaction">
       <div class="box-contain clearfix">
         <div class="empty text-center">
-          <!-- 您passed實名認證 -->
-          <i v-show="this.$store.state.userInfo.isActive == 1" style="color:red;font-size: 1.5rem;"
-             class="iconfont icon-shenhezhong"></i>
-          <i v-show="!showBtn && this.$store.state.userInfo.isActive != 1" style="color:red;font-size: 1.5rem;"
-             class="iconfont icon-tongguo1"></i>
-          <i v-show="showBtn" style="color:red;font-size: 1.5rem;" class="iconfont icon-icon-test"></i>
+         <span v-show="this.$store.state.userInfo.isActive == 1" style="color:red;font-size: 0.6rem;">
+          {{$t('auth.underReview')}}
+         </span>
+          <span v-show="!showBtn && this.$store.state.userInfo.isActive != 1" 
+          style="color:red;font-size: 0.6rem;"
+             >
+             {{$t('auth.examinationPassed')}}
+            </span> 
         </div>
       </div>
     </div>
     <div class="form-block">
       <div class="auth-msg" v-if="this.$store.state.userInfo.isActive == 3">
-        <p>Authentication failed, please re-authenticate</p>
+        <p>{{$t('auth.authenticationFailed')}}</p>
         <div>
-          Reason for failure:{{this.$store.state.userInfo.authMsg}}
+          {{$t('auth.reasonForFailure')}}:{{this.$store.state.userInfo.authMsg}}
         </div>
       </div>
       <!-- <mt-field label="手機號" placeholder="請輸入您的手機號" v-model="form.phone"></mt-field> -->
-      <mt-field label="actual name" placeholder="please enter your real name" type="text" v-model="form.name"></mt-field>
-      <mt-field label="ID number" placeholder="Please enter your ID number" type="text" v-model="form.idCard"></mt-field>
+      <mt-field :label="$t('auth.actualName')" :placeholder="$t('auth.actualName')" type="text" v-model="form.name"></mt-field>
+      <mt-field :label="$t('auth.idCrad')" :placeholder="$t('auth.idCrad')" type="text" v-model="form.idCard"></mt-field>
     </div>
     <div class="upload-box clearfix">
       <!-- <form action=""> -->
@@ -46,8 +48,8 @@
           :before-upload="beforeAvatarUpload">
           <img v-if="form.img1key" :src="form.img1key" class="id-img avatar">
           <i v-else class="iconfont icon-zhaopian"></i>
-          <span v-if="!form.img1key && !imgStatus" class="btn-title">identity card</span>
-          <span v-if="imgStatus" class="btn-title">uploading...</span>
+          <span v-if="!form.img1key && !imgStatus" class="btn-title">{{$t('auth.identityCard')}}</span>
+          <span v-if="imgStatus" class="btn-title">{{$t('common.loading')}}...</span>
         </el-upload>
         <!-- <i class="iconfont icon-tupian"></i> -->
         <!-- <span class="btn-title">身分證正面</span> -->
@@ -67,8 +69,8 @@
           :before-upload="beforeAvatarUpload2">
           <img v-if="form.img2key" :src="form.img2key" class="id-img avatar">
           <i v-else class="iconfont icon-zhaopian"></i>
-          <span v-if="!form.img2key && !imgStatus2" class="btn-title">identity card</span>
-          <span v-if="imgStatus2" class="btn-title">uploading...</span>
+          <span v-if="!form.img2key && !imgStatus2" class="btn-title">{{$t('auth.identityCard')}}</span>
+          <span v-if="imgStatus2" class="btn-title">{{$t('common.loading')}}...</span>
         </el-upload>
         <!--
             :auto-upload="false"
@@ -91,15 +93,15 @@
       </div> -->
     </div>
     <div class="rule-box">
-      <div class="title">Authentication rules:</div>
+      <div class="title">{{$t('auth.authenticationRules')}}</div>
       <ul>
-        <li>1. New users must pass the real-name authentication audit after registration.</li>
-        <li>2. Once the name and ID number are verified, they will not be modified. Please contact customer service for modification.</li>
-        <li>3. The real name must be the same as the account name of the withdrawal financial account.</li>
+        <li>{{$t('auth.authenticationRules1')}}</li>
+        <li>{{$t('auth.authenticationRules2')}}</li>
+        <li>{{$t('auth.authenticationRules3')}}</li>
       </ul>
     </div>
     <div v-show="showBtn" class="btnbox">
-      <span class="text-center btnok" @click="toSure">confirm</span>
+      <span class="text-center btnok" @click="toSure">{{$t('common.confirm')}}</span>
     </div>
 
   </div>
@@ -215,7 +217,7 @@ export default {
       // const _that = this
       const isLt10M = file.size / 1024 / 1024 < 10
       if (!isLt10M) {
-        this.$message.error('Upload image size cannot exceed 10M!')
+        this.$message.error(this.$t('auth.uploadSize'))
         return false
       } else {
         this.form.img2key = URL.createObjectURL(file)
@@ -246,31 +248,31 @@ export default {
       // return isJPG && isLt2M;
     },
     // 上載
-    handleFile: function (e) {
-      // var that = this
-      let $target = e.target || e.srcElement
-      let file = $target.files[0]
-      // if(file.size > 1024 * 1024 *20){
-      let i = false
-      if (i) {
-        Toast('The photo you uploaded is too large, please select an image under 20M')
-      } else {
-        // Indicator.open('Loading...')
-        this.img1Key = file
-        // this.$refs.formDate.submit()
-        // this.uploadIdImg({upload_file:file})
-        var reader = new FileReader()
-        reader.onload = (data) => {
-          let res = data.target || data.srcElement
-          this.form.img1Key = res.result
-          // Indicator.close()
-        }
-        // reader.onloadend = () => {
-        //   Indicator.close()
-        // }
-        reader.readAsDataURL(file)
-      }
-    },
+    // handleFile: function (e) {
+    //   // var that = this
+    //   let $target = e.target || e.srcElement
+    //   let file = $target.files[0]
+    //   // if(file.size > 1024 * 1024 *20){
+    //   let i = false
+    //   if (i) {
+    //     Toast('The photo you uploaded is too large, please select an image under 20M')
+    //   } else {
+    //     // Indicator.open('{{$t('common.loading')}}...')
+    //     this.img1Key = file
+    //     // this.$refs.formDate.submit()
+    //     // this.uploadIdImg({upload_file:file})
+    //     var reader = new FileReader()
+    //     reader.onload = (data) => {
+    //       let res = data.target || data.srcElement
+    //       this.form.img1Key = res.result
+    //       // Indicator.close()
+    //     }
+    //     // reader.onloadend = () => {
+    //     //   Indicator.close()
+    //     // }
+    //     reader.readAsDataURL(file)
+    //   }
+    // },
     // async uploadIdImg(){
     //      let imgformData = new FormData()
 
@@ -285,11 +287,11 @@ export default {
     toSure () {
       // 實名認證彈框
       if (isNull(this.form.name) || !isName(this.form.name)) {
-        Toast('Please enter your real last name')
+        Toast(this.$t('auth.realNamePlease'))
       } else if (isNull(this.form.idCard)/*  || !idCardReg(this.form.idCard) */) {
-        Toast('Please enter your correct ID number')
+        Toast(this.$t('auth.IdNumber'))
       } else if (isNull(this.form.img1key) || isNull(this.form.img2key)) {
-        Toast('Please upload your ID photo')
+        Toast(this.$t('auth.IdPhoto'))
       } else {
         // 顯示確認彈窗
         this.toAuthentication()
@@ -305,7 +307,7 @@ export default {
       }
       let data = await api.userAuth(opts)
       if (data.status === 0) {
-        Toast('Submitted successfully!')
+        Toast(this.$t('auth.submitSuccess'))
         this.goBack()
       } else {
         Toast(data.msg)

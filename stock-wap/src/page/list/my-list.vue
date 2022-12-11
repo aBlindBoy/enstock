@@ -29,9 +29,9 @@
       <li class="title">
         <div>
           <ul class='clearfix'>
-            <li class="li-title">Stock name</li>
-            <li class="li-base text-center">Latest price</li>
-            <li class="li-base text-center">chg</li>
+            <li class="li-title">{{$t('common.stockName')}}</li>
+            <li class="li-base text-center">{{$t('common.lastPrice')}}</li>
+            <li class="li-base text-center">{{$t('common.chgRate')}}</li>
             <li class="li-base text-center">
              
             </li>
@@ -48,8 +48,8 @@
         <div>
           <ul class="clearfix" :class="item.nowPrice-item.preclose_px<0?'green':'red'" @click='toDetail(item)' >
             <li :class="item.stock_plate == '科創'?'li-title li-title-kc':'li-title'">
-              <p class="name">
-                {{item.stockName}}
+              <p class="name" style="font-size: 0.25rem;text-overflow: ellipsis;overflow: hidden; white-space:nowrap;">
+                  {{item.stockName}}
               </p>
               <p class="code">
                 <i :class="item.stock_type == 'sz'?'iconfont shen-mark hushen-mark':'iconfont hushen-mark'">US</i>
@@ -64,8 +64,8 @@
             </li>
             <li  class="li-base text-center">
               <p class="code">
-                  <span v-if="item.nowPrice == 0">-</span>
-                  <span v-else>{{item.nowPrice-item.preclose_px>0?'+':''}}{{item.hcrate?item.hcrate:'-'}}%</span>
+                  <span v-if="item.hcrate == 0">-</span>
+                  <span v-else>{{item.hcrate>0?'+':''}}{{item.hcrate?item.hcrate:'-'}}%</span>
               </p>
             </li>
             <li class="li-base text-center">
@@ -81,10 +81,10 @@
     </div>
     <div v-show="loading" class="load-all text-center">
       <mt-spinner type="fading-circle"></mt-spinner>
-      Loading...
+      {{$t('common.loading')}}...
     </div>
     <div v-show="!loading && !getStatus" class="load-all text-center">
-      all loaded
+      {{$t('common.allLoaded')}}
     </div>
     <foot></foot>
   </div>

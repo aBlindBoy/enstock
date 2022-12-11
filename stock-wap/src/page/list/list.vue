@@ -9,7 +9,7 @@
         style="height:auto;top: 0;position: absolute;width: 100%;"
         fixed
         @click.enter.native="toSearch"
-        placeholder="Name/Code Initials"
+        :placeholder="$t('common.searchStockCode')"
       >
       </mt-search>
       <!-- :fixed="selected != '2'?true:false" -->

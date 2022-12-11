@@ -5,25 +5,24 @@
       class="search-btn-list"
       icon="search"
       @click="getStock"
-      >search</mt-button
+      >{{$t('common.search')}}</mt-button
     >
     <mt-search
       fixed
       show
       autofocus
       v-model="keywords"
-     
-      placeholder="Stock code can be entered"
+      :placeholder="$t('common.searchStockCode2')"
     >
     <!--  @keyup.enter.native="getStock" -->
       <ul class="table-list">
         <li class="title">
           <div>
             <ul class="clearfix">
-              <li class="li-title">Stock</li>
-              <li class="li-base">Latest price</li>
+              <li class="li-title">{{$t('common.stockName')}}</li>
+              <li class="li-base">{{$t('common.lastPrice')}}</li>
               <!-- <li class="li-base">Chg</li> -->
-              <li class="li-base">Chg %</li>
+              <li class="li-base">{{$t('common.chgRate')}}</li>
             </ul>
           </div>
         </li>
@@ -45,9 +44,7 @@
                 <p class="name">{{ item.name }}</p>
                 <p class="code">
                   <i
-                    v-if="item.stock_plate != '科創'"
-                    :class="
-                      item.stock_type == 'sz'
+                    :class=" item.stock_type == 'sz'
                         ? 'iconfont shen-mark hushen-mark'
                         : 'iconfont hushen-mark'
                     "
@@ -75,13 +72,13 @@
       </ul>
       <div v-show="loading" class="load-all text-center">
         <mt-spinner type="fading-circle"></mt-spinner>
-        Loading...
+        {{$t('common.loading')}}...
       </div>
       <div v-show="!loading && hasSearch" class="load-all text-center">
-        All loaded
+        {{$t('common.allLoaded')}}
       </div>
       <div v-show="!hasSearch" class="load-all text-center">
-        Enter the stock code to query
+        {{$t('listSearch.search')}}
       </div>
     </mt-search>
     <foot></foot>

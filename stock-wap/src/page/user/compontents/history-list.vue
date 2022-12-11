@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div v-if="list.length<=0" class="empty text-center">
-      No order information yet!
+      {{$t('position.noOrder')}}
     </div>
     <div v-if="list.length>0">
       <ul
@@ -15,37 +15,37 @@
               <span class="main">{{item.stockName}}</span>
               <span class="secondary">({{item.stockCode}})</span>
               <span :class="item.orderDirection=='bullish'?'type type-up':'type type-down'">{{item.orderDirection=='bullish'?'bullish':'bearish'}}</span>
-              <span class="pull-right">total profit and loss:<b
+              <span class="pull-right">{{$t('common.ploatingProfitAndLoss')}}:<b
                 :class="item.allProfitAndLose<0?'space green':item.allProfitAndLose==0?'space':'space red'">{{item.allProfitAndLose}}</b></span>
             </div>
             <div class="order-info">
               <p class="clearfix">
-                <span class="col-xs-4">Buying price:<b class="space">{{item.buyOrderPrice}}</b></span>
-                <span class="col-xs-4 text-center">Quantity:<b class="space">{{item.orderNum}}</b></span>
-                <span class="col-xs-4 text-right">market value:<b class="space">{{item.orderTotalPrice}}</b></span>
+                <span class="col-xs-4">{{$t('common.purchasePrice')}}:<b class="space">{{item.buyOrderPrice}}</b></span>
+                <span class="col-xs-4 text-center">{{$t('common.quantity')}}:<b class="space">{{item.orderNum}}</b></span>
+                <span class="col-xs-4 text-right">{{$t('common.marketValue')}}:<b class="space">{{item.orderTotalPrice}}</b></span>
               </p>
               <p class="clearfix">
-                <span class="col-xs-4">selling price:<b class="space">{{item.sellOrderPrice}}</b></span>
+                <span class="col-xs-4">{{$t('common.sellPrice')}}:<b class="space">{{item.sellOrderPrice}}</b></span>
                 <span class="col-xs-4 text-center"></span>
-                <span class="col-xs-4 text-right">Spread fee:<b class="space">{{item.orderStayFee}}</b></span>
+                <span class="col-xs-4 text-right">{{$t('common.spreadFee')}}:<b class="space">{{item.orderStayFee}}</b></span>
               </p>
               <p class="clearfix">
-                <span class="col-xs-4">Handling fee:<b class="space">{{item.orderFee}}</b></span>
-                <span class="col-xs-4 text-center">Stamp duty:<b class="space">{{item.orderSpread}}</b></span>
-                <span class="col-xs-4 text-right">Storage fee:<b class="space">{{item.orderStayFee}}</b></span>
+                <span class="col-xs-4">{{$t('common.totalHandlingFee')}}:<b class="space">{{item.orderFee}}</b></span>
+                <span class="col-xs-4 text-center">{{$t('common.stampDuty')}}:<b class="space">{{item.orderSpread}}</b></span>
+                <span class="col-xs-4 text-right">{{$t('common.storageFee')}}:<b class="space">{{item.orderStayFee}}</b></span>
               </p>
 
               <p class="clearfix">
-                <span class="col-xs-5">Days to stay:<b class="space">{{item.orderStayDays}}</b></span>
-                <span class="col-xs-7 text-right">Floating profit and loss:<b
+                <span class="col-xs-5 ">{{$t('common.daysToStay')}}:<b class="space">{{item.orderStayDays}}</b></span>
+                <span class="col-xs-7 text-right">{{$t('common.ploatingProfitAndLoss')}}:<b
                   :class="item.profitAndLose<0?'space green':item.profitAndLose==0?'space':'space red'">{{item.profitAndLose}}</b></span>
               </p>
               <p class="clearfix">
-                        <span class="secondary col-xs-6">buy:
+                        <span class="secondary col-xs-6">{{$t('common.buy')}}:
                             <b v-if="item.buyOrderTime">{{new Date(item.buyOrderTime) | timeFormat}}</b>
                             <b v-else></b>
                         </span>
-                <span class="secondary col-xs-6 text-right">sell:
+                <span class="secondary col-xs-6 text-right">{{$t('common.sell')}}:
                             <b v-if="item.sellOrderTime">{{new Date(item.sellOrderTime) | timeFormat}}</b>
                             <b v-else></b>
                         </span>
@@ -57,10 +57,10 @@
       </ul>
       <div v-show="loading" class="load-all text-center">
         <mt-spinner type="fading-circle"></mt-spinner>
-        Loading...
+        {{$t('common.loading')}}...
       </div>
       <div v-show="!loading" class="load-all text-center">
-        all loaded
+        {{$t('common.allLoaded')}}
       </div>
     </div>
   </div>

@@ -19,7 +19,7 @@
       >
         <div v-show="loading" class="load-all text-center">
           <mt-spinner type="fading-circle"></mt-spinner>
-          Loading...
+          {{$t('common.loading')}}...
         </div>
         <ul
           class="order-info-box-wrap"
@@ -74,7 +74,7 @@
         </ul>
 
         <div v-show="!loading && hasSearch" class="load-all text-center">
-          all loaded
+          {{$t('common.allLoaded')}}
         </div>
         <div class="text-center" v-if="!hasSearch">
           Please check the order

@@ -59,10 +59,10 @@
       </ul>
       <div v-show="loading" class="load-all text-center">
         <mt-spinner type="fading-circle"></mt-spinner>
-        Loading...
+        {{$t('common.loading')}}...
       </div>
       <div v-show="!loading" class="load-all text-center">
-        all loaded
+        {{$t('common.allLoaded')}}
       </div>
     </mt-search>
     <foot></foot>

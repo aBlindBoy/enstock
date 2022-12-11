@@ -2,8 +2,8 @@
     <div class="wrapper">
 
         <mt-navbar class="head" v-model="selected"  >
-            <mt-tab-item id="1" @click="tabsClick">Subscription list</mt-tab-item>
-            <mt-tab-item id="2" @click="tabsClick">Subscription record</mt-tab-item>
+            <mt-tab-item id="1" @click="tabsClick">{{$t('ipo.openSubscription')}}</mt-tab-item>
+            <mt-tab-item id="2" @click="tabsClick">{{$t('ipo.subscriptionList')}}</mt-tab-item>
         </mt-navbar>
         <div v-if="selected == 1">
             <!-- <div v-if="list.length<=0" 
@@ -14,7 +14,7 @@
             style="margin-top:20px" 
             class="empty text-center">
                     <mt-spinner type="fading-circle"></mt-spinner>
-                    Loading...
+                    {{$t('common.loading')}}...
             </div>
             <div v-if="list.length>0">
             <ul
@@ -24,27 +24,27 @@
                 <li v-for="(item) in list" :key="item.key">
                 <div class="order-info-box">
                     <div class="order-title">
-                    <span class="main">Stock code/name</span>
+                    <span class="main">{{$t('ipo.stockCodeName')}}</span>
                     <span class="secondary">({{item.stockCode}}/{{item.stockName}})</span>
                     <span class="direction pull-right big-font">
-                                Issue market:
+                        <!-- {{$t('ipo.issueMarket')}}: -->
                                 <b class="space green">{{item.stockPlate}}</b>
                             </span>
                     </div>
                     
                     <div class="order-info">
                         <p class="clearfix">
-                            <span class="col-xs-6 text-left">date of issuance:<b class="space">{{item.ticketingDate}}</b></span>
+                            <span class="col-xs-6 text-left">{{$t('ipo.dateOfIssuance')}}:<b class="space">{{item.ticketingDate}}</b></span>
                             <!-- <span class="col-xs-6 text-right green">承銷張數:<b class="space">{{item.underwritingSheet}}</b></span> -->
-                            <span class="col-xs-6 text-right green">market price:<b class="space">{{item.marketPrice}} USD</b></span>
+                            <span class="col-xs-6 text-right green">{{$t('ipo.marketPrice')}}:<b class="space">{{item.marketPrice}} USD</b></span>
                         </p>
                         <p class="clearfix">
-                            <span class="col-xs-6  text-left">Date of draw:<b class="space">{{item.drawDate}}</b></span>
-                            <span class="col-xs-6 text-right yellow">underwriting price:<b class="space">{{item.underwritingPrice}} USD</b></span>
+                            <span class="col-xs-6  text-left">{{$t('ipo.dateOfDraw')}}:<b class="space">{{item.drawDate}}</b></span>
+                            <span class="col-xs-6 text-right yellow">{{$t('ipo.underwritingPrice')}}:<b class="space">{{item.underwritingPrice}} USD</b></span>
 
                         </p>
                         <p class="clearfix">
-                            <span class="col-xs-6  text-left">Subscription period:<b class="space">{{item.subscriptionTime}} </b></span>
+                            <span class="col-xs-6  text-left">{{$t('ipo.subscriptionPeriod')}}:<b class="space">{{item.subscriptionTime}} </b></span>
                         </p>
                     </div>
                     <div class="order-foot clearfix">
@@ -54,10 +54,10 @@
                     </div> -->
                         <div  v-if="isSubscribe(item.subscriptionTime)"  @click="clickCtock(item)" class="foot-btn">
                             <i class='font-icon'></i>
-                            Subscription
+                            {{$t('ipo.subscription')}}
                         </div>
                             <div v-else class="foot-btn">
-                                {{item.remark ==''?'has not started':item.remark}}
+                                {{item.remark ==''?$t("ipo.subscription"):item.remark}}
                             </div>
                         </div> 
                 </div>
@@ -65,10 +65,10 @@
             </ul>
             <div v-show="loading" class="load-all text-center">
                 <mt-spinner type="fading-circle"></mt-spinner>
-                Loading...
+                {{$t('common.loading')}}...
             </div>
             <div v-show="!loading" class="load-all text-center">
-                all loaded
+                {{$t('common.allLoaded')}}
             </div>
             </div>
         </div>
@@ -78,13 +78,14 @@
                     class="empty text-center">
                     No order information yet!
                     </div> -->
-                    <div v-if="historyList.length<=0 " 
+                    <div  
+                        v-if="historyLoading "
                         style="margin-top:20px"
                         class="empty text-center">
                         <mt-spinner type="fading-circle"></mt-spinner>
-                        Loading...
+                        {{$t('common.loading')}}...
                     </div>
-                    <div v-if="historyList.length>0">
+                    <div v-if="historyLoading">
                     <ul
                         class="order-info-box-wrap"
                         :infinite-scroll-disabled="loading"
@@ -92,7 +93,7 @@
                         <li v-for="(item) in historyList" :key="item.key">
                         <div class="order-info-box">
                             <div class="order-title">
-                            <span class="main">Stock code/name</span>
+                            <span class="main">{{$t('ipo.stockCodeName')}}</span>
                             <span class="secondary">({{item.stockCode}}/{{item.stockName}})</span>
                             <span class="direction pull-right big-font">
                                         <b class="space green">{{statusType[item.status]}}</b>
@@ -101,25 +102,25 @@
                             
                             <div class="order-info">
                                 <p class="clearfix">
-                                    <span class="col-xs-6 text-left">date of issuance:<b class="space">{{item.ticketingDate}}</b></span>
-                                    <span class="col-xs-6 text-right ">Number of sheets subscribed:<b class="space green">{{item.submitSheets}}</b></span>
+                                    <span class="col-xs-6 text-left">{{$t('ipo.dateOfIssuance')}}:<b class="space">{{item.ticketingDate}}</b></span>
+                                    <span class="col-xs-6 text-right ">{{$t('ipo.numberOfWinningTickets')}}:<b class="space green">{{item.submitSheets}}</b></span>
                                 </p>
                                 <p class="clearfix">
-                                    <span class="col-xs-6  text-left">Date of draw:<b class="space">{{item.drawDate}}</b></span>
-                                    <span class="col-xs-6 text-right ">market price:<b class="space red">{{item.marketPrice}} USD</b></span>
+                                    <span class="col-xs-6  text-left">{{$t('ipo.dateOfDraw')}}:<b class="space">{{item.drawDate}}</b></span>
+                                    <span class="col-xs-6 text-right ">{{$t('ipo.marketPrice')}}:<b class="space red">{{item.marketPrice}} USD</b></span>
                                 </p>
                                 <p class="clearfix">
-                                    <span class="col-xs-6  text-left">Subscription date:<b class="space">{{formatDate(item.submitTime)}}</b></span>
-                                    <span class="col-xs-6 text-right ">underwriting price:<b class="space yellow">{{item.underwritingPrice}} USD</b></span>
+                                    <span class="col-xs-6  text-left">{{$t('ipo.subscriptionDate')}}:<b class="space">{{formatDate(item.submitTime)}}</b></span>
+                                    <span class="col-xs-6 text-right ">{{$t('ipo.underwritingPrice')}}:<b class="space yellow">{{item.underwritingPrice}} USD</b></span>
                                 </p>
                                 <p class="clearfix" v-if="item.status != 1">
-                                    <span class="col-xs-6  text-left">Date of winning the lottery:<b class="space">{{formatDate(item.endTime)}}</b></span>
-                                    <span class="col-xs-6 text-right ">Number of winning tickets:<b class="space yellow">{{item.tradeSheets}}</b></span>
+                                    <span class="col-xs-6  text-left">{{$t('ipo.dateOfWinningTheLottery')}}:<b class="space">{{formatDate(item.endTime)}}</b></span>
+                                    <span class="col-xs-6 text-right ">{{$t('ipo.numberOfWinningTickets')}}:<b class="space yellow">{{item.tradeSheets}}</b></span>
                                 </p>
                                 <p class="clearfix" >
-                                    <span class="col-xs-6  text-left">The winning amount:<b class="space yellow">{{formartAmount(item.tradeAmount)}} USD</b></span>
+                                    <span class="col-xs-6  text-left">{{$t('ipo.theWinningAmount')}}:<b class="space yellow">{{formartAmount(item.tradeAmount)}} USD</b></span>
                                     <!-- <span class="col-xs-6 text-right ">中籤張數:<b class="space yellow">{{item.tradeSheets}}</b></span> -->
-                                    <span v-if="item.status == 1" class="col-xs-6 text-right ">Subscription funds:<b class="space yellow">{{formartAmount(item.submitAmount)}} USD</b></span>
+                                    <span v-if="item.status == 1" class="col-xs-6 text-right ">{{$t('ipo.subscriptionPrice')}}:<b class="space yellow">{{formartAmount(item.submitAmount)}} USD</b></span>
                                 </p>
                             </div>
                             <div class="order-foot clearfix">
@@ -133,18 +134,18 @@
                                            
                                             <div v-if="item.deductionStatus == 1" class="foot-btn">
                                                 <div v-if="isNowDay(item)"  @click="clickPay(item)">
-                                                    to pay
+                                                    {{$t('ipo.toPay')}}
                                                 </div>
 
                                                 <div v-else>
-                                                    Not due payment time
+                                                    {{$t('ipo.notDuePaymentTime')}}
                                                 </div>
                                                 <!-- <i class='font-icon'></i> -->
                                                 
                                             </div>
                                             <div v-if="item.deductionStatus == 2"  class="foot-btn">
                                                 <i class='font-icon'></i>
-                                                Paid
+                                                {{$t('ipo.paid')}}
                                             </div>
                                         </div>
                                   
@@ -156,10 +157,10 @@
                     </ul>
                     <!-- <div v-show="loading" class="load-all text-center">
                         <mt-spinner type="fading-circle"></mt-spinner>
-                        Loading...
+                        {{$t('common.loading')}}...
                     </div> -->
                     <div v-show="!loading" class="load-all text-center">
-                        all loaded
+                        {{$t('common.allLoaded')}}
                     </div>
                     </div>
         </div>
@@ -169,20 +170,21 @@
                     <el-form :model="form" ref="form" class="demo-form">
                         <div class="storeinformation_popup_top">
                             <el-form-item>
-                                <el-input type="text" v-model="form.submitSheets" placeholder="請填寫申購張數"
+                                <el-input type="text" v-model="form.submitSheets" 
+                                :placeholder="$t('ipo.pleaseQuantity')"
                                     show-word-limit oninput="value=value.replace(/[^\d]/g,'')">
                                 </el-input>
                             </el-form-item>
-                            <p> stock name:{{form.stockName}}</p>
-                            <p style="margin-top:20px"> Subscription price:{{form.underwritingPrice}}USD</p>
-                            <p style="margin-top:20px"> Available funds:{{formartAmount($store.state.userInfo.enableAmt)}}USD</p>
-                            <p v-if="form.sheets !=0" style="margin-top:20px"> cost:{{formartAmount(form.underwritingPrice*1000*form.submitSheets)}}USD</p>
+                            <p>  {{$t('common.stockName')}}:{{form.stockName}}</p>
+                            <p style="margin-top:20px"> {{$t('ipo.underwritingPrice')}}:{{form.underwritingPrice}}USD</p>
+                            <p style="margin-top:20px"> {{$t('ipo.availableFunds')}}:{{formartAmount($store.state.userInfo.enableAmt)}}USD</p>
+                            <p v-if="form.sheets !=0" style="margin-top:20px"> {{$t('ipo.cost')}}:{{formartAmount(form.underwritingPrice*1000*form.submitSheets)}}USD</p>
 
                         </div>
                         <el-form-item style="text-align:center;margin-top:30px">
                             <el-button type="primary" @click="submitData()"
                                 style="background-color: #fff !important;color:#333 !important;border-color:#DCDFE6 !important;">
-                                Subscription
+                                {{$t('common.confirm')}}
                             </el-button>
                         </el-form-item>
                     </el-form>
@@ -211,7 +213,8 @@
                 },
                 saveStock: null, //申購數據
                 loading:false,
-                statusType:["","Appointment successful","Won the lottery","Did not win the lottery"],//,"部分中签"
+                historyLoading:false,
+                // statusType:["","Appointment successful","Won the lottery","Did not win the lottery"],//,"部分中签"
 
             }
         },
@@ -229,7 +232,13 @@
             userAmt(){
                 console.log(this.$store.state.userInfo.userAmt);
                 return  Number(this.$store.state.userInfo.userAmt).toFixed(2);
+            },
+            statusType(){
+                return ["",this.$t('ipo.appointmentSuccessful'),
+                this.$t('ipo.wonTheLottery'),
+                this.$t('ipo.didNotWinTheLottery')]
             } 
+
         },
         created() {
             this.getHiStockList()
@@ -289,13 +298,15 @@
             },
             async getStockSubscribeHistoryList() {
                 let data = await api.getStockSubscribeHistoryList()
+                this.historyLoading = true
                 if (data.status === 0) {
-                this.historyList =  data.data.list.map(item=>{
-                                        item.submitTime =  dayjs( item.submitTime)
-                                        return item;
-                                    })
+                    this.historyList =  data.data.list.map(item=>{
+                        item.submitTime =  dayjs( item.submitTime)
+                        return item;
+                    })
                   
                 }
+                this.historyLoading = false
             },
 
             // 申購
@@ -326,7 +337,7 @@
             },
 
             clickPay(item){
-                MessageBox.confirm('您確定繳費嗎?').then(async action => {
+                MessageBox.confirm(this.$t('ipo.confirmPay')).then(async action => {
                     let opt = {
                         id: item.id
                     }

@@ -43,6 +43,7 @@ import Trage from '@/page/tradeAgree'
 import OpenAccount from '@/page/openaccount'
 import FundsList from '@/page/funds/funds-list'
 import newsDetail from '@/page/home/newsDetail'
+import language from '@/page/home/language'
 
 
 
@@ -372,7 +373,18 @@ export default new Router({
         hasHeader: true
       },
       component: RechargeList
-    }, {
+    }, 
+    {
+      path: '/language',
+      name: 'language',
+      meta: {
+        title: 'Language',
+        requireAuth: true,
+        hasHeader: true
+      },
+      component: language
+    },
+    {
       path: '/cash',
       name: 'cash',
       meta: {
@@ -458,15 +470,15 @@ export default new Router({
       component: () => import('../page/funds/days')
     },
     {
-      path: '/xingu',
-      name:'xingu',
+      path: '/ipo',
+      name:'ipo',
       meta: {
         title: 'IPO subscription',
         requireAuth: true,
         hasHeader: true,
         iconRight: 'setting'
       },
-      component: () => import('../page/funds/xingu')
+      component: () => import('../page/funds/ipo')
     },
     {
       path: '/searchStock',
@@ -478,6 +490,8 @@ export default new Router({
       },
       component: () => import('../page/list/search')
     },
+
+    
     {
       path: '/notify',
       name: 'notify',

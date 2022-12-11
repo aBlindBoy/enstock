@@ -17,7 +17,9 @@ import * as filters from '@/utils/utils'
 import animated from 'animate.css' // npm install animate.css --save安装，在引入
 
 import '../static/css/public2.css'
-
+import en from './i18n/en'
+import zhTW from './i18n/zh-TW'
+import VueI18n from 'vue-i18n'
 // import VueTouch from 'vue-touch'
 
 Vue.use(animated)
@@ -28,7 +30,14 @@ Vue.use(VueClipboard)
 // VueTouch.config.swipe = {
 //   threshold: 100 // 手指左右滑动距离
 // }
-
+Vue.use(VueI18n)
+const i18n = new VueI18n({
+	locale: 'en',
+	messages: {
+		en,
+		"zh-TW":zhTW
+	}
+})
 Vue.use(Mint)
 Vue.component('icon', Icon)
 Vue.config.productionTip = false
@@ -138,5 +147,6 @@ new Vue({
   store,
   router,
   axios,
+  i18n,
   render: h => h(App)
 }).$mount('#app')
