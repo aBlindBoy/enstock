@@ -59,8 +59,8 @@ export default {
     position: absolute;
     top: -110px;
     width: 100%;
-    height: 300px;  
-    color: #000;
+    height: 757px; 
+    color: rgb(226, 216, 216);
     background-image:  linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../../static/newimg/stock_title.png)  ;
     background-size: cover;
   }

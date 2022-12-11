@@ -12,7 +12,7 @@
         <div class="wrapper">
           <div class="user-center-title" style="text-align:left;">
             <span class="iconfont icon-you" style="color:#C11815;font-size:18px;margin-right:10px"></span>
-            Financing close
+            {{$t('financingClose.title')}}
           </div>
           <div class="table-search">
             <el-row type="flex" justify='end'>

@@ -14,7 +14,7 @@
             <div class="header-chi">
               <div class="user-center-title">
                 <img src="../../../../assets/image/sanjao.png" alt />
-                <span>Recharge</span>
+                <span>{{$t('recharge.title')}}</span>
               </div>
             </div>
           

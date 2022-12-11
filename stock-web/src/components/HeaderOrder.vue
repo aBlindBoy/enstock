@@ -22,7 +22,7 @@
 							<div class="market-data">
 								<img src="../assets/image/dp.png" v-if="this.$store.state.systemColor == 'red-bg'" alt />
 								<img src="../../static/img/gupiao.png" v-if="this.$store.state.systemColor == 'black-bg'" alt="">
-								<span>Market data</span>
+								<span>{{$t('header.marketData')}}</span>
 							</div>
 						</el-menu-item>
 						<!-- <el-menu-item index="/transaction?code=300498" style="color:#000; display: flex;align-items: center; ">
@@ -138,7 +138,12 @@
 
 		},
 		created() {
-
+			let locale = localStorage.getItem("locale") 
+			
+			if(locale){
+				debugger
+				this.locale = locale
+			}
 			// this.timer = setInterval(this.refreshOutMoneyOrderNum, 1000*60)
 		},
 		mounted() {
@@ -250,7 +255,6 @@
 				}
 			},
 			selectLocale(locale){
-				debugger
 				this.$i18n.locale = locale
 				this.locale = locale
 				localStorage.setItem("locale",locale) 

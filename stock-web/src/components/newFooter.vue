@@ -3,29 +3,26 @@
       <div class="footer">
          <div class="cot">
              <div class="left">
-                 <div><span class="iconfont icon-dianhua"></span>Contact Method: {{siteInfo.sitePhone}}</div>
+                 <div><span class="iconfont icon-dianhua"></span>{{$t('footer.contactMethod')}}: {{siteInfo.sitePhone}}</div>
                  <!-- <div><span class="iconfont icon-qq"></span>QQ號:{{siteInfo.siteQq}}</div> -->
-                 <div><span class="iconfont icon-ziyuan"></span>Mail: {{siteInfo.siteHost}}</div>
+                 <div><span class="iconfont icon-ziyuan"></span>{{$t('footer.mail')}}: {{siteInfo.siteHost}}</div>
              </div>
              <div class="mid">
-                 <div class="text">Risk Warning: Investment involves risks, the price of securities may rise or fall, and may even become worthless in extreme cases.
-                     Before making any investment decision, investors should understand the potential risks of securities investment and confirm that they have the corresponding risk tolerance.
-                     And evaluate your risk appetite, relevant experience and knowledge before deciding whether to trade. Any investment involves risks and losses that may exceed the principal invested.
-                     Past performance of individual stocks, industries, industries, markets and any investment product does not guarantee future performance returns.</div>
+                 <div class="text">{{$t('footer.riskWarning')}}</div>
                  <!-- <div class="copyright">© 2020 嘉信投資國際有限公司 All rights reserved  嘉信投資（國際）投資管理公司</div> -->
              </div>
              <div class="right">
-                 <div class="app">Official download</div>
+                 <div class="app">{{$t('footer.officialDownload')}}</div>
                  <div class="pic">
                      <div class="pic_l">
                          <div class="adrpic"><img :src="siteInfo.siteAndroidImg" alt=""></div>
-                         <div class="adrtext">Official Download (Android)</div>
-                         <a class="iostext" :href="siteInfo.siteAndroidUrl">Link to download (Android)</a>
+                         <div class="adrtext">{{$t('footer.officialDownloadAndroid')}}</div>
+                         <a class="iostext" :href="siteInfo.siteAndroidUrl">{{$t('footer.linkToDownloadAndroid')}}</a>
                      </div>
                      <div class="pic_r">
                          <div class="iospic"><img :src="siteInfo.siteIosImg" alt=""></div>
-                         <div class="iostext">Official Download (Apple)</div>
-                         <a class="iostext" :href="siteInfo.siteIosUrl">Link to download (Apple)</a>
+                         <div class="iostext">{{$t('footer.officialDownloadApple')}}</div>
+                         <a class="iostext" :href="siteInfo.siteIosUrl">{{$t('footer.linkToDownloadApple')}}</a>
                      </div>
                  </div>
                  <!-- <div class="pc"><span class="iconfont icon-pc"></span>官方PC下載</div> -->

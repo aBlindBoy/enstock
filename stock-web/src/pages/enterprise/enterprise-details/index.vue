@@ -43,7 +43,7 @@
                               <!-- <span class="iconfont icon-redu"></span> -->
                               <span class="iconfont icon-redu redu"></span>
 
-                              <span>{{$t('enterprise.time')}}:{{detailsCont.views}}</span>
+                              <span>{{$t('enterprise.heat')}}:{{detailsCont.views}}</span>
                             </div>
                           </div>
                         </div>

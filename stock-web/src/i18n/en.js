@@ -112,6 +112,8 @@ export default  {
         sharesIsNull:"Please enter or select the number of shares to buy",
         leverageIsNull:"Please enter or select leverage",
         directionIsNull:"Please select the buying and selling direction",
+        financingPosition:"Financing position",
+        closePosition:"Financing to close the position"
     },
     product:{
         title:"PRODUCT DESCRIPTION",
@@ -127,6 +129,7 @@ export default  {
         principalContent4:"When the funds are close to the loss and forced to liquidate the Warning line, the Margin needs to be replenished as soon as possible;",
         principalContent5:"When the trading capital is lower than the Closing Line, the system will terminate the operation;",
         principalContent6:"A single stock position shall not exceed the total funds in the account 90.00% ;",
+        usStock:"US stock market",
         targetName:"Target Name",
         targetContent:"U.S. Stock market margin financing and securities lending sector",
         marketTradingHours:"Market trading hours",
@@ -138,6 +141,7 @@ export default  {
         meansOfTransaction:"Means of transaction",
         meansOfTransactionContent:"You can buy long, sell short, buy up, buy squat, buy on the same day, close the position on the same day, and earn the swing amplitude spread of the day!",
         transactionAmount:"Using financing and securities lending, buying up and down by buying and selling",
+        transactionAmountContent :"Leveraging financing and securities lending, buying and selling through buying and selling",
         minimumPurchaseAmount:"Minimum purchase amount",
         handlingFee:"Handling fee",
         handlingContent:"Charged when buying and selling, based on the total transaction price",
@@ -307,7 +311,7 @@ export default  {
         cost:"Cost",
         pleaseQuantity:"Please fill in to apply for Quantity",
     },
-    financingPositionPosition:{
+    financingPosition:{
         title:"Financing position",
         tips:"Tips",
         closePosition:"Are you sure you want to close the position?",

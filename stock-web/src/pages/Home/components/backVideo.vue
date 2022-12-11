@@ -18,8 +18,8 @@
     <div class="pc-wrap" >
       <div class="actTitleBar" >
         {{$t('home.tradeLike')}} <br class="showH5" />
-        {{$t('home.with')}}
-        2v.com
+        <!-- {{$t('home.with')}} -->
+        2vsec.com
       </div>
       <div class="btnBox" @click="toRegister">
         <div class="signUp us" >

@@ -51,7 +51,9 @@
             </div>
             <!-- 股市 -->
             <div class="stock">
-              <!-- <div class="tit"><span class="iconfont icon-_gushiloushi"></span> U.S. Stock market</div> -->
+              <div class="tit"><span class="iconfont icon-_gushiloushi"></span> 
+                
+                {{$t('product.usStock')}}</div>
               <div class="info">
                 <div class="left">
                   <div class="item">
@@ -82,7 +84,7 @@
                 <div class="mid">
                   <div class="item">
                     <div class="i_tit">{{$t('product.transactionAmount')}}</div>
-                    <div class="msg">Using financing and securities lending, buying up and down by buying and selling</div>
+                    <div class="msg">{{$t('product.transactionAmountContent')}}</div>
                   </div>
                   <div class="item">
                     <div class="i_tit">{{$t('product.minimumPurchaseAmount')}}</div>

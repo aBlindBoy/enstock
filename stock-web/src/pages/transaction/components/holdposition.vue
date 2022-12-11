@@ -91,7 +91,7 @@
           :label="$t('common.sell')">
           <template slot-scope="scope">
             <el-button class="btn-sell" plain title="I want to close my position" size="mini" @click="toSell(scope.row)"><i
-              class="iconfont icon-chakan"></i>Sell
+              class="iconfont icon-chakan"></i>{{$t('common.sell')}}
             </el-button>
           </template>
         </el-table-column>

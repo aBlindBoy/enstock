@@ -34,7 +34,7 @@
                     <div class="test">
                       <el-input
                         v-model="form.stock"
-                        placeholder="Please enter ticker and stock"
+                        :placeholder="$t('stock.search')"
                         class="search-public"
                       >
                         <!-- <el-button @click="getList" slot="append" icon="iconfont  icon-search"></el-button> -->

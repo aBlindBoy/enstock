@@ -11,7 +11,7 @@
         <el-main style=" min-height: calc(100vh - 150px );">
           <div class="con-box account futuresholdposition">
             <el-tabs v-model="activeName" class="aaaa" @tab-click="tabsClick"	>
-              <el-tab-pane label="Open subscription" name="1">
+              <el-tab-pane :label="$t('ipo.openSubscription')" name="1">
                 <div class="user-info">
                   <el-table :data="list" style="width: 100%">
         
@@ -84,7 +84,7 @@
                   </el-table>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="Subscription list" name="2">
+              <el-tab-pane :label="$t('ipo.subscriptionList')" name="2">
                 <div class="user-info">
                   <el-table :data="historyList" style="width: 100%">
                    

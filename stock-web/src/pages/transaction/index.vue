@@ -41,7 +41,7 @@
                 <span
                     class="iconfont icon-hangqing transaction-hangqing"
                   ></span>
-                  >{{$t('tradingFloor.optional')}}
+                  {{$t('tradingFloor.optional')}}
                 </div>
               </div>
             </div>
@@ -79,7 +79,7 @@
                
               >
               <!--  v-if="$store.state.haslogin" -->
-                <el-tab-pane label="In/Out" name="zero">
+                <el-tab-pane :label="$t('tradingFloor.inOut')" name="zero">
                   <BuyBox1
                     @selectDetailsItem="selectDetailsItem"
                     :cutIndex="cutIndex"
@@ -90,7 +90,7 @@
                     :code="code"
                   ></BuyBox1>
                 </el-tab-pane>
-                <el-tab-pane label="Financing position" name="first">
+                <el-tab-pane :label="$t('tradingFloor.financingPosition')" name="first">
                   <!-- 我的持仓 -->
                   <hold-position
                     :haslogin="haslogin"
@@ -99,7 +99,8 @@
                   ></hold-position>
                 </el-tab-pane>
 
-                <el-tab-pane label="Financing to close the position" name="second">
+                <el-tab-pane
+                :label="$t('tradingFloor.closePosition')"  name="second">
                   <sell-box
                     :hasChangeSell="hasChangeSell"
                     :handleOptions="handleOptions"
@@ -297,7 +298,7 @@ export default {
     // 现在想不做判断，进入之前一律刷新一次
     if (!to.query.code) {
       let query = to.query;
-      query.code = "6414";
+      query.code = "A";
       next({
         path: to.path,
         query: query
@@ -309,7 +310,7 @@ export default {
     // 现在想不做判断，进入之前一律刷新一次
     if (!to.query.code) {
       let query = to.query;
-      query.code = "6414";
+      query.code = "A";
       next({
         path: to.path,
         query: query

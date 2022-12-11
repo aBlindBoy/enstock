@@ -6,7 +6,7 @@ import locale from 'element-ui/lib/locale/lang/en'
 import localeTW from 'element-ui/lib/locale/lang/zh-TW'
 import VueI18n from 'vue-i18n'
 import en from './i18n/en'
-import zhTW from './i18n/zhTW'
+import zhTW from './i18n/zh-TW'
 
 import store from './store'
 import axios from './axios/index' // 这里这里

@@ -15,7 +15,7 @@
                   size="mini"
                   clearable
                   v-model="form.stock"
-                  placeholder="Please enter ticker and stock"
+                  :placeholder="$t('tradingFloor.search')"
                 >
                   <el-button
                     size="mini"
@@ -34,7 +34,7 @@
             :height="windowHeight"
             style="width: 100%"
           >
-            <el-table-column prop="name" label="Stock Name">
+            <el-table-column prop="name" :label="$t('common.stockName')">
               <template slot-scope="scope">
                 <div class="tab-name">
                   <p style="display: flex; width: 100px;">
@@ -59,7 +59,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="nowPrice" align="right" label="Latest price">
+            <el-table-column prop="nowPrice" align="right" :label="$t('common.lastPrice')">
               <template slot-scope="scope">
                 <div class="price">
                   <div
@@ -92,7 +92,7 @@
                 </div>-->
               </template>
             </el-table-column>
-            <el-table-column prop="hcrate" align="right" label="Chg %">
+            <el-table-column prop="hcrate" align="right" :label="$t('common.chgRate')">
               <template slot-scope="scope">
                 <div class="price">
                   <div
@@ -117,7 +117,7 @@
           </el-table>
           <div class="page-box text-center">
             <a @click="toStock" class="more-btn" href="javascript:;">
-              Click to load more
+             {{$t('tradingFloor.loadMore')}}
               <i class="iconfont icon-xiasanjiao"></i>
             </a>
             <!-- <el-pagination
@@ -143,7 +143,7 @@
                   size="mini"
                   clearable
                   v-model="form2.stockMy"
-                  placeholder="Please enter ticker and stock"
+                  :placeholder="$t('tradingFloor.search')"
                 >
                   <el-button
                     size="mini"
@@ -184,7 +184,7 @@
 								<a v-if="!isOptionOpt" href="javascript:;" @click="addOptions"><i class="iconfont icon-wujiaoxing1"></i></a> -->
               </template>
             </el-table-column>
-            <el-table-column prop="name" label="name" >
+            <el-table-column prop="name" :label="$t('common.stockName')" >
               <template slot-scope="scope">
                 <div class="tab-name">
                   <p style="display: flex; width: 100px;">
@@ -199,7 +199,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="nowPrice" align="center" label="Current price">
+            <el-table-column prop="nowPrice" align="center" :label="$t('common.lastPrice')">
               <template slot-scope="scope">
                 <div class="price">
                   <div
@@ -232,7 +232,7 @@
                 </div>-->
               </template>
             </el-table-column>
-            <el-table-column prop="hcrate" align="center" label="chg %">
+            <el-table-column prop="hcrate" align="center"  :label="$t('common.chgRate')">
               <template slot-scope="scope">
                 <div class="price">
                   <div

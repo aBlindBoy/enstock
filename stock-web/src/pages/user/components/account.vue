@@ -34,7 +34,7 @@
               ）
             </span>
           </div>
-          <el-collapse-item title="US stock account" name="1">
+          <el-collapse-item :title="$t('account.usStockAccount')" name="1">
             <el-col :span="24">
               <el-row class="Assets-box" :gutter="20">
                 <el-col :span="6">

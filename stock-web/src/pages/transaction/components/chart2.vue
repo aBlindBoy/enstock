@@ -52,7 +52,7 @@
     data() {
       return {
         //NarBarArry: ['分時', '1分', '5分', '30分', '60分', '日K', '周K', '月K'],
-        NarBarArry: ['real time', '1 minute','5 minute', 'day line', 'week line', 'month line'],
+        // NarBarArry: ,
         navIndex: 0,
         event: {},
         emptyShow: true,
@@ -68,6 +68,11 @@
     computed: {
       change() {
         return this.$route.query.code
+      },
+      NarBarArry(){
+        return [this.$t('tradingFloor.real'), this.$t('tradingFloor.oneMinute'),
+        this.$t('tradingFloor.fiveMinute'), this.$t('tradingFloor.dayLine'), 
+        this.$t('tradingFloor.weekLine'), this.$t('tradingFloor.monthLine')]
       }
     },
     created() {
