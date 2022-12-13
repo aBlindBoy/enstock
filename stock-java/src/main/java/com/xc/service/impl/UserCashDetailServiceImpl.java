@@ -50,23 +50,10 @@ import org.springframework.stereotype.Service;
 
 
    public ServerResponse<PageInfo> findUserCashDetailList(Integer positionId, HttpServletRequest request, int pageNum, int pageSize) {
-
      PageHelper.startPage(pageNum, pageSize);
-
-
-
      User user = this.iUserService.getCurrentUser(request);
-
-
-
      List<UserCashDetail> userCashDetails = this.userCashDetailMapper.findUserCashDetailList(user.getId(), positionId);
-
-
-
      PageInfo pageInfo = new PageInfo(userCashDetails);
-
-
-
      return ServerResponse.createBySuccess(pageInfo);
 
    }

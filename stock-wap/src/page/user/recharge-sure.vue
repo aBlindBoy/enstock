@@ -10,15 +10,13 @@
     <div class="box1">
       <div class="form-block page-part">
         <mt-field
-          label="Amount"
-          placeholder="Recharge amount"
+          :label="$t('rechargeSure.amount')"
           disabled
           type="number"
           v-model="selectNumber"
         ></mt-field>
         <mt-field
-          label="Order number"
-          placeholder="order number"
+          :label="$t('rechargeSure.orderNumber')"
           disabled
           v-model="orderSn">
           <span
@@ -26,7 +24,7 @@
               v-clipboard:success="onCopy"
               v-clipboard:error="onError"
             >
-              <i class="iconfont icon-fuzhi"></i>copy
+              <i class="iconfont icon-fuzhi"></i>{{$t('common.copy')}}
             </span>
         </mt-field>
         <!-- <div v-if="type == 0">
@@ -155,11 +153,10 @@
         </div> -->
       </div>
       <div class="tips-group red">
-          <p><i class="iconfont icon-jinggao1"></i>Precautions:</p>
+          <p><i class="iconfont icon-jinggao1"></i>{{$t('rechargeSure.precautions')}}</p>
           <p class="tip-text">
             <i class="iconfont icon-jingpaibuzhou"></i
-            >In order to facilitate the timely arrival of your funds, please contact customer service to reserve a Recharge channel every time you submit a Recharge.
-          </p>
+            >{{$t('rechargeSure.precautions1')}}</p>
         </div>
       <!-- <div v-if="type == 0">
         <div class="tips-group">
@@ -224,7 +221,7 @@
     </div>
 
     <!-- 倒計時彈框 -->
-    <mt-popup
+    <!-- <mt-popup
       v-model="popupVisible2"
       pop-transition="popup-fade"
       :closeOnClickModal="false"
@@ -236,7 +233,7 @@
         ></a>
       </div>
       <img width="100%" src="../../assets/img/xiane.png" alt="" />
-    </mt-popup>
+    </mt-popup> -->
 
     <!-- <el-divider></el-divider>
     <div class="upload-box clearfix">
@@ -333,9 +330,9 @@ export default {
       let data = await api.updateMoney(param);
       if (data.status === 0) {
         // 成功
-        Toast(data.msg ? data.msg : "Recharge成功,等Pending review!");
+        Toast(data.msg ? data.msg : this.$t('rechargeSure.rechargeSuccess'));
       } else {
-        Toast(data.msg ? data.msg : "Recharge失敗,請重新Recharge");
+        Toast(data.msg ? data.msg : this.$t('rechargeSure.rechargeFailed'));
       }
     },
     handleError() {
@@ -354,10 +351,10 @@ export default {
       }
     },
     onCopy: function (e) {
-      Toast("復制成功！");
+      Toast(this.$t('common.copySuccess'));
     },
     onError: function (e) {
-      Toast("復制失敗，請重試！");
+      Toast(this.$t('common.copyError'));
     },
     toSure() {
       // Recharge
@@ -390,9 +387,9 @@ export default {
       let data = await api.inMoney(opts);
       if (data.status === 0) {
         // 成功
-        Toast(data.msg ? data.msg : "Recharge成功!");
+        Toast(data.msg ? data.msg : this.$t('rechargeSure.rechargeSuccess'));
       } else {
-        Toast(data.msg ? data.msg : "Recharge失敗,請重新Recharge");
+        Toast(data.msg ? data.msg :this.$t('rechargeSure.rechargeFailed'));
       }
     },
     closePopup() {

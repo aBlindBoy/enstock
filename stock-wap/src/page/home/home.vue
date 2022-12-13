@@ -281,8 +281,6 @@ export default {
     this.getInfoSite()
 
     this.getArtList() // 獲取公告
-    this.getRealTimeQuotesIndex()
-    this.timer3 = setInterval( this.getRealTimeQuotesIndex, 2000)
    
   },
   mounted () {
@@ -291,9 +289,11 @@ export default {
     // this.getNewsList(3,7)
     // this.getNewsList(4,5)
     // this.getNewsList(5,1)
-    this.getMarket(169) // 獲取大盤指數
-    this.getMarket(166) // 獲取大盤指數
-    this.getMarket(8827) // 獲取大盤指數
+    this.getMarket() // 獲取大盤指數
+    this.timer3 = setInterval( this.getMarket, 6000)
+
+    // this.getMarket(166) // 獲取大盤指數
+    // this.getMarket(8827) // 獲取大盤指數
     // this.getBanner() //獲取banner
  
     // let header = document.querySelector('.header-box')
@@ -416,20 +416,25 @@ export default {
         this.$message.error(result.msg)
       }
     },
-    //https://cn.investing.com/markets/united-states
-    async getMarket (id) {
+    async getMarket () {
       // 獲取大盤指數
-      // debugger
-      let result = await api.getChats(id)
-      let floatPoint =  result.candles[result.candles.length-1][1] - result.candles[0][1] 
-      let floatRate =  floatPoint / result.candles[0][1]
-      let item = {
-          currentPoint: result.attr["last_value"],
-          floatPoint: floatPoint,
-          floatRate: floatRate,
-          indexName: result.attr["symbol"]
-      } 
-      this.realTimeQuotesIndexList.push(item)
+      let result = await api.getChats()
+      // let floatPoint =  result.candles[result.candles.length-1][1] - result.candles[0][1] 
+      // let floatRate =  floatPoint / result.candles[0][1]
+      this.realTimeQuotesIndexList= []
+      for (let index = 0; index <  result.data.items.length; index++) {
+        const element = result.data.items[index];
+          let item = {
+                currentPoint:  element['6'],
+                floatPoint: element['11'],
+                floatRate: element['56'],
+                indexName:  index == 0?'DJI':element['200009'],
+            }
+          this.realTimeQuotesIndexList.push(item)
+      }
+
+    
+    
 
       
       // let result = await api.getMarket()

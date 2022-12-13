@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div v-if="list.length<=0" class="empty text-center">
-      No Withdrawal information yet!
+      {{$t('withdrawalList.noYet')}}
     </div>
     <div v-else>
       <ul
@@ -12,12 +12,12 @@
         <li class="list-body" v-for="(item) in list" :key="item.key">
           <div class="order-info-box">
             <div class="order-title">
-                    <span class="main">
-                      Withdrawal to financial account
-                    </span>
+              <span class="main">
+                {{$t('withdrawalList.financialAccount')}}
+              </span>
               <span class="payNumber">{{item.withAmt}}</span>
               <span class="red pull-right">
-                        {{item.withStatus == 1?'Withdrawal success':item.withStatus == 2?'Withdrawal failed':item.withStatus == 3?'cancel the order':'under review'}}
+                        {{withStatus[item.withStatus]}}
                         <i v-if="item.withStatus == 1" class="iconfont icon-tongguo4 animated bounceIn"></i>
                         <i v-if="item.withStatus==0" class="iconfont icon-dengdai animated bounceInDown"></i>
                         <i v-if="item.withStatus == 2" class="iconfont icon-failure animated bounceInDown"></i>
@@ -28,23 +28,23 @@
             </div>
             <div class="order-info">
               <p class="clearfix">
-                <span class="col-xs-6">Handling fee:<b class="space">{{item.withFee}}</b></span>
+                <span class="col-xs-6">{{$t('withdrawalList.handlingFee')}}:<b class="space">{{item.withFee}}</b></span>
                 <!-- <span class="col-xs-6">實際到帳金額:<b class="space" style="font-size:0.26rem">{{item.withAmt - item.withFee}}</b>USD</span>                         -->
               </p>
               <p class="clearfix">
-                <span class="col-xs-12">financial account:<b class="space">{{item.bankName}}-{{item.bankAddress}}</b></span>
+                <span class="col-xs-12">{{$t('withdrawalList.financialAccount')}}:<b class="space">{{item.bankName}}-{{item.bankAddress}}</b></span>
               </p>
               <p class="clearfix">
-                <span class="col-xs-12">card number:<b class="space">{{item.bankNo}}</b></span>
+                <span class="col-xs-12">{{$t('withdrawalList.cardNumber')}}:<b class="space">{{item.bankNo}}</b></span>
               </p>
               <p v-if="item.withStatus == 3" class="clearfix">
-                <span class="col-xs-12">Reason for Cancellation:<b class="space">{{item.withMsg}}</b></span>
+                <span class="col-xs-12">{{$t('withdrawalList.failedCancellation')}}:<b class="space">{{item.withMsg}}</b></span>
               </p>
               <p v-if="item.withStatus == 2" class="clearfix">
-                <span class="col-xs-12">Reason for Cancellation:<b class="space">{{item.withMsg}}</b></span>
+                <span class="col-xs-12">{{$t('withdrawalList.cancalCancellation')}}:<b class="space">{{item.withMsg}}</b></span>
               </p>
               <p class="clearfix">
-                        <span class="secondary col-xs-6">time:
+                        <span class="secondary col-xs-6">{{$t('withdrawalList.time')}}:
                             <b v-if="item.applyTime">{{new Date(item.applyTime) | timeFormat}}</b>
                             <b v-else></b>
                         </span>
@@ -53,7 +53,7 @@
             <div v-if="item.withStatus == 0" class="order-foot clearfix">
               <div @click="cancle(item.id)" class="foot-btn">
                 <i class='font-icon'></i>
-                Cancel Withdrawal
+                {{$t('withdrawalList.cancelWithdrawal')}}
               </div>
             </div>
 
@@ -98,7 +98,15 @@ export default {
     }
   },
   watch: {},
-  computed: {},
+  computed: {
+    withStatus(){
+      return [this.$t('withdrawalList.underReview'),
+      this.$t('withdrawalList.withdrawalSucceeded'),
+      this.$t('withdrawalList.withdrawalFailed'),
+      this.$t('withdrawalList.cancelWithdrawal')]
+    }
+
+  },
   created () {},
   mounted () {
     this.getListDetail()

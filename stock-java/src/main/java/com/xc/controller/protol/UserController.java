@@ -44,6 +44,9 @@ public class UserController {
     @Autowired
     IUserStockSubscribeService iUserStockSubscribeService;
 
+    @Autowired
+    IUserRechargeService iUserRechargeService;
+
     //添加到自選股
     @RequestMapping({"addOption.do"})
     @ResponseBody
@@ -220,9 +223,6 @@ public class UserController {
         return serverResponse;
     }
 
-    @Autowired
-    IUserRechargeService iUserRechargeService;
-
     //查询 用戶信息
     @RequestMapping({"getUserInfo.do"})
     @ResponseBody
@@ -285,17 +285,16 @@ public class UserController {
     }
 
     /*新股申购-查询用戶最新新股申购数据*/
-    @RequestMapping({"getOneSubscribeByUserId.do"})
-    @ResponseBody
-    public ServerResponse getOneSubscribeByUserId(@RequestParam("userId") Integer userId, HttpServletRequest request) {
-        return this.iUserStockSubscribeService.getOneSubscribeByUserId(userId, request);
-    }
+//    @RequestMapping({"getOneSubscribeByUserId.do"})
+//    @ResponseBody
+//    public ServerResponse getOneSubscribeByUserId(@RequestParam("userId") Integer userId, HttpServletRequest request) {
+//        return this.iUserStockSubscribeService.getOneSubscribeByUserId(userId, request);
+//    }
 
-    /*新股申购-用戶提交金额*/
-    @RequestMapping({"submitSubscribe.do"})
-    @ResponseBody
-    public ServerResponse userSubmit(UserStockSubscribe model, HttpServletRequest request) {
-        return this.iUserStockSubscribeService.userSubmit(model, request);
-    }
+//    @RequestMapping({"submitSubscribe.do"})
+//    @ResponseBody
+//    public ServerResponse userSubmit(UserStockSubscribe model, HttpServletRequest request) {
+//        return this.iUserStockSubscribeService.userSubmit(model, request);
+//    }
 
 }

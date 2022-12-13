@@ -82,6 +82,9 @@ public class SiteArticleServiceImpl
 
     public ServerResponse detail(Integer artId) {
         SiteArticle siteArticle = this.siteArticleMapper.selectByPrimaryKey(artId);
+        if(siteArticle.getViews()==null){
+            siteArticle.setViews(1);
+        }
         siteArticle.setViews(siteArticle.getViews()+1);
         this.siteArticleMapper.updateByPrimaryKey(siteArticle);
         return ServerResponse.createBySuccess(this.siteArticleMapper.selectByPrimaryKey(artId));

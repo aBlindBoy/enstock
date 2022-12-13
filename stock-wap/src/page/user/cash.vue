@@ -17,34 +17,35 @@
       <div class="box">
         <div class="box-contain clearfix">
           <div class="account text-center">
-            <p class="title">Withdrawal amount (USD)</p>
+            <p class="title">{{$t('withdrawal.withdrawalAmount')}} (USD)</p>
             <p class="red number">{{$store.state.userInfo.enableAmt}}</p>
           </div>
         </div>
       </div>
       <div class="form-block page-part">
-        <mt-field label="Amount" placeholder="Please enter Withdrawal amount" type="number" v-model="number">
-          <span @click="changeAllNumber">all</span>
+        <mt-field :label="$t('withdrawal.amount')" 
+        :placeholder="$t('withdrawal.pleaseAmount')" type="number" v-model="number">
+          <span @click="changeAllNumber">{{$t('withdrawal.all')}}</span>
         </mt-field>
         <!-- <mt-field label="到帳金融" placeholder="請輸入Withdrawal金額" type="number" v-model="card"></mt-field> -->
         <!-- <mt-field label="手機號" placeholder="請輸入手機號" type="number" v-model="phone"></mt-field> -->
       </div>
       <div class="btnbox">
-        <span class="text-center btnok" @click="toSure">Confirm</span>
+        <span class="text-center btnok" @click="toSure">{{$t('common.confirm')}}</span>
       </div>
       <!-- <div v-if="!$store.state.bankInfo.bankNo" class="addcard back text-center">
       沒有金融帳戶？<a href="#/addCard">點選添加</a> -->
       <!-- </div> -->
       <div class="attention" style="margin-bottom:10px;">
-        <p>Note: Withdrawal is preset to withdraw available funds in the US stock account.</p>
+        <p>{{$t('withdrawal.note')}}</p>
       </div>
       <div class="attention">
-        <p>1. Currently there are open positions and orders cannot be withdrawn.</p>
-        <p>2. To withdraw money, please pass real-name authentication and bind a financial account on the official website.</p>
-        <p>3. Withdrawal time working days between {{settingInfo.withTimeBegin}} : 00  and {{settingInfo.withTimeEnd}} : 00 .</p>
-        <p>4. Deduction for each withdrawal {{settingInfo.withFeeSingle}} USD handling fee<span v-if="settingInfo.withFeePercent != 0">, plus the withdrawal amount * {{settingInfo.withFeePercent}}</span>。
+        <p>1. {{$t('withdrawal.note1')}}</p>
+        <p>2. {{$t('withdrawal.note2')}}</p>
+        <p>3. {{$t('withdrawal.note3')}} {{settingInfo.withTimeBegin}} : 00  - {{settingInfo.withTimeEnd}}:00 .</p>
+        <p>4. {{$t('withdrawal.note4')}} {{settingInfo.withFeeSingle}} USD. {{$t('withdrawal.note41')}} <span v-if="settingInfo.withFeePercent != 0">, {{$t('withdrawal.note42')}} * {{settingInfo.withFeePercent}}</span>
         </p>
-        <p>5. The minimum amount of each Withdrawal {{settingInfo.withMinAmt}} USD .</p>
+        <p>5.{{$t('withdrawal.note5')}} {{settingInfo.withMinAmt}} USD .</p>
         <!-- <p>6、<span class="red">出金時段內出金一般2小時到帳，出金時間受金融間清算時間影響，各家金融到帳時間不同，最遲T+1次日24點前到帳</span></p> -->
       </div>
       <!-- <div @click="toCashList">
@@ -109,19 +110,19 @@ export default {
       // 確定Withdrawal
       //   未實名認證和添加金融帳戶不能Withdrawal
       if (!this.$store.state.userInfo.idCard) {
-        Toast('Please verify your real name first')
+        Toast(this.$t('withdrawal.verifyRealName'))
         this.$router.push('/authentication')
         return
       }
       if (!this.$store.state.bankInfo.bankNo) {
-        Toast('Please bind a financial account first')
+        Toast(this.$t('withdrawal.verifyFinancial'))
         this.$router.push('/addCard')
         return
       }
       if (!this.number || this.number <= 0) {
-        Toast('Please enter the correct Withdrawal amount')
+        Toast(this.$t('withdrawal.verifyAmount'))
       } else if (this.number - this.settingInfo.withMinAmt < 0) {
-        Toast('Withdrawal amount must not be less than' + this.settingInfo.withMinAmt)
+        Toast(this.$t('withdrawal.verifyMinAmount') + this.settingInfo.withMinAmt)
       } else {
         let opts = {
           amt: this.number
@@ -129,10 +130,10 @@ export default {
         let data = await api.outMoney(opts)
         if (data.status === 0) {
           // 成功
-          Toast('The application is successful, please wait for the Pending review!')
+          Toast(this.$t('withdrawal.pendingReview') )
           this.$router.push('/cashlist')
         } else {
-          Toast(data.msg ? data.msg : 'Withdrawal failed, please re-Withdrawal or contact the administrator')
+          Toast(data.msg ? data.msg : this.$t('withdrawal.withdrawalFailed'))
         }
       }
     },

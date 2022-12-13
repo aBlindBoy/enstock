@@ -22,9 +22,13 @@ axios.interceptors.request.use(
   config => {
     // if (store.state.token) {
     //     // config.headers.Authorization = `USER_TOKEN = ${store.state.token}`;
-    //     config.headers["USER_TOKEN"] = store.state.token;
+    //     
     // }
     // console.log(config)
+    let locale = localStorage.getItem("locale") 
+    if (locale) {
+      config.headers["Accept-Language"] = locale=='en'?'en':'zh-TW';
+    }
     return config
   },
   err => {

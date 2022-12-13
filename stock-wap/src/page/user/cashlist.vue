@@ -7,12 +7,12 @@
         </router-link>
       </mt-header>
     </div> -->
-    <div class="text-center">
+    <!-- <div class="text-center">
       <div class="btn-group">
         <a href="#/cash" class="with-draw-btn">Withdrawal</a>
         <a href="javascript:;" class="with-draw-detai-btn on">Record</a>
       </div>
-    </div>
+    </div> -->
     <div>
       <div class="box page-part transaction">
         <div class="box-contain clearfix">

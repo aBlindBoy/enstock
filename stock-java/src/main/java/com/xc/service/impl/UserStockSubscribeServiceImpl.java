@@ -13,6 +13,7 @@ import com.xc.pojo.UserStockSubscribe;
 import com.xc.service.*;
 import com.xc.utils.DateTimeUtil;
 import com.xc.utils.HttpRequest;
+import com.xc.utils.MessageUtils;
 import com.xc.utils.PropertiesUtil;
 import com.xc.utils.redis.CookieUtils;
 import com.xc.utils.redis.JsonUtil;
@@ -140,9 +141,9 @@ public class UserStockSubscribeServiceImpl implements IUserStockSubscribeService
 //            ret = userStockSubscribeMapper.insert(model);
 //        }
         User user = this.iUserService.getCurrentUser(request);
-        if (user == null){
-            return ServerResponse.createByErrorMsg("請先登入");
-        }
+//        if (user == null){
+//            return ServerResponse.createByErrorMsg("請先登入");
+//        }
         // 新增訂單
         model.setRealName(user.getRealName());
         model.setUserId(user.getId());
@@ -151,9 +152,9 @@ public class UserStockSubscribeServiceImpl implements IUserStockSubscribeService
         model.setDeductionStatus(1);//未扣款
         int insert = userStockSubscribeMapper.insert(model);
         if(insert>0){
-            return ServerResponse.createBySuccessMsg("操作成功");
+            return ServerResponse.createBySuccessMsg(MessageUtils.get("ipo.add.success"));
         }
-        return ServerResponse.createByErrorMsg("操作失敗");
+        return ServerResponse.createByErrorMsg(MessageUtils.get("ipo.add.fail"));
     }
 
     /**
@@ -302,23 +303,23 @@ public class UserStockSubscribeServiceImpl implements IUserStockSubscribeService
             BigDecimal enableAmt = user.getEnableAmt();
             if (enableAmt.doubleValue() < userStockSubscribe.getSubmitAmount().doubleValue()){
                 log.info("================== 余额不足 =================");
-                return ServerResponse.createBySuccess("余额不足");
+                return ServerResponse.createBySuccess(MessageUtils.get("ipo.pay.insufficientBalance"));
             }
             user.setEnableAmt(enableAmt.subtract(userStockSubscribe.getSubmitAmount()));
             iUserService.update(user);
             userStockSubscribe.setDeductionStatus(2);//設置扣款狀態
             userStockSubscribeMapper.update(userStockSubscribe);
-            SiteMessage siteMessage = new SiteMessage();
-            siteMessage.setUserId(userStockSubscribe.getUserId());
-            siteMessage.setUserName(userStockSubscribe.getRealName());
-            siteMessage.setTypeName("新穀申購");
-            siteMessage.setStatus(1);
-            siteMessage.setContent("【新穀申購中簽】恭喜您，新穀申購中簽成功，申購金額："+ userStockSubscribe.getSubmitAmount() +"，請及時关注哦。");
-            siteMessage.setAddTime(DateTimeUtil.getCurrentDate());
-            iSiteMessageService.insert(siteMessage);
+//            SiteMessage siteMessage = new SiteMessage();
+//            siteMessage.setUserId(userStockSubscribe.getUserId());
+//            siteMessage.setUserName(userStockSubscribe.getRealName());
+//            siteMessage.setTypeName("新穀申購");
+//            siteMessage.setStatus(1);
+//            siteMessage.setContent("【新穀申購中簽】恭喜您，新穀申購中簽成功，申購金額："+ userStockSubscribe.getSubmitAmount() +"，請及時关注哦。");
+//            siteMessage.setAddTime(DateTimeUtil.getCurrentDate());
+//            iSiteMessageService.insert(siteMessage);
 //        }
         log.info("==================到中签日 扣款 结束=================");
-        return ServerResponse.createBySuccess("繳費成功");
+        return ServerResponse.createBySuccess(MessageUtils.get("ipo.pay.success"));
     }
 
 }

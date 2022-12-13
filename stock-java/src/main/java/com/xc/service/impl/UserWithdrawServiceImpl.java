@@ -16,6 +16,7 @@ import com.xc.dao.UserMapper;
 import com.xc.dao.UserWithdrawMapper;
 
 import com.xc.service.*;
+import com.xc.utils.MessageUtils;
 import com.xc.utils.stock.WithDrawUtils;
 
 import java.math.BigDecimal;
@@ -77,7 +78,7 @@ public class UserWithdrawServiceImpl implements IUserWithdrawService {
     @Transactional
     public ServerResponse outMoney(String amt, String with_Pwd, HttpServletRequest request) throws Exception {
         if (StringUtils.isBlank(amt)) {
-            return ServerResponse.createByErrorMsg("參數不能為空");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.amountNull"));
         }
         User user = this.iUserService.getCurrentRefreshUser(request);
         String w = user.getWithPwd();
@@ -89,47 +90,35 @@ public class UserWithdrawServiceImpl implements IUserWithdrawService {
         }
         if (w.equals(with_Pwd)) {
             if (user.getIsLogin().intValue() == 1) {
-                return ServerResponse.createByErrorMsg("用戶被锁定");
+                return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.accountLock"));
             }
-
-
             List<UserPosition> userPositions = this.iUserPositionService.findPositionByUserIdAndSellIdIsNull(user.getId());
 
             if (userPositions.size() > 0) {
-
-                return ServerResponse.createByErrorMsg("有持倉單不能出金");
-
+                return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.existsPosition"));
             }
 
-
-            if (StringUtils.isBlank(user.getRealName()) || StringUtils.isBlank(user.getIdCard())) {
-
-                return ServerResponse.createByErrorMsg("未實名認證");
-
-            }
+//            if (StringUtils.isBlank(user.getRealName()) || StringUtils.isBlank(user.getIdCard())) {
+//
+//                return ServerResponse.createByErrorMsg("未實名認證");
+//
+//            }
 
             UserBank userBank = this.iUserBankService.findUserBankByUserId(user.getId());
 
             if (userBank == null) {
-
-                return ServerResponse.createByErrorMsg("未添加银行卡");
-
+                return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.noBank"));
             }
 
-
-            if (user.getAccountType().intValue() == 1) {
-
-                return ServerResponse.createByErrorMsg("模拟用戶不能出金");
-
-            }
+//            if (user.getAccountType().intValue() == 1) {
+//                return ServerResponse.createByErrorMsg("模拟用戶不能出金");
+//            }
 
 
             SiteSetting siteSetting = this.iSiteSettingService.getSiteSetting();
 
             if ((new BigDecimal(amt)).compareTo(new BigDecimal(siteSetting.getWithMinAmt().intValue())) == -1) {
-
-                return ServerResponse.createByErrorMsg("出金金额不得低於" + siteSetting.getWithMinAmt() + "元");
-
+                return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.minAmount") + siteSetting.getWithMinAmt() + " USD");
             }
 
 
@@ -139,42 +128,27 @@ public class UserWithdrawServiceImpl implements IUserWithdrawService {
 
             SiteProduct siteProduct = iSiteProductService.getProductSetting();
             if (siteProduct.getHolidayDisplay()) {
-                return ServerResponse.createByErrorMsg("週末或節假日不能出金！");
+                return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.holidays") );
             }
 
             if (!WithDrawUtils.checkIsWithTime(with_time_begin, with_time_end)) {
-
-                return ServerResponse.createByErrorMsg("出金失敗，出金時间在" + with_time_begin + "点 - " + with_time_end + "点 之间");
-
+                return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.hour")+ " "+with_time_begin + " - " + with_time_end );
             }
 
 
-            BigDecimal index_user_amt = user.getUserIndexAmt();
-
-            if (index_user_amt.compareTo(new BigDecimal("0")) == -1) {
-
-                return ServerResponse.createByErrorMsg("指数資金不能小於0");
-
-            }
-
-
-            BigDecimal futures_user_amt = user.getUserFutAmt();
-
-            if (futures_user_amt.compareTo(new BigDecimal("0")) == -1) {
-
-                return ServerResponse.createByErrorMsg("期货資金不能小於0");
-
-            }
-
-
+//            BigDecimal index_user_amt = user.getUserIndexAmt();
+//            if (index_user_amt.compareTo(new BigDecimal("0")) == -1) {
+//                return ServerResponse.createByErrorMsg("指数資金不能小於0");
+//            }
+//            BigDecimal futures_user_amt = user.getUserFutAmt();
+//            if (futures_user_amt.compareTo(new BigDecimal("0")) == -1) {
+//                return ServerResponse.createByErrorMsg("期货資金不能小於0");
+//            }
             BigDecimal enable_amt = user.getEnableAmt();
-
             int compareAmt = enable_amt.compareTo(new BigDecimal(amt));
 
             if (compareAmt == -1) {
-
-                return ServerResponse.createByErrorMsg("提現失敗，用戶可用資金不足");
-
+                return ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.fail.available"));
             }
 
 
@@ -200,52 +174,30 @@ public class UserWithdrawServiceImpl implements IUserWithdrawService {
                 log.info("修改用戶資金成功");
 
             } else {
-
                 log.error("修改用戶資金失敗");
-
                 throw new Exception("用戶提現，修改用戶資金失敗");
-
             }
 
 
             UserWithdraw userWithdraw = new UserWithdraw();
 
             userWithdraw.setUserId(user.getId());
-
             userWithdraw.setNickName(user.getRealName());
-
             userWithdraw.setAgentId(user.getAgentId());
-
             userWithdraw.setWithAmt(new BigDecimal(amt));
-
             userWithdraw.setApplyTime(new Date());
-
             userWithdraw.setWithName(user.getRealName());
-
             userWithdraw.setBankNo(userBank.getBankNo());
-
             userWithdraw.setBankName(userBank.getBankName());
-
             userWithdraw.setBankAddress(userBank.getBankAddress());
-
             userWithdraw.setWithStatus(Integer.valueOf(0));
-
-
             BigDecimal withfee = siteSetting.getWithFeePercent().multiply(new BigDecimal(amt)).add(new BigDecimal(siteSetting.getWithFeeSingle().intValue()));
-
             userWithdraw.setWithFee(withfee);
-
-
             int insertCount = this.userWithdrawMapper.insert(userWithdraw);
-
             if (insertCount > 0) {
-
-                return ServerResponse.createBySuccessMsg("提現成功");
-
+                return ServerResponse.createBySuccessMsg(MessageUtils.get("withdraw.fail.success"));
             }
-
             log.error("保存提現記錄失敗");
-
             throw new Exception("用戶提現，保存提現記錄失敗");
         } else {
             return ServerResponse.createByErrorMsg("提現密碼不正確！！");

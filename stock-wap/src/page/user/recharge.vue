@@ -33,7 +33,7 @@
     <div class="box">
       <div class="box-contain clearfix">
         <div class="account text-center">
-          <p class="title">Current Available Balance (USD)</p>
+          <p class="title">{{$t('recharge.currentAvailable')}} (USD)</p>
           <p class="red number">{{ $store.state.userInfo.enableAmt }}</p>
         </div>
       </div>
@@ -42,7 +42,7 @@
       <div class="box-contain clearfix">
         <div class="back-info">
           <!-- 金融帳戶信息 -->
-          <p class="title">Recharge amount (USD)</p>
+          <p class="title">{{$t('recharge.rechargeAmount')}} (USD)</p>
           <div class="box-tab">
             <input v-model="selectNumber" class="btn-default" type="number" />
             <div class="tab-con">
@@ -64,7 +64,7 @@
               </ul>
             </div>
             <p style="padding-bottom: 0.3rem">
-              The minimum Recharge amount is {{ settingInfo.chargeMinAmt }}USD
+              {{$t('recharge.minAmount')}} {{ settingInfo.chargeMinAmt }}USD
             </p>
           </div>
         </div>
@@ -125,14 +125,12 @@
       <div class="btnbox">
         <el-button
           type="danger"
-          style="
-            background: #b60c0d;
-            border-color: #b60c0d;
+          style="background: #b60c0d; border-color: #b60c0d;
             width: 100%;
             margin-top: 0.28rem;
           "
           @click="toSure"
-          >Recharge now</el-button
+          >{{$t('common.recharge')}}</el-button
         >
         <div v-if="dialogShow" class="text-center btnok">
           <form
@@ -155,26 +153,26 @@
             <!--<input type="hidden" name="pay_producturl" v-model="formDate.pay_producturl"/>-->
           </form>
           <button class="submitBtn" type="submit" @click="onsubmit()">
-            Recharge now
+            {{$t('recharge.minAmount')}} 
           </button>
         </div>
       </div>
       <div class="attention">
-        <p><i class="iconfont icon-jinggao1"></i>Precautions:</p>
+        <p><i class="iconfont icon-jinggao1"></i>{{$t('recharge.precautions')}}</p>
         <p>
-          More than five unpaid orders, the account is prohibited from continuing to place orders
+          1. {{$t('recharge.precautions1')}}
         </p>
         <p>
-          The remitter information and financial account information must be consistent with the real-name registration information!
+          2. {{$t('recharge.precautions2')}}
         </p>
         <p>
-          The three-party financial supervision account can be changed at any time, please be sure to obtain the latest payment information!
+          3. {{$t('recharge.precautions3')}}
         </p>
       </div>
     </div>
 
    
-    <mt-popup
+    <!-- <mt-popup
       pop-transition="popup-fade"
       :closeOnClickModal="false"
       class="mint-popup-white"
@@ -212,7 +210,7 @@
           >Next step</el-button
         >
       </div>
-    </mt-popup>
+    </mt-popup> -->
   </div>
 </template>
 
@@ -413,7 +411,7 @@ export default {
     async toSure() {
       // Recharge 先判斷是否實名認證
       if(!this.selectNumber){
-        Toast("Please select the recharge amount")
+        Toast(this.$t('recharge.amountIsNull'))
         return
       }
       await this.getCardDetail();

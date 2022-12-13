@@ -1,25 +1,26 @@
 <template>
   <div class="wrapper">
     <div class="header">
-      <mt-header title="User Info">
+      <mt-header :title="$t('setting.title')">
         <router-link to="/user" slot="left">
-          <mt-button icon="back">Mine</mt-button>
+          <mt-button icon="back">{{$t('setting.back')}}</mt-button>
         </router-link>
       </mt-header>
     </div>
     <div class="form-block">
-      <mt-field label="actual name" placeholder="actual name" type="text" disabled
+      <mt-field :label="$t('setting.actualName')" :placeholder="$t('setting.actualName')" type="text" disabled
                 v-model="$store.state.userInfo.realName"></mt-field>
-      <mt-field label="cellphone number" placeholder="手機cellphone number號碼" type="text" disabled v-model="$store.state.userInfo.phone"></mt-field>
+      <mt-field :label="$t('setting.cellphoneNumber')" type="text" disabled v-model="$store.state.userInfo.phone"></mt-field>
     </div>
     <div class="form-block">
-      <mt-field label="login password" @click.native="changeLogin" autocomplete="new-password" placeholder="Click to modify the login password"
+      <mt-field :label="$t('setting.loginPassword')" @click.native="changeLogin"
+       autocomplete="new-password" 
                 type="password" disabled>
-        <span @click="changeLogin"><i class="iconfont icon-xiugai"></i>change Password</span>
+        <span @click="changeLogin"><i class="iconfont icon-xiugai"></i>{{$t('setting.changePassword')}}</span>
       </mt-field>
     </div>
     <div class="btnbox">
-      <span class="text-center btnok loginout" @click="toRegister">Exit system</span>
+      <span class="text-center btnok loginout" @click="toRegister">{{$t('setting.exitSystem')}}</span>
     </div>
     <!-- 修改密碼 -->
     <mt-popup v-model="changeLoginPsdBox" position="bottom" class="mint-popup-wrap">
@@ -27,11 +28,13 @@
         <a @click="changeLoginPsdBox = false" class="pull-right"><i class="iconfont icon-weitongguo"></i></a>
       </div>
       <div class="form-block">
-        <mt-field label="Old Password" type="password" placeholder="Please enter old password" v-model="nextPsd"></mt-field>
-        <mt-field label="new password" placeholder="The password is 6~12 digits, numbers, letters or symbols" type="password" v-model="newPsd"></mt-field>
+        <mt-field :label="$t('setting.oldPassword')" type="password"
+         :placeholder="$t('setting.pleasePassword')" v-model="nextPsd"></mt-field>
+        <mt-field :label="$t('setting.newPassword')" 
+        :placeholder="$t('setting.passwordFormat')" type="password" v-model="newPsd"></mt-field>
       </div>
       <div class="text-center">
-        <mt-button class="btn-sure" type="default" @click="changeLoginPsd">Confirm</mt-button>
+        <mt-button class="btn-sure" type="default" @click="changeLoginPsd">{{$t('common.confirm')}}</mt-button>
       </div>
     </mt-popup>
   </div>
@@ -75,9 +78,9 @@ export default {
     },
     async changeLoginPsd () {
       if (isNull(this.nextPsd) || isNull(this.newPsd)) {
-        Toast('Please enter old and new password')
+        Toast(this.$t('setting.newPasswordIsNull'))
       } else if (!pwdReg(this.newPsd)) {
-        Toast('The password is 6~12 digits, numbers, letters or symbols')
+        Toast(this.$t('setting.passwordNotFormat'))
       } else {
         // 修改密碼
         let opts = {

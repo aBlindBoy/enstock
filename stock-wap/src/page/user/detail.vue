@@ -11,20 +11,22 @@
     <div class="box page-part">
       <div class="box-contain clearfix">
         <div class="account text-center">
-          <p class="title">Current Available Balance (USD)</p>
+          <p class="title">{{$t('fundingDetails.currentAvailable')}}(USD)</p>
           <p class="red number">{{$store.state.userInfo.enableAmt}}</p>
         </div>
         <div class="account-panel">
           <div class="col-xs-6">
             <a href="#/recharge">
               <img src="../../assets/img/recharge_icon.png"><br>
-              Recharge
+              
+              {{$t('common.recharge')}}
             </a>
           </div>
           <div class="col-xs-6">
             <a href="#/cash">
               <img src="../../assets/img/withdrew_icon.png"><br>
-              Withdrawal
+              
+              {{$t('common.withdraw')}}
             </a>
           </div>
         </div>

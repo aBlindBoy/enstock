@@ -13,6 +13,7 @@ import com.xc.service.*;
 import com.xc.utils.DateTimeUtil;
 import com.xc.utils.HolidayUtil;
 import com.xc.utils.KeyUtils;
+import com.xc.utils.MessageUtils;
 import com.xc.utils.stock.BuyAndSellUtils;
 import com.xc.utils.stock.GeneratePosition;
 import com.xc.utils.stock.GetStayDays;
@@ -1896,26 +1897,26 @@ public class UserPositionServiceImpl implements IUserPositionService {
         /*實名認證开关开启*/
         SiteProduct siteProduct = iSiteProductService.getProductSetting();
         User user = this.iUserService.getCurrentRefreshUser(request);
-        if (user==null){
-            return ServerResponse.createByErrorMsg("please log in first");
-        }
+//        if (user==null){
+//            return ServerResponse.createByErrorMsg("please log in first");
+//        }
         if (siteProduct.getRealNameDisplay() && (StringUtils.isBlank(user.getRealName()) || StringUtils.isBlank(user.getIdCard()))) {
-            return ServerResponse.createByErrorMsg("Failed to place an order, please verify your real name first");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.realName"));
         }
         BigDecimal user_enable_amt = user.getEnableAmt();
         log.info("用戶 {} 下單，股票id = {} ，数量 = {} , 方向 = {} , 杠杆 = {}", new Object[]{user
                 .getId(), stockId, buyNum, buyType, lever});
         if (siteProduct.getRealNameDisplay() && user.getIsLock().intValue() == 1) {
-            return ServerResponse.createByErrorMsg("Order failed, account has been locked");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.accountLock"));
         }
         if (siteProduct.getHolidayDisplay()) {
-            return ServerResponse.createByErrorMsg("Cannot be traded on weekends or holidays!");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.holidays"));
         }
 
         SiteSetting siteSetting = this.iSiteSettingService.getSiteSetting();
         if (siteSetting == null) {
             log.error("下單出错，网站設置表不存在");
-            return ServerResponse.createByErrorMsg("Failed to place an order, system settings error");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.settingError"));
         }
 
         String am_begin = siteSetting.getTransAmBegin();
@@ -1927,7 +1928,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         log.info("是否在上午交易時间 = {} 是否在下午交易時间 = {}", Boolean.valueOf(am_flag), Boolean.valueOf(pm_flag));
 
         if (!am_flag && !pm_flag) {
-            return ServerResponse.createByErrorMsg("Failed to place an order, it is not within the trading hours");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.tradingHours"));
         }
 
 //        TwStock stock = null;
@@ -1941,23 +1942,32 @@ public class UserPositionServiceImpl implements IUserPositionService {
 
         List dbPosition = findPositionByStockCodeAndTimes(siteSetting.getBuySameTimes(), stock.getStockCode(), user.getId());
         if (dbPosition.size() >= siteSetting.getBuySameNums()) {
-            return ServerResponse.createByErrorMsg("frequent transactions," + siteSetting.getBuySameTimes() + "The position of the same stock within one minute shall not exceed" + siteSetting
-                    .getBuySameNums() + "strip");
+            String s = MessageUtils.get("position.buy.fail.frequentTransactionsTime");
+            //"frequent transactions," + siteSetting.getBuySameTimes() + "The position of the same stock within one minute shall not exceed" + siteSetting
+            //                    .getBuySameNums() + "strip"
+            return ServerResponse.createByErrorMsg(String.format(s, siteSetting.getBuySameTimes(),siteSetting.getBuySameNums() ));
         }
 
         Integer transNum = findPositionNumByTimes(siteSetting.getBuyNumTimes(), user.getId());
         if (transNum / 100 >= siteSetting.getBuyNumLots()) {
-            return ServerResponse.createByErrorMsg("frequent transactions," + siteSetting
-                    .getBuyNumTimes() + "Minutes cannot exceed" + siteSetting.getBuyNumLots() + "share");
+            //"frequent transactions," + siteSetting
+            //                    .getBuyNumTimes() + "Minutes cannot exceed" + siteSetting.getBuyNumLots() + " share"
+            String s = MessageUtils.get("position.buy.fail.frequentTransactionsShare");
+
+            return ServerResponse.createByErrorMsg(String.format(s, siteSetting.getBuyNumTimes(),siteSetting.getBuyNumLots() ));
         }
 
         if (buyNum < siteSetting.getBuyMinNum()) {
-            return ServerResponse.createByErrorMsg("Failed to place an order, the purchase quantity is less than" + siteSetting
-                    .getBuyMinNum() + "share");
+            String s = MessageUtils.get("position.buy.fail.minShares");
+//            "Failed to place an order, the purchase quantity is less than" + siteSetting
+//                    .getBuyMinNum() + "share"
+            return ServerResponse.createByErrorMsg(String.format(s, siteSetting.getBuyMinNum() ));
         }
         if (buyNum.intValue() > siteSetting.getBuyMaxNum().intValue()) {
-            return ServerResponse.createByErrorMsg("Failed to place an order, the purchase quantity is greater than" + siteSetting
-                    .getBuyMaxNum() + "share");
+            String s = MessageUtils.get("position.buy.fail.maxShares");
+//            "Failed to place an order, the purchase quantity is greater than " + siteSetting
+//                    .getBuyMaxNum() + "share"
+            return ServerResponse.createByErrorMsg(String.format(s, siteSetting.getBuyMaxNum() ));
         }
 
 
@@ -1965,7 +1975,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         BigDecimal now_price = new BigDecimal(nowPrice);
 
         if (now_price.compareTo(new BigDecimal("0")) == 0) {
-            return ServerResponse.createByErrorMsg("Quote 0, please try again later");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.quoteNull"));
         }
 
 
@@ -1987,16 +1997,20 @@ public class UserPositionServiceImpl implements IUserPositionService {
 
         int compareInt = buy_amt_autual.compareTo(new BigDecimal(siteSetting.getBuyMinAmt().intValue()));
         if (compareInt == -1) {
-            return ServerResponse.createByErrorMsg("Failed to place an order, the purchase amount is less than" + siteSetting
-                    .getBuyMinAmt() + "USD");
+//            "Failed to place an order, the purchase amount is less than" + siteSetting
+//                    .getBuyMinAmt() + " USD"
+            String s = MessageUtils.get("position.buy.fail.minAmount");
+            return ServerResponse.createByErrorMsg(String.format(s, siteSetting.getBuyMinAmt() ));
         }
 
 
         BigDecimal max_buy_amt = user_enable_amt.multiply(siteSetting.getBuyMaxAmtPercent());
         int compareCwInt = buy_amt_autual.compareTo(max_buy_amt);
         if (compareCwInt == 1) {
-            return ServerResponse.createByErrorMsg("Failed to place an order, cannot exceed available funds" + siteSetting
-                    .getBuyMaxAmtPercent().multiply(new BigDecimal("100")) + " %");
+//            "Failed to place an order, cannot exceed available funds " + siteSetting
+//                    .getBuyMaxAmtPercent().multiply(new BigDecimal("100")) + " %"
+            String s = MessageUtils.get("position.buy.fail.availableFunds");
+            return ServerResponse.createByErrorMsg(String.format(s, siteSetting.getBuyMaxAmtPercent().multiply(new BigDecimal("100"))));
         }
 
 
@@ -2004,15 +2018,15 @@ public class UserPositionServiceImpl implements IUserPositionService {
         log.info("用戶可用金额 = {}  实际購買金额 =  {}", user_enable_amt, buy_amt_autual);
         log.info("比较 用戶金额 和 实际 購買金额 =  {}", Integer.valueOf(compareUserAmtInt));
         if (compareUserAmtInt == -1) {
-            return ServerResponse.createByErrorMsg("Failed to place an order, the available financing amount is less than" + buy_amt_autual + "USD");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.buy.fail.insufficientBalance"));
         }
 
-        if (user.getUserIndexAmt().compareTo(new BigDecimal("0")) == -1) {
-            return ServerResponse.createByErrorMsg("Failed, index total fund is less than 0");
-        }
-        if (user.getUserFutAmt().compareTo(new BigDecimal("0")) == -1) {
-            return ServerResponse.createByErrorMsg("Failed, the total futures fund is less than 0");
-        }
+//        if (user.getUserIndexAmt().compareTo(new BigDecimal("0")) == -1) {
+//            return ServerResponse.createByErrorMsg("Failed, index total fund is less than 0");
+//        }
+//        if (user.getUserFutAmt().compareTo(new BigDecimal("0")) == -1) {
+//            return ServerResponse.createByErrorMsg("Failed, the total futures fund is less than 0");
+//        }
 
         UserPosition userPosition = new UserPosition();
         userPosition.setPositionType(user.getAccountType());
@@ -2096,7 +2110,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
             throw new Exception("The user traded and placed an order, and there was an error in saving the position record");
         }
 
-        return ServerResponse.createBySuccess("successfully ordered");
+        return ServerResponse.createBySuccess(MessageUtils.get("position.buy.success"));
     }
     @Transactional
     public ServerResponse sellUsStock(String positionSn, int doType) throws Exception {
@@ -2105,7 +2119,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         SiteSetting siteSetting = this.iSiteSettingService.getSiteSetting();
         if (siteSetting == null) {
             log.error("平倉出错，网站設置表不存在");
-            return ServerResponse.createByErrorMsg("Failed to place an order, system settings error");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.settingError"));
         }
         SiteProduct siteProduct = iSiteProductService.getProductSetting();
 
@@ -2118,38 +2132,40 @@ public class UserPositionServiceImpl implements IUserPositionService {
             boolean pm_flag = BuyAndSellUtils.isTransTime(pm_begin, pm_end);
             log.info("是否在上午交易時间 = {} 是否在下午交易時间 = {}", Boolean.valueOf(am_flag), Boolean.valueOf(pm_flag));
             if (!am_flag && !pm_flag) {
-                return ServerResponse.createByErrorMsg("Failed to close the position, not within the trading hours");
+                return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.tradingHours"));
             }
 
             if (siteProduct.getHolidayDisplay()) {
-                return ServerResponse.createByErrorMsg("Cannot be traded on weekends or holidays!");
+                return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.holidays"));
             }
 
         }
 
         UserPosition userPosition = this.userPositionMapper.findPositionBySn(positionSn);
-        if (userPosition == null) {
-            return ServerResponse.createByErrorMsg("Failed to close the position, the order does not exist");
-        }
+//        if (userPosition == null) {
+//            return ServerResponse.createByErrorMsg("Failed to close the position, the order does not exist");
+//        }
 
         User user = this.userMapper.selectByPrimaryKey(userPosition.getUserId());
         /*實名認證开关开启*/
 
         if (siteProduct.getRealNameDisplay() && user.getIsLock() == 1) {
-            return ServerResponse.createByErrorMsg("Failed to close the position, the user has been locked");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.accountLock"));
         }
 
 
-        if (userPosition.getSellOrderId() != null) {
-            return ServerResponse.createByErrorMsg("Failed to close the position, this order has been closed");
-        }
+//        if (userPosition.getSellOrderId() != null) {
+//            return ServerResponse.createByErrorMsg("Failed to close the position, this order has been closed");
+//        }
 
 //        if (1 == userPosition.getIsLock().intValue()) {
 ////            return ServerResponse.createByErrorMsg("平倉失敗 " + userPosition.getLockMsg());
 ////        }
 
         if (!DateTimeUtil.isCanSell(userPosition.getBuyOrderTime(), siteSetting.getCantSellTimes())) {
-            return ServerResponse.createByErrorMsg(siteSetting.getCantSellTimes() + "The position cannot be closed within minutes");
+            String s = MessageUtils.get("position.sell.fail.closedMinutes");
+            //siteSetting.getCantSellTimes() + " The position cannot be closed within minutes"
+            return ServerResponse.createByErrorMsg(String.format(s,siteSetting.getCantSellTimes()));
         }
 
 //        if (DateTimeUtil.sameDate(DateTimeUtil.getCurrentDate(),userPosition.getBuyOrderTime())) {
@@ -2162,7 +2178,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         BigDecimal now_price = new BigDecimal(stockListVO.getNowPrice());
         if (now_price.compareTo(new BigDecimal("0")) != 1) {
             log.error("股票 = {} 收到报价 = {}", userPosition.getStockName(), now_price);
-            return ServerResponse.createByErrorMsg("Quotation 0, failed to close position, please try again later");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("position.buy.quoteNull"));
         }
 
         double stock_crease = stockListVO.getHcrate().doubleValue();
@@ -2269,7 +2285,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         ucd.setAgentName(user.getAgentName());
         ucd.setUserId(user.getId());
         ucd.setUserName(user.getRealName());
-        ucd.setDeType("total profit and loss ");
+        ucd.setDeType("Total profit and loss");
         ucd.setDeAmt(all_profit);
 //        ucd.setDeSummary("賣出股票，" + userPosition.getStockCode() + "/" + userPosition.getStockName() + ",佔用本金：" + freez_amt + ",總手續費：" + all_fee_amt + ",建倉費：" + buy_fee_amt + ",遞延費：" + orderStayFee + ",印花税：" + orderSpread + ",盈虧：" + profitLoss + "，總盈虧：" + all_profit);
         ucd.setDeSummary("sell stock，" + userPosition.getStockCode() + "/" + userPosition.getStockName() + ",Occupy the principal：" + freez_amt + ",total handling fee：" + all_fee_amt + ",Opening fee：" + buy_fee_amt + ",deferred fee：" + orderStayFee + ",profit and loss：" + profitLoss + "，total profit and loss：" + all_profit);
@@ -2288,7 +2304,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
             throw new Exception("The user closes the position and saves the detailed record error");
         }
 
-        return ServerResponse.createBySuccessMsg("Successfully closed!");
+        return ServerResponse.createBySuccessMsg(MessageUtils.get("position.sell.success"));
     }
 
 }

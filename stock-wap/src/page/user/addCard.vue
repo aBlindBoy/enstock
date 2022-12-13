@@ -16,24 +16,24 @@
       </div>
     </div>
     <div class="form-block page-part">
-      <mt-field label="financial name" placeholder="Please enter financial name (full name)" type="text" v-model="bankName"></mt-field>
-      <mt-field label="Account opening branch" placeholder="Need to be accurate to the branch or sub-branch" type="text" v-model="bankAddress"></mt-field>
-      <mt-field label="financial account number" placeholder="Please enter financial account number" v-model="bankNo"></mt-field>
+      <mt-field :label="$t('addCard.financialName')" :placeholder="$t('addCard.pleaseFinancialName')" type="text" v-model="bankName"></mt-field>
+      <mt-field :label="$t('addCard.accountOpening')" :placeholder="$t('addCard.pleaseAccountOpening')" type="text" v-model="bankAddress"></mt-field>
+      <mt-field :label="$t('addCard.financialAccount')" :placeholder="$t('addCard.pleaseFinancialAccount')" v-model="bankNo"></mt-field>
     </div>
     <!-- <div class="form-block page-part">
         <mt-field label="持卡人姓名" placeholder="和金融帳戶綁定一致" type="text" v-model="username"></mt-field>
         <mt-field label="金融預留手機號" placeholder="請輸入持卡人手機號" type="text" v-model="username"></mt-field>
     </div> -->
     <div class="rule-box">
-      <div class="title">hint:</div>
+      <div class="title">{{$t('addCard.precautions')}}</div>
       <ul>
-        <li>1、New users must register by adding a financial account.</li>
-        <li>2、Users can only add one personal financial account.</li>
-        <li>3、The real name must be the same as the account name of the withdrawal financial account.</li>
+        <li>1. {{$t('addCard.precautions1')}}</li>
+        <li>2. {{$t('addCard.precautions2')}}</li>
+        <li>3. {{$t('addCard.precautions3')}}</li>
       </ul>
     </div>
     <div class="btnbox">
-      <span class="text-center btnok" @click="toSure">Confirm</span>
+      <span class="text-center btnok" @click="toSure">{{$t('common.confirm')}}</span>
     </div>
 
   </div>
@@ -70,11 +70,11 @@ export default {
     async toSure () {
       // 添加金融帳戶
       if (isNull(this.bankNo) ) {
-        Toast('Please enter financial account number')
+        Toast(this.$t('addCard.pleaseFinancialName'))
       } else if (isNull(this.bankName) || !isName(this.bankName)) {
-        Toast('Please enter financial name')
+        Toast(this.$t('addCard.pleaseAccountOpening'))
       } else if (isNull(this.bankAddress) || !isName(this.bankAddress)) {
-        Toast('Please enter the account opening branch')
+        Toast(this.$t('addCard.pleaseFinancialAccount'))
       } else {
         let opts = {
           bankName: this.bankName,
@@ -84,7 +84,7 @@ export default {
         if (this.$route.query.type === 'edit') {
           let data = await api.updateBankCard(opts)
           if (data.status === 0) {
-            Toast('Successfully modified!')
+            Toast(this.$t('addCard.modifiedSuccess'))
             this.$router.push('/card')
           } else {
             Toast(data.msg)
@@ -92,7 +92,7 @@ export default {
         } else {
           let data = await api.addBankCard(opts)
           if (data.status === 0) {
-            Toast('Added successfully!')
+            Toast(this.$t('addCard.addSuccess'))
             this.$router.push('/card')
           } else {
             Toast(data.msg)

@@ -14,6 +14,7 @@ import com.xc.service.IUserBankService;
 import com.xc.service.IUserService;
 
 
+import com.xc.utils.MessageUtils;
 import com.xc.vo.user.UserBankInfoVO;
 
 import java.util.Date;
@@ -33,6 +34,8 @@ import org.springframework.stereotype.Service;
    @Autowired
    IUserService iUserService;
 
+
+
    public UserBank findUserBankByUserId(Integer userId) { return this.userBankMapper.findUserBankByUserId(userId); }
 
    public ServerResponse addBank(UserBank bank, HttpServletRequest request) {
@@ -42,9 +45,7 @@ import org.springframework.stereotype.Service;
      UserBank dbBank = this.userBankMapper.findUserBankByUserId(user.getId());
 
      if (dbBank != null) {
-
-       return ServerResponse.createByErrorMsg("Bank information already exists, do not add it again");
-
+       return ServerResponse.createByErrorMsg(MessageUtils.get("bank.existed"));
      }
      UserBank userBank = new UserBank();
 
@@ -65,11 +66,11 @@ import org.springframework.stereotype.Service;
      int insertCount = this.userBankMapper.insert(userBank);
 
      if (insertCount > 0) {
-       return ServerResponse.createBySuccess("Add bank card successfully");
+       return ServerResponse.createBySuccess(MessageUtils.get("bank.add.success"));
 
      }
 
-     return ServerResponse.createByErrorMsg("Failed to add bank card");
+     return ServerResponse.createByErrorMsg(MessageUtils.get("bank.add.fail"));
 
    }
 
@@ -81,7 +82,7 @@ import org.springframework.stereotype.Service;
 
      if (dbBank == null) {
 
-       return ServerResponse.createByErrorMsg("The modification failed, the bank could not be found");
+       return ServerResponse.createByErrorMsg(MessageUtils.get("bank.modify.idNotFound"));
 
      }
 
@@ -99,11 +100,11 @@ import org.springframework.stereotype.Service;
 
      if (updateCount > 0) {
 
-       return ServerResponse.createBySuccess("Changed bank card successfully");
+       return ServerResponse.createBySuccess(MessageUtils.get("bank.modify.success"));
 
      }
 
-     return ServerResponse.createByErrorMsg("Failed to modify bank card");
+     return ServerResponse.createByErrorMsg(MessageUtils.get("bank.modify.fail"));
    }
 
    public ServerResponse getBankInfo(HttpServletRequest request) {
@@ -114,7 +115,7 @@ import org.springframework.stereotype.Service;
 
      if (dbBank == null) {
 
-       return ServerResponse.createByErrorMsg("No bank information added");
+       return ServerResponse.createByErrorMsg(MessageUtils.get("bank.query.notFound"));
 
      }
 

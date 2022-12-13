@@ -12,16 +12,9 @@
           </div>
           <div class="pro clearfix">
             {{item.deSummary}}
-            <!-- 股票:300092/開山股份 <span class="pull-right">金額:50.241</span> -->
           </div>
-          <!-- <div class="clearfix">
-
-              <div class="col-xs-4">價格:</div>
-              <div class="col-xs-4">Quantity:5000</div>
-              <div class="col-xs-4">總金額:34558.000</div>
-          </div> -->
           <div class="pro clearfix">
-            <div class="col-xs-12 text-right">Generation time:{{new Date(item.addTime) | timeFormat}}</div>
+            <div class="col-xs-12 text-right">{{$t('fundingDetails.operatingTime')}}:{{new Date(item.addTime) | timeFormat}}</div>
           </div>
         </div>
 

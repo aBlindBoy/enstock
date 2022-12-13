@@ -9,6 +9,7 @@ import com.xc.dao.*;
 import com.xc.pojo.*;
 import com.xc.service.*;
 import com.xc.utils.DateTimeUtil;
+import com.xc.utils.MessageUtils;
 import com.xc.utils.PropertiesUtil;
 import com.xc.utils.ip.IpUtils;
 import com.xc.utils.ip.JuheIpApi;
@@ -218,7 +219,7 @@ public class UserServiceImpl implements IUserService {
         StockOption dboption = this.stockOptionMapper.findMyOptionIsExistByCode(user.getId(), code);
 
         if (dboption != null) {
-            return ServerResponse.createByErrorMsg("Add failed, optional stock already exists");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.exists"));
         }
 //        Stock stock = new Stock();
 //        new TwStock();
@@ -245,7 +246,7 @@ public class UserServiceImpl implements IUserService {
         Stock stock = this.stockMapper.findStockByCode(code);
 //        }
         if (stock == null) {
-            return ServerResponse.createByErrorMsg("Add failed, stock does not exist");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.stockNotExists"));
         }
         StockOption stockOption = new StockOption();
 //        stockOption.setUserId(user.getId());
@@ -269,9 +270,9 @@ public class UserServiceImpl implements IUserService {
 
         int insertCount = this.stockOptionMapper.insert(stockOption);
         if (insertCount > 0) {
-            return ServerResponse.createBySuccessMsg("Add optional stock successfully");
+            return ServerResponse.createBySuccessMsg(MessageUtils.get("option.add.success"));
         }
-        return ServerResponse.createByErrorMsg("Add failed, please try again");
+        return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.fail"));
     }
 
 
@@ -287,14 +288,14 @@ public class UserServiceImpl implements IUserService {
         StockOption dboption = this.stockOptionMapper.findMyOptionIsExistByCode(user.getId(), code);
 
         if (dboption == null) {
-            return ServerResponse.createByErrorMsg("Delete failed, optional stock does not exist");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("option.delete.stockNotExists"));
         }
 
         int delCount = this.stockOptionMapper.deleteByPrimaryKey(dboption.getId());
         if (delCount > 0) {
-            return ServerResponse.createBySuccessMsg("Deleting self-selected stocks succeeded");
+            return ServerResponse.createBySuccessMsg(MessageUtils.get("option.delete.success"));
         }
-        return ServerResponse.createByErrorMsg("Delete failed, please try again");
+        return ServerResponse.createByErrorMsg(MessageUtils.get("option.delete.fail"));
     }
 
 
@@ -326,20 +327,20 @@ public class UserServiceImpl implements IUserService {
 
     public ServerResponse updatePwd(String oldPwd, String newPwd, HttpServletRequest request) {
         if (StringUtils.isBlank(oldPwd) || StringUtils.isBlank(newPwd)) {
-            return ServerResponse.createByErrorMsg("parameter cannot be empty");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("user.password.update.parameterNotEmpty"));
         }
 
         User user = getCurrentRefreshUser(request);
         if (!oldPwd.equals(user.getUserPwd())) {
-            return ServerResponse.createByErrorMsg("wrong password");
+            return ServerResponse.createByErrorMsg(MessageUtils.get("user.password.update.wrongPassword"));
         }
 
         user.setUserPwd(newPwd);
         int updateCount = this.userMapper.updateByPrimaryKeySelective(user);
         if (updateCount > 0) {
-            return ServerResponse.createBySuccessMsg("Successfully modified");
+            return ServerResponse.createBySuccessMsg(MessageUtils.get("user.password.update.success"));
         }
-        return ServerResponse.createByErrorMsg("fail to edit");
+        return ServerResponse.createByErrorMsg(MessageUtils.get("user.password.update.fail"));
     }
 
 

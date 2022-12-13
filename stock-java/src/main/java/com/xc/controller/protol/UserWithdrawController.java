@@ -7,6 +7,7 @@ import com.xc.service.IUserWithdrawService;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.xc.utils.MessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class UserWithdrawController {
             serverResponse = this.iUserWithdrawService.outMoney(amt, user.getWithPwd(), request);
         } catch (Exception e) {
             log.error("出金异常 e = {}", e);
-            serverResponse = ServerResponse.createByErrorMsg("出金异常，請稍后再试");
+            serverResponse = ServerResponse.createByErrorMsg(MessageUtils.get("withdraw.error"));
         }
         return serverResponse;
     }

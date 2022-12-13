@@ -11,12 +11,12 @@
     <div class="box page-part transaction">
       <div class="box-contain clearfix">
         <div v-if="cardInfo.length<=0" class="empty text-center">
-          No financial account linked yet
+         {{$t('card.noFinancial')}}
         </div>
         <div v-if="cardInfo.length>0" class="back-info">
           <!-- 金融帳戶信息 -->
           <p class="name">
-            financial account
+            {{$t('card.financialAccount')}}
           </p>
           <ul>
             <li class="clearfix" v-for="i in cardInfo" :key="i.key">
@@ -30,15 +30,15 @@
               </div>
             </li>
           </ul>
-          <p class="red">Each person can be bound to one financial account at most. If you need to change the financial account, please contact customer service</p>
+          <p class="red">{{$t('card.customerService')}}</p>
         </div>
       </div>
     </div>
     <div v-if="cardInfo.length<=0" class="btnbox">
-      <span class="text-center btnok" @click="addCard">Add a financial account</span>
+      <span class="text-center btnok" @click="addCard">{{$t('card.addFinancial')}}</span>
     </div>
     <div v-else class="btnbox">
-      <span class="text-center btnok" @click="addCard('edit')">Edit financial account</span>
+      <span class="text-center btnok" @click="addCard('edit')">{{$t('card.editFinancial')}}</span>
     </div>
   </div>
 </template>

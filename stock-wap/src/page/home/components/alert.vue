@@ -70,7 +70,7 @@ export default {
     },
     async getArtList () {
       // 獲取公告詳情
-      let result = await api.getArtDetail({ artId: this.$route.query.id })
+      let result = await api.getArtDetail({ id: this.$route.query.id })
       if (+result.status === 0) {
         this.artList = result.data
       } else {

@@ -484,7 +484,7 @@ export function getTwStockPageList (options) {
 export function getUsStockData (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `https://ws.api.cnyes.com/ws/api/v1/quote/quotes/USS:${stock_code}:STOCK?column=G,F_FORMAT_V2`,
+      url: `/cnyesWs/ws/api/v1/quote/quotes/USS:${stock_code}:STOCK?column=G,F_FORMAT_V2`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)
@@ -499,7 +499,7 @@ export function getUsStockData (stock_code) {
 export function getUsOpenClose (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=USS:${stock_code}:STOCK&resolution=M&quote=1`,
+      url: `/cnyesWs/ws/api/v1/charting/history?symbol=USS:${stock_code}:STOCK&resolution=M&quote=1`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)
@@ -513,21 +513,21 @@ export function getUsOpenClose (stock_code) {
 
 
 
-// 获取台湾股票买卖情况
-export function getTwStockExchange (stock_ids) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      url: `/twstock/api/v2/five-price-stock-data/data?stock_id=${stock_ids}`,
-      type: "GET",
-      success: function(recvData) {
-        resolve(recvData)
-      },
-      error:function(error){
-        reject(error)
-      }
-    });
-  })
-}
+// // 获取台湾股票买卖情况
+// export function getTwStockExchange (stock_ids) {
+//   return new Promise((resolve, reject) => {
+//     $.ajax({
+//       url: `/twstock/api/v2/five-price-stock-data/data?stock_id=${stock_ids}`,
+//       type: "GET",
+//       success: function(recvData) {
+//         resolve(recvData)
+//       },
+//       error:function(error){
+//         reject(error)
+//       }
+//     });
+//   })
+// }
 
 // 下单美股
 export function buyUsStock (options) {
@@ -565,10 +565,25 @@ export function sellUsStock (options) {
 //   return get('/investing/charts_xml/jschart_markets_169.json', options)
 // }
 
-export function getChats(id) {
+// export function getChats(id) {
+//   return new Promise((resolve, reject) => {
+//     $.ajax({
+//       url: `/investing/charts_xml/jschart_markets_${id}.json`,
+//       type: "GET",
+//       success: function(recvData) {
+//         resolve(recvData)
+//       },
+//       error:function(error){
+//         reject(error)
+//       }
+//     });
+//   })
+// }
+
+export function getChats() {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `/investing/charts_xml/jschart_markets_${id}.json`,
+      url: `/cnyesWs/ws/api/v2/universal/quote?type=USINDEX&column=A&page=0&limit=3`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)
