@@ -112,8 +112,8 @@ export default  {
         sharesIsNull : "請輸入或選擇要購買的股份數量",
         leverageIsNull : "請輸入或選擇杠杆",
         directionIsNull : "請選擇買賣方向",
-        financingPosition:"融資持倉",
-        closePosition:"歷史持倉"
+        financingPosition:"融資庫存",
+        closePosition:"歷史庫存"
     },
     product:{
         title : "產品說明",

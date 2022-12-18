@@ -256,11 +256,16 @@ export default {
       form: {
           underwritingPrice:null,
       },
-      statusType:["",this.$t('common.appointmentSuccessful'),this.$t('common.wonTheLottery'),
-      this.$t('common.didNotWinTheLottery')],//,"部分中签"
+      // statusType:,//,"部分中签"
     };
   },
-  computed: {},
+  computed: {
+    statusType(){
+      return ["",this.$t('ipo.appointmentSuccessful'),this.$t('ipo.wonTheLottery'),
+      this.$t('ipo.didNotWinTheLottery')]
+    }
+
+  },
   created() {
     this.$store.state.userMenu = '2-14'
     this.getHiStockList()

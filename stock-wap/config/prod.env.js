@@ -1,5 +1,6 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  VUE_APP_API : '"https://api.2vsec.com.tw/"'
+  VUE_APP_API : '"https://api.2vsec.com.tw/"',
+  // assetsPublicPath:'"../../"'
 }

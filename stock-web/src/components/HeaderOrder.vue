@@ -50,9 +50,6 @@
 					 </span>
 					<a href="javascript:;"  id="google_translate_element" style="width: 40px;"></a>
 					<!-- <a href="javascript:;" class="language" type="primary" @click="isEn1">En</a> -->
-					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toLogin">{{$t('common.login')}}</a>
-					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toRegister">{{$t('common.register')}}</a>
-					<!-- <a href="javascript:;" class="iconfont icon-lingdang xiaoxiding" style=" margin-right: 10px;"></a> -->
 					<el-dropdown trigger="click" @command="selectColor">
 						<span class="el-dropdown-link" style="color:#fff;line-height: 30px;font-size: 16px;">{{$t('header.style')}}<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
@@ -72,6 +69,10 @@
 							<el-dropdown-item command="zh-TW">中文繁体</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
+					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toLogin">{{$t('common.login')}}</a>
+					<a href="javascript:;" v-if="!this.$store.state.haslogin" class="header-btn" type="primary" @click="toRegister">{{$t('common.register')}}</a>
+					<!-- <a href="javascript:;" class="iconfont icon-lingdang xiaoxiding" style=" margin-right: 10px;"></a> -->
+					
 
 					<el-dropdown v-if="this.$store.state.haslogin" @command="handleCommand">
 						<span class="el-dropdown-link">

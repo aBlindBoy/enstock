@@ -24,6 +24,10 @@ axios.interceptors.request.use(
     //     config.headers.Authorization = `token ${store.state.userId}`;
     // }
     // console.log(config)
+    let locale = localStorage.getItem("locale") 
+    if (locale) {
+      config.headers["Accept-Language"] = locale=='en'?'en':'zh-TW';
+    }
     return config
   },
   err => {

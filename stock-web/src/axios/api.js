@@ -540,14 +540,14 @@ export function findUserFundsPositionByCode(options) {
 }
 
 // 获取台湾股票列表
-export function getTwStockListApi (options) {
-  return post('/api/tw/stock/list.do', options)
-}
+// export function getTwStockList (options) {
+//   return post('/api/tw/stock/list.do', options)
+// }
 
 // 获取台湾股票分页列表
-// export function getTwStockPageList (options) {
-//   return post('/api/tw/stock/getTwStock.do', options)
-// }
+export function getTwStockList (options) {
+  return post('/api/tw/stock/getTwStock.do', options)
+}
 
 
 
@@ -583,7 +583,7 @@ export function sellUsStock (options) {
 export function getUsOpenClose (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=USS:${stock_code}:STOCK&resolution=M&quote=1`,
+      url: `/cnyesWs/ws/api/v1/charting/history?symbol=USS:${stock_code}:STOCK&resolution=M&quote=1`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)
@@ -598,7 +598,22 @@ export function getUsOpenClose (stock_code) {
 export function getUsStockData (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `https://ws.api.cnyes.com/ws/api/v1/quote/quotes/USS:${stock_code}:STOCK?column=G,F_FORMAT_V2`,
+      url: `/cnyesWs/ws/api/v1/quote/quotes/USS:${stock_code}:STOCK?column=G,F_FORMAT_V2`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+export function getChats() {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesWs/ws/api/v2/universal/quote?type=USINDEX&column=A&page=0&limit=10`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)

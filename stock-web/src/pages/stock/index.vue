@@ -14,20 +14,47 @@
       <div>
         <backdrop1>
           <div class="title-stock" style="">
-            <!-- <span class="stock-title">股票詳情</span> -->
             <span class="stock-title-en">{{$t('stock.title')}}</span>
           </div>
         </backdrop1>
       </div>
+
       <el-main>
         <div class="fat">
+          <div >
+            <marquee-text :duration="30" :paused="paused" @mouseenter="mouseenter" @mouseleave="mouseleave">
+          <span v-for="quotes in realTimeQuotesIndexList" style="margin-left: 20px;line-height: 50px;" >
+            <b> {{quotes.indexName}}</b>
+            <span> {{quotes.currentPoint}}</span>
+            <span v-if="quotes.floatRate>0">
+                <i class="el-icon-top red"></i>
+                <span style="background-color:rgb(177 59 81 / 50%);"> +{{quotes.floatPoint}}</span>
+                <span style="background-color:rgb(177 59 81 / 50%);"> +{{quotes.floatRate}}%</span>
+            </span>  
+            <!---->
+            <span v-else  >
+              <i class="el-icon-bottom green"></i>
+              <span style="background-color:rgb(75 160 123 / 50%)"> {{quotes.floatPoint}}</span>
+              <span style="background-color:rgb(75 160 123 / 50%)"> {{quotes.floatRate}}%</span>
+            </span>
+          </span>
+        </marquee-text>
+          </div>
+     
+
           <div
             class="table-box "
-            :style="
-              color == 'black-bg' ? 'margin: 50px auto;' : 'margin-top: 200px;'
-            "
           >
-            <div class="table-cont-box">
+          <el-menu
+              :default-active="activeIndex"
+              mode="horizontal"
+              @select="handleSelect"
+              text-color="#fff"
+              active-text-color="#ffd04b">
+              <el-menu-item  class="banner-menu first" index="1">美股</el-menu-item>
+              <el-menu-item  class="banner-menu first" index="2">台股</el-menu-item>
+            </el-menu>
+            <div class="table-cont-box" v-if="activeIndex==1">
               <div class="table-search">
                 <el-row type="flex" justify="end">
                   <el-col :span="8">
@@ -47,17 +74,37 @@
                   </el-col>
                 </el-row>
               </div>
-              <!-- <div class="table-title">
-                <ul class="clearfix">
-                  <li class="pull-left">
-                    <a class="list" href="javascript:;">股票詳情</a>
-                  </li>
-                </ul>
-                <div></div>
-              </div> -->
               <table-box
+                :key="us"
                 :list="list"
                 :getData="getList"
+                :handleOptions="handleOptions"
+              ></table-box>
+            </div>
+            <div class="table-cont-box" v-if="activeIndex==2">
+              <div class="table-search">
+                <el-row type="flex" justify="end">
+                  <el-col :span="8">
+                    <div class="test">
+                      <el-input
+                        v-model="form.stock"
+                        :placeholder="$t('stock.search')"
+                        class="search-public"
+                      >
+                        <!-- <el-button @click="getList" slot="append" icon="iconfont  icon-search"></el-button> -->
+                      </el-input>
+                      <span
+                        @click="getTwStockList"
+                        class="iconfont icon-search search-stock"
+                      ></span>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+              <table-box
+                :key="tw"
+                :list="twList"
+                :getData="getTwStockList"
                 :handleOptions="handleOptions"
               ></table-box>
             </div>
@@ -77,16 +124,20 @@ import * as api from "../../axios/api";
 import backdrop1 from "@/components/backdrop1.vue";
 import newFooter from "../../components/newFooter";
 import { mapState } from "vuex";
+import MarqueeText from 'vue-marquee-text-component'
+// import MarqueeText from 'vue-marquee-text-component/src/components/MarqueeText.vue';
 export default {
   components: {
     HomeHeader,
     TableBox,
     backdrop1,
-    newFooter
+    newFooter,
+    MarqueeText
   },
   props: {},
   data() {
     return {
+      activeIndex:'1',
       timer: null,
       form: {
         stock: "",
@@ -94,12 +145,14 @@ export default {
         pageSize: 10
       },
       list: {
-        list: []
       },
+      twList:[],
       loading: false,
       refresh: false, // 刷新中
       changeTextClass: {}, // 表格中的数据变化
-      siteInfo: {}
+      siteInfo: {},
+      realTimeQuotesIndexList:[],
+      paused:false,
     };
   },
   watch: {},
@@ -110,6 +163,7 @@ export default {
   },
   created() {
     this.timer = setInterval(this.refreshList, 60000);
+    this.getMarket();
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -128,6 +182,39 @@ export default {
         this.$message.error(result.msg);
       }
     },
+    handleSelect(event){
+      this.activeIndex = event
+      if (event == 1) {
+        this.getList()
+      } else {
+        this.getTwStockList()
+      }
+    },
+    mouseenter(){
+      console.log(this.paused);
+   
+      this.paused = true
+
+    },
+    mouseleave(){
+      this.paused = false
+      console.log(this.paused);
+    },
+    async getMarket () {
+      // 獲取大盤指數
+      let result = await api.getChats()
+      this.realTimeQuotesIndexList= []
+      for (let index = 0; index <  result.data.items.length; index++) {
+        const element = result.data.items[index];
+          let item = {
+                currentPoint:  element['6'],
+                floatPoint: element['11'],
+                floatRate: element['56'],
+                indexName: element['200009'],
+            }
+            this.realTimeQuotesIndexList.push(item)
+        }
+    },
     async getList() {
       // 获取表格数据
       let opt = {
@@ -137,28 +224,29 @@ export default {
       };
       this.loading = true;
       let res = await api.getStock(opt);
-      // debugger
       if (res.status === 0) {
         this.list = res.data
-        // this.list = {...res.data,list:[]};
-        // let stock_ids = res.data.list.map(item => item.code).join(",");
-        // const res1 = await api.getTwStockData(stock_ids);
-        
-        // res1.data.forEach((item, index) => {
-        //   let newItem = {
-        //     nowPrice: item["當盤成交價"],
-        //     hcrate: item["Quote change"],
-        //     today_max: item["最高價"],
-        //     today_min: item["最低價"]
-        //   };
-        //   this.list.list.push({ ...res.data.list[index], ...newItem })
-        // });
       } else {
         this.$message.error(data.msg);
       }
       this.loading = false;
     },
-
+    async getTwStockList() {
+      // 获取表格数据
+      let opt = {
+        keyWords: this.form.stock,
+        pageNum: this.form.pageNum,
+        pageSize: this.form.pageSize
+      };
+      this.loading = true;
+      let res = await api.getTwStockList(opt);
+      if (res.status === 0) {
+        this.twList = res.data
+      } else {
+        this.$message.error(data.msg);
+      }
+      this.loading = false;
+    },
     async refreshList() {
       if (this.refresh || this.loading) {
         return;
@@ -232,7 +320,7 @@ export default {
   }
   .fat {
     overflow: hidden;
-    margin-top: 200px;
+    // margin-top: 200px;
   }
   .table-search {
     background-color: #0a1c27;

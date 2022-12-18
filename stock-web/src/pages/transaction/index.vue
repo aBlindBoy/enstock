@@ -33,6 +33,24 @@
                   <span style="font-size: 14px;">{{$t('tradingFloor.quotes')}}</span>
                 </div>
                 <div
+                  class="market transaction-red-bg hangqing"
+                  @click="
+                    optTablebox(
+                      {
+                        name: '',
+                        type: 'first'
+                      },
+                      0,
+                      '1'
+                    )
+                  "
+                >
+                  <span
+                    class="iconfont icon-hangqing transaction-hangqing"
+                  ></span>
+                  <span style="font-size: 14px;">台股</span>
+                </div>
+                <div
                   class="optional optional-item-hover"
                   v-if="$store.state.haslogin"
                   :class="currIndex == 'second' ? 'currIndex' : ''"

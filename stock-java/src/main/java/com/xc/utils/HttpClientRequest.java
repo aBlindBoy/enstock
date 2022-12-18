@@ -57,7 +57,7 @@ public class HttpClientRequest {
             RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10*1000).
                     setConnectionRequestTimeout(10*1000).setSocketTimeout(10*1000)
                     .setAuthenticationEnabled(false)
-//                    .setProxy(httpHost)
+                    .setProxy(httpHost)
                     .build();
             httpGet.setConfig(requestConfig);
             response = httpClient.execute(httpGet);

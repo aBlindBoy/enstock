@@ -63,7 +63,7 @@ public class UsStockApi {
         StockListVO stockListVO = new StockListVO();
         try {
             Connection detailConn = Jsoup.connect( "https://www.moomoo.com/stock/"+stockCode+"-US/");
-            detailConn.proxy("127.0.0.1",7890);
+//            detailConn.proxy("127.0.0.1",7890);
             Document document1 = detailConn.execute().parse();
             Element stockMain = document1.getElementsByClass("stock-main").first();
 

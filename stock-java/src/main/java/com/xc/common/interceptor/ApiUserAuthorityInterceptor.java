@@ -3,6 +3,7 @@ package com.xc.common.interceptor;
 
 import com.google.common.collect.Maps;
 import com.xc.pojo.User;
+import com.xc.utils.MessageUtils;
 import com.xc.utils.PropertiesUtil;
 import com.xc.utils.redis.CookieUtils;
 import com.xc.utils.redis.JsonUtil;
@@ -41,7 +42,7 @@ public class ApiUserAuthorityInterceptor implements HandlerInterceptor {
             Map map = Maps.newHashMap();
             map.put("success", Boolean.valueOf(false));
 //            map.put("msg", "請先登录，無權限訪問user");
-            map.put("msg", "Please log in first, no access");
+            map.put("msg", MessageUtils.get("user.login.noLogin"));
             writer.print(JsonUtil.obj2String(map));
             writer.flush();
             writer.close();
