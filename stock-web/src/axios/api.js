@@ -552,7 +552,7 @@ export function getTwStockList (options) {
 
 
 
-// 下单美股
+// 下单台灣股票
 export function buyTwStock (options) {
   return post('/user/buyTwStock.do', options)
 }
@@ -614,6 +614,39 @@ export function getChats() {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: `/cnyesWs/ws/api/v2/universal/quote?type=USINDEX&column=A&page=0&limit=10`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+
+// 股票tw最新价格
+export function getTwStockData (stock_code) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesWs/ws/api/v1/quote/quotes/TWS:${stock_code}:STOCK?column=I`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+// 五檔
+export function getTwStockExchange(code) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesWs//ws/api/v1/quote/quotes/TWS:${code}:STOCK?column=K`,
       type: "GET",
       success: function(recvData) {
         resolve(recvData)

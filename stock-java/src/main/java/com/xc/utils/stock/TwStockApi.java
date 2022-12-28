@@ -24,7 +24,12 @@ public class TwStockApi {
             result = HttpClientRequest.doGet(
                     String.format("https://ws.api.cnyes.com/ws/api/v1/quote/quotes/TWS:%s:STOCK?column=I,M",code));
 //            result = ClientProxyHttpClientHttp.doGetRequest(TW_URL+ code);
-            log.info("請求數據源接口：{}",result);
+            int statusCode = JSONUtil.parseObj(result).getInt("statusCode");
+            if (statusCode == 404){
+                result = HttpClientRequest.doGet(
+                        String.format("https://ws.api.cnyes.com/ws/api/v1/quote/quotes/TWG:%s:STOCK?column=I,M",code));
+            }
+            log.info("請求數據源編碼：{}，接口返回數據：{}",code,result);
         } catch (Exception e) {
             log.error("获取股票行情出错，錯誤信息 = {}", e);
         }

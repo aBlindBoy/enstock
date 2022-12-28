@@ -258,7 +258,7 @@ public class UserServiceImpl implements IUserService {
 //        stockOption.setStockGid(stock.getStockGid());
 //        stockOption.setIsLock(stock.getIsLock());
 
-        //添加台湾自選股
+        //添加自選股
         stockOption.setUserId(user.getId());
         stockOption.setStockId(stock.getId());
         stockOption.setAddTime(new Date());

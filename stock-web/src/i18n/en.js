@@ -30,6 +30,7 @@ export default  {
         operate:"Operate",
         copySuccess:"Copy successfully!",
         copyError:"Copy failed, please try again!",
+        sheet:"sheet",
     },
     header:{
         home:"Home",
@@ -100,7 +101,7 @@ export default  {
         dayLine:"day line",
         weekLine:"week line",
         monthLine:"monthLine",
-        inOut:"In/Out",
+        inOut:"Buy/Sell",
         needToPay:"need to pay",
         buy:"buy",
         or:"or",

@@ -127,6 +127,9 @@
       hasGetNewOrder: {
         type: Number,
         default: function () {}
+      },
+      marketType:{
+        type: String,
       }
     },
     data () {
@@ -198,7 +201,7 @@
         let opts = {
           state: 0,
           stockCode: '', // 代码
-          stockSpell: '', // 简拼
+          stockSpell: this.marketType, 
           pageNum: this.pageNum,
           pageSize: this.pageSize
         }

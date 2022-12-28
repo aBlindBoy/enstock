@@ -44,6 +44,7 @@
       },
       detail: {
         type: Object,
+        required:true,
         default() {
 
         }
@@ -62,7 +63,6 @@
         isOptionOpt: false, // 是否自選
         type: '0', // 類型
         styleName: 'red',
-        k_top_closing: 99999999999
       }
     },
     computed: {

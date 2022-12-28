@@ -14,10 +14,7 @@ import com.xc.utils.DateTimeUtil;
 import com.xc.utils.HolidayUtil;
 import com.xc.utils.KeyUtils;
 import com.xc.utils.MessageUtils;
-import com.xc.utils.stock.BuyAndSellUtils;
-import com.xc.utils.stock.GeneratePosition;
-import com.xc.utils.stock.GetStayDays;
-import com.xc.utils.stock.UsStockApi;
+import com.xc.utils.stock.*;
 import com.xc.utils.stock.sina.SinaStockApi;
 import com.xc.vo.agent.AgentIncomeVO;
 import com.xc.vo.position.AdminPositionVO;
@@ -33,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -82,6 +80,14 @@ public class UserPositionServiceImpl implements IUserPositionService {
     SiteTaskLogMapper siteTaskLogMapper;
     @Autowired
     StockMapper stockMapper;
+
+    @Autowired
+    TwStockMapper twStockMapper;
+
+    @Autowired
+    ITwStockService twStockService;
+
+
     @Autowired
     AgentAgencyFeeMapper agentAgencyFeeMapper;
     @Autowired
@@ -409,10 +415,10 @@ public class UserPositionServiceImpl implements IUserPositionService {
     }*/
 
     @Transactional
-    public ServerResponse buyTwStock(Integer stockId, Integer buyNum,
+    public ServerResponse buyTwStock(String stockId, Integer buyNum,
                                      Integer buyType, Integer lever,
                                      String nowPrice, String hcrate,
-                                     String preClose, HttpServletRequest request) throws Exception {
+                                    HttpServletRequest request) throws Exception {
 
         // 判断週末不能买
         Date today = new Date();
@@ -464,7 +470,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         }
 
 //        TwStock stock = null;
-        Stock stock = this.stockMapper.findStockByCode(stockId.toString());
+        TwStock stock = this.twStockService.findStockByCode(stockId.toString()).getData();
 //        ServerResponse stock_res = this.stockMapper.findStockByCode(stockId.toString());
 //        if (!stock_res.isSuccess()) {
 //            return ServerResponse.createByErrorMsg("下單失敗，股票代码錯誤");
@@ -511,23 +517,23 @@ public class UserPositionServiceImpl implements IUserPositionService {
 
 
         //BigDecimal buy_amt = now_price.multiply(new BigDecimal(buyNum.intValue())).divide(new BigDecimal(lever.intValue())).setScale(2, 4);
-        BigDecimal buy_amt = now_price.multiply(new BigDecimal(buyNum.intValue()));
+        BigDecimal buy_amt = now_price.multiply(new BigDecimal(buyNum));
 
 
         //BigDecimal buy_amt_autual = now_price.multiply(new BigDecimal(buyNum.intValue())).divide(new BigDecimal(lever.intValue()), 2, 4);
-        BigDecimal buy_amt_autual = buy_amt.divide(new BigDecimal(lever.intValue()), 2, 4);
+        BigDecimal buy_amt_autual = buy_amt.divide(new BigDecimal(lever), 2, RoundingMode.HALF_UP);
 
 
-        int compareInt = buy_amt_autual.compareTo(new BigDecimal(siteSetting.getBuyMinAmt().intValue()));
-        if (compareInt == -1) {
-            return ServerResponse.createByErrorMsg("下單失敗，購買金额小於" + siteSetting
-                    .getBuyMinAmt() + "元");
+        int compareInt = buy_amt_autual.compareTo(new BigDecimal(siteSetting.getBuyMinAmt()));
+        if (compareInt < 0) {
+            return ServerResponse.createByErrorMsg("下單失敗，購買金额小於 " + siteSetting
+                    .getBuyMinAmt() + " 新臺幣");
         }
 
 
         BigDecimal max_buy_amt = user_enable_amt.multiply(siteSetting.getBuyMaxAmtPercent());
         int compareCwInt = buy_amt_autual.compareTo(max_buy_amt);
-        if (compareCwInt == 1) {
+        if (compareCwInt > 0) {
             return ServerResponse.createByErrorMsg("下單失敗，不能超過可用資金的" + siteSetting
                     .getBuyMaxAmtPercent().multiply(new BigDecimal("100")) + "%");
         }
@@ -536,16 +542,16 @@ public class UserPositionServiceImpl implements IUserPositionService {
         int compareUserAmtInt = user_enable_amt.compareTo(buy_amt_autual);
         log.info("用戶可用金额 = {}  实际購買金额 =  {}", user_enable_amt, buy_amt_autual);
         log.info("比较 用戶金额 和 实际 購買金额 =  {}", Integer.valueOf(compareUserAmtInt));
-        if (compareUserAmtInt == -1) {
-            return ServerResponse.createByErrorMsg("下單失敗，融資可用金额小於" + buy_amt_autual + "元");
+        if (compareUserAmtInt < 0) {
+            return ServerResponse.createByErrorMsg("下單失敗，融資可用金额小於 " + buy_amt_autual + " 新臺幣");
         }
 
-        if (user.getUserIndexAmt().compareTo(new BigDecimal("0")) == -1) {
-            return ServerResponse.createByErrorMsg("失敗，指数总資金小於0");
-        }
-        if (user.getUserFutAmt().compareTo(new BigDecimal("0")) == -1) {
-            return ServerResponse.createByErrorMsg("失敗，期货总資金小於0");
-        }
+//        if (user.getUserIndexAmt().compareTo(new BigDecimal("0")) == -1) {
+//            return ServerResponse.createByErrorMsg("失敗，指数总資金小於0");
+//        }
+//        if (user.getUserFutAmt().compareTo(new BigDecimal("0")) == -1) {
+//            return ServerResponse.createByErrorMsg("失敗，期货总資金小於0");
+//        }
 
         UserPosition userPosition = new UserPosition();
         userPosition.setPositionType(user.getAccountType());
@@ -561,7 +567,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         userPosition.setBuyOrderTime(new Date());
         userPosition.setBuyOrderPrice(now_price);
         userPosition.setOrderDirection((buyType.intValue() == 0) ? "看涨" : "看跌");
-
+        userPosition.setStockSpell("TW");
         userPosition.setOrderNum(buyNum);
         userPosition.setOrderLever(lever);
         userPosition.setOrderTotalPrice(buy_amt);
@@ -1807,11 +1813,9 @@ public class UserPositionServiceImpl implements IUserPositionService {
             BigDecimal subPrice = position.getSellOrderPrice().subtract(position.getBuyOrderPrice());
             //profitAndLose = subPrice.multiply(new BigDecimal(position.getOrderNum().intValue())).multiply(new BigDecimal(position.getOrderLever())).setScale(2,4);
             profitAndLose = subPrice.multiply(new BigDecimal(position.getOrderNum().intValue()));
-            if ("看跌".equals(position.getOrderDirection())) {
+            if ("bullish".equals(position.getOrderDirection())) {
                 profitAndLose = profitAndLose.negate();
             }
-
-
             allProfitAndLose = profitAndLose.subtract(position.getOrderFee()).subtract(position.getOrderSpread()).subtract(position.getOrderStayFee()).subtract(position.getSpreadRatePrice());
         } else {
 
@@ -1821,7 +1825,15 @@ public class UserPositionServiceImpl implements IUserPositionService {
 
 //            String twStockResult= UsStockApi.getStock(position.getStockCode());
 //            StockListVO stockListVO=UsStockApi.assembleStockListVO(twStockResult);
-            StockListVO stockListVO= UsStockApi.getMoomooStock(position.getStockCode());
+            StockListVO stockListVO=null;
+            if (position.getStockGid().equals("US")){
+                 stockListVO= UsStockApi.getMoomooStock(position.getStockCode());
+            }else{
+               String result = TwStockApi.getTwStock(position.getStockCode());
+                stockListVO =  TwStockApi.assembleStockListVO(result);
+            }
+
+
             nowPrice = stockListVO.getNowPrice();
             BigDecimal subPrice = (new BigDecimal(nowPrice)).subtract(position.getBuyOrderPrice());
             //profitAndLose = subPrice.multiply(new BigDecimal(position.getOrderNum().intValue())).multiply(new BigDecimal(position.getOrderLever())).setScale(2,4);
@@ -1881,7 +1893,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
     }
 
     @Override
-    public ServerResponse buyUsStock(String stockId, Integer buyNum, Integer buyType, Integer lever, String nowPrice, String hcrate, String preClose, HttpServletRequest request) throws Exception {
+    public ServerResponse buyUsStock(String stockId, Integer buyNum, Integer buyType, Integer lever, String nowPrice, String hcrate,  HttpServletRequest request) throws Exception {
         // 判断週末不能买
         Date today = new Date();
         Calendar c = Calendar.getInstance();
@@ -2042,6 +2054,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         userPosition.setBuyOrderTime(new Date());
         userPosition.setBuyOrderPrice(now_price);
         userPosition.setOrderDirection((buyType.intValue() == 0) ? "bullish" : "bearish");
+        userPosition.setStockSpell("US");
 
         userPosition.setOrderNum(buyNum);
         userPosition.setOrderLever(lever);

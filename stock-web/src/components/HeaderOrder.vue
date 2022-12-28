@@ -18,7 +18,7 @@
 						<el-menu-item index="down">{{$t('header.softwareDownload')}}</el-menu-item>
 						<el-menu-item index="introduce">{{$t('header.companyProfile')}}</el-menu-item>
 						<el-menu-item index="enterprise">{{$t('header.news')}}</el-menu-item>
-						<el-menu-item index="/transaction?code=A" style="color:#000; display: flex;align-items: center;">
+						<el-menu-item index="/transaction?code=A&marketType=usa" style="color:#000; display: flex;align-items: center;">
 							<div class="market-data">
 								<img src="../assets/image/dp.png" v-if="this.$store.state.systemColor == 'red-bg'" alt />
 								<img src="../../static/img/gupiao.png" v-if="this.$store.state.systemColor == 'black-bg'" alt="">
@@ -142,7 +142,6 @@
 			let locale = localStorage.getItem("locale") 
 			
 			if(locale){
-				debugger
 				this.locale = locale
 			}
 			// this.timer = setInterval(this.refreshOutMoneyOrderNum, 1000*60)
@@ -242,18 +241,19 @@
 					pageSize: 1
 				};
 				this.loading = true;
-				let data = await api.getStock(opt);
+				// let data = await api.getStock(opt);
 				debugger
-				if (data.status === 0) {
+				// if (data.status === 0) {
 					this.$router.push({
 						path: "/transaction",
 						query: {
-							code: data.data.list[0].code,
+							code: 'A',
+							marketType:"usa"
 						},
 					});
-				} else {
-					this.$message.error(data.msg);
-				}
+				// } else {
+				// 	this.$message.error(data.msg);
+				// }
 			},
 			selectLocale(locale){
 				this.$i18n.locale = locale

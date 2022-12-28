@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 public interface IUserPositionService {
 //  ServerResponse buy(Integer paramInteger1, Integer paramInteger2, Integer paramInteger3, Integer paramInteger4, HttpServletRequest paramHttpServletRequest) throws Exception;
 
-  ServerResponse buyTwStock(Integer paramInteger1, Integer paramInteger2, Integer paramInteger3, Integer paramInteger4,  String now_price, String hcrate,String preClose, HttpServletRequest paramHttpServletRequest) throws Exception;
+  ServerResponse buyTwStock(String paramInteger1, Integer paramInteger2,
+                            Integer paramInteger3, Integer paramInteger4,
+                            String now_price, String hcrate,
+                            HttpServletRequest paramHttpServletRequest) throws Exception;
 
 //  ServerResponse sell(String paramString, int paramInt) throws Exception;
 
@@ -65,7 +68,7 @@ public interface IUserPositionService {
   PositionProfitVO getPositionProfitVO(UserPosition position);
 
 
-  ServerResponse buyUsStock(String stockId, Integer buyNum, Integer buyType, Integer lever, String nowPrice, String hcrate, String preClose, HttpServletRequest request) throws Exception;
+  ServerResponse buyUsStock(String stockId, Integer buyNum, Integer buyType, Integer lever, String nowPrice, String hcrate,  HttpServletRequest request) throws Exception;
 
   ServerResponse sellUsStock(String positionSn, int i) throws Exception;
 }

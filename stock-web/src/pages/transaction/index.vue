@@ -6,9 +6,10 @@
     <el-container class="main-wrapper">
       <el-main class="transform-main " style="overflow: hidden;">
         <div
-          style="margin-bottom: 2px;display: flex;background-color: #000;justify-content: space-between;"
+        
         >
-          <div
+        <!--   style="margin-bottom: 2px;display: flex;background-color: #000;justify-content: space-between;" -->
+          <!-- <div
             class="tab-bg"
             style="display: flex;justify-content: space-between; height: 40px;"
           >
@@ -38,9 +39,9 @@
                     optTablebox(
                       {
                         name: '',
-                        type: 'first'
+                        type: 'four'
                       },
-                      0,
+                      1,
                       '1'
                     )
                   "
@@ -63,30 +64,44 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
+
+
+          <el-menu
+              :default-active="activeIndex"
+              mode="horizontal"
+              @select="optTablebox"
+              style="height:30px"
+              text-color="#fff"
+              active-text-color="#ffd04b">
+              <el-menu-item  class="banner-menu first" index="1">美股</el-menu-item>
+              <el-menu-item  class="banner-menu first" index="2">台股</el-menu-item>
+              <el-menu-item  class="banner-menu first" index="3">自選</el-menu-item>
+            </el-menu>
         </div>
 
         <el-row :gutter="3">
         
         
           <el-col :span="5" v-if="cutIndex == 1">
-            <!--  ==> 监听融资下单 -->
             <table-box
               ref="tableBox"
               @toTransaction="toTransaction"
               :hasGetNewOrder="hasGetNewOrder2"
-              :handleOptions2="handleOptionsindex2"
-              :handleOptions3="handleOptions3"
               :handleOptions4="handleOptions4"
             ></table-box>
+            <!-- :handleOptions2="handleOptionsindex2"
+              :handleOptions3="handleOptions3" -->
           </el-col>
           <el-col class="alterWidthCenter" :span="14" v-if="cutIndex == 1" style="height: calc(100vh - 103px);">
             <ChartNew
+              ref="ChartNew"
               :detail="detail"
               :code="code"
               :ucode="ucode"
+              :key="ucode"
             ></ChartNew>
-
+            <!-- :key="ChartNewNumber" -->
             <!-- 持仓单子 -->
 
             <div class="tab-box jiaoyi-000" style="height: calc(100vh);margin-top:5px">
@@ -98,28 +113,50 @@
               >
               <!--  v-if="$store.state.haslogin" -->
                 <el-tab-pane :label="$t('tradingFloor.inOut')" name="zero">
-                  <BuyBox1
-                    @selectDetailsItem="selectDetailsItem"
-                    :cutIndex="cutIndex"
-                    :detailsCont="detailsCont"
-                    :hasGetNewOrder="hasGetNewOrder"
-                    :handleOptions2="handleOptions2"
+                  <BuyBox
+                    ref="BuyBox"
+                    :detail="detail"
                     :settingInfo="settingInfo"
                     :code="code"
-                  ></BuyBox1>
+                    :key="ucode"
+                  ></BuyBox>
+                  <!-- :cutIndex="cutIndex"
+                    :detailsCont="detailsCont"
+                    :hasGetNewOrder="hasGetNewOrder" -->
                 </el-tab-pane>
-                <el-tab-pane :label="$t('tradingFloor.financingPosition')" name="first">
-                  <!-- 我的持仓 -->
+                <el-tab-pane label="美股库存" name="first">
+                  <!-- 美股持仓 -->
                   <hold-position
                     :haslogin="haslogin"
                     :hasGetNewOrder="hasGetNewOrder"
                     :handleOptions="handleOptions"
+                    key="US"
+                    marketType="US"
                   ></hold-position>
                 </el-tab-pane>
 
-                <el-tab-pane
-                :label="$t('tradingFloor.closePosition')"  name="second">
+                <el-tab-pane label="美股历史库存"  name="second">
                   <sell-box
+                    :hasChangeSell="hasChangeSell"
+                    :handleOptions="handleOptions"
+                    key="US"
+                     marketType="US"
+                  ></sell-box>
+                </el-tab-pane>
+                <el-tab-pane
+                label="台股库存"  name="three">
+                  <hold-position
+                    :hasChangeSell="hasChangeSell"
+                    :handleOptions="handleOptions"
+                    marketType="TW"
+                    key="TW"
+                    ></hold-position>
+                </el-tab-pane>
+                <el-tab-pane
+                label="台股历史库存"  name="four">
+                  <sell-box
+                    key="TW"
+                    marketType="TW"
                     :hasChangeSell="hasChangeSell"
                     :handleOptions="handleOptions"
                   ></sell-box>
@@ -215,9 +252,10 @@
 							</div>
             </div>
           </el-col>
-          <el-col class="alterWidthLeft" :span="5" v-if="cutIndex == 1">
+          <el-col class="alterWidthLeft" :span="5" >
             <Company
               :code="code"
+              :key="code"
             ></Company>
           </el-col>
         </el-row>
@@ -239,7 +277,7 @@ import SellBox from "./components/sell";
 // import FuturesSellBox from "./components/futuressell";
 // import FundsSellBox from "./components/fundssell";
 import Company from "./components/company";
-import BuyBox1 from "./components/buy1";
+import BuyBox from "./components/buy";
 
 import * as api from "@/axios/api";
 
@@ -262,7 +300,7 @@ export default {
     // FundsHoldPosition,
     // FuturesSellBox,
     // FundsSellBox,
-    BuyBox1
+    BuyBox
   },
   props: {},
   data() {
@@ -297,45 +335,47 @@ export default {
       isChartOld: false,
       windowWidth: document.documentElement.clientWidth, //实时屏幕宽度
       windowHeight: document.documentElement.clientHeight - 160, //实时屏幕高度
-      windowHeight1: document.documentElement.clientHeight - 200 //实时屏幕高度
+      windowHeight1: document.documentElement.clientHeight - 200, //实时屏幕高度
+      activeIndex:"",
+      ChartNewNumber:1,//k线key用来刷新组件
     };
   },
   watch: {
-    change(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.getDetail(); // 分时数据
-      }
-    }
+    // change(newVal, oldVal) {
+    //   if (newVal !== oldVal) {
+    //     this.getDetail(); // 分时数据
+    //   }
+    // }
   },
   computed: {
     change() {
       return this.$route.query.code;
     }
   },
-  beforeRouteEnter(to, from, next) {
-    // 现在想不做判断，进入之前一律刷新一次
-    if (!to.query.code) {
-      let query = to.query;
-      query.code = "A";
-      next({
-        path: to.path,
-        query: query
-      });
-    }
-    next();
-  },
-  beforeRouteUpdate(to, from, next) {
-    // 现在想不做判断，进入之前一律刷新一次
-    if (!to.query.code) {
-      let query = to.query;
-      query.code = "A";
-      next({
-        path: to.path,
-        query: query
-      });
-    }
-    next();
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   // 现在想不做判断，进入之前一律刷新一次
+  //   if (!to.query.code) {
+  //     let query = to.query;
+  //     query.code = "A";
+  //     next({
+  //       path: to.path,
+  //       query: query
+  //     });
+  //   }
+  //   next();
+  // },
+  // beforeRouteUpdate(to, from, next) {
+  //   // 现在想不做判断，进入之前一律刷新一次
+  //   if (!to.query.code) {
+  //     let query = to.query;
+  //     query.code = "A";
+  //     next({
+  //       path: to.path,
+  //       query: query
+  //     });
+  //   }
+  //   next();
+  // },
   beforeCreate() {},
   created() {
     setInterval(() => {
@@ -352,12 +392,20 @@ export default {
 
     this.code = this.$route.query.code;
     this.ucode = this.$route.query.code;
-
-    if (this.code.indexOf("hf_") != -1) {
-      this.isChartOld = true;
+ 
+    if (this.$route.query.marketType == 'usa') {
+      this.activeIndex = '1'
+      // this.$refs.tableBox.activeName = "first";
     } else {
-      this.isChartOld = false;
+      this.activeIndex = '2'
+      // this.$refs.tableBox.activeName = "four";
     }
+
+    // if (this.code.indexOf("hf_") != -1) {
+    //   this.isChartOld = true;
+    // } else {
+    //   this.isChartOld = false;
+    // }
 
     if(this.$store.state.haslogin){
       
@@ -368,44 +416,49 @@ export default {
     if (!this.$store.state.productSetting) {
       this.getProductSetting();
     }
+    
+    this.$nextTick(() => {
+      this.OnSize();
+    });
   },
   mounted() {
-    window.activeName1 = "first";
    
+    // window.activeName1 = "first";
+    this.getDetail()
     // this.getNewsList();
   },
   methods: {
-    qidai() {
-      this.$message("Stay tuned");
-    },
+    // qidai() {
+    //   this.$message("Stay tuned");
+    // },
    
-    toUserCenter() {
-      // 進入個人中心
-      this.$router.push("/user");
-    },
-    async handleCommand(val) {
-      if (val === "a") {
-        // 修改密碼
-      } else if (val === "c") {
-        this.$store.state.loginIsShow = true;
-      } else if (val === "d") {
-        this.$router.push("/user");
-      } else {
-        // 退出登錄
-        this.clearCookie();
-        let data = await api.logout();
-        if (data.status === 0) {
-          // 退出登錄清除本地存儲 清除用戶數據
-          window.localStorage.clear();
-          this.$store.state.haslogin = false;
-          this.$message.success("you are logged out");
-          this.$store.state.userInfo = {};
-          this.$router.push("/login");
-        } else {
-          this.$message.error(data.msg);
-        }
-      }
-    },
+    // toUserCenter() {
+    //   // 進入個人中心
+    //   this.$router.push("/user");
+    // },
+    // async handleCommand(val) {
+    //   if (val === "a") {
+    //     // 修改密碼
+    //   } else if (val === "c") {
+    //     this.$store.state.loginIsShow = true;
+    //   } else if (val === "d") {
+    //     this.$router.push("/user");
+    //   } else {
+    //     // 退出登錄
+    //     this.clearCookie();
+    //     let data = await api.logout();
+    //     if (data.status === 0) {
+    //       // 退出登錄清除本地存儲 清除用戶數據
+    //       window.localStorage.clear();
+    //       this.$store.state.haslogin = false;
+    //       this.$message.success("you are logged out");
+    //       this.$store.state.userInfo = {};
+    //       this.$router.push("/login");
+    //     } else {
+    //       this.$message.error(data.msg);
+    //     }
+    //   }
+    // },
     toLogin1() {
       this.$router.push("/login");
     },
@@ -416,58 +469,87 @@ export default {
       document.getElementsByTagName("body")[0].className = command;
       window.drawLine && window.drawLine();
     },
-    toIndex() {
-      this.$router.push({
-        path: "/"
-      });
-    },
+
     async toTransaction(row) {
       var ziCode = this.$route.query;
       // 出仓数据
-      var data = await api.findUserPositionByCode({
-        stockCode: row.code || ziCode.code
-      });
-      console.log(row, "222222222222222");
-      if (data.status == 0) {
-        this.$store.commit("setUserPositionData", data.data.list[0]);
-      }
+      // var data = await api.findUserPositionByCode({
+      //   stockCode: row.code || ziCode.code
+      // });
+ 
+      this.ucode = row.code || ziCode.code
+      this.getDetail()
+      // if (data.status == 0) {
+      //   this.$store.commit("setUserPositionData", data.data.list[0]);
+      // }
     },
-    async toStock() {
-      //加载跟多新闻列表
-      var page = ++this.pageNum;
-      var query = {
-        pageNum: page,
-        pageSize: 15,
-        type: this.newType
-      };
-      var list = await this.getNewsList(query);
-      console.log(list);
-      if (list.length <= 0) {
-        this.$message({
-          message: "no more data",
-          type: "warning"
+    // async toStock() {
+    //   //加载跟多新闻列表
+    //   var page = ++this.pageNum;
+    //   var query = {
+    //     pageNum: page,
+    //     pageSize: 15,
+    //     type: this.newType
+    //   };
+    //   var list = await this.getNewsList(query);
+    //   console.log(list);
+    //   if (list.length <= 0) {
+    //     this.$message({
+    //       message: "no more data",
+    //       type: "warning"
+    //     });
+    //     return;
+    //   }
+    //   this.newsList.push(...list);
+    // },
+
+
+    // 切换美股台股
+    optTablebox(index) {
+      debugger
+      this.activeIndex = index
+      
+      if (index == 1) {
+        this.$router.push({
+          path: "/transaction",
+          query: {
+            code: "A",
+            marketType: 'usa'
+          }
         });
-        return;
-      }
-      this.newsList.push(...list);
-    },
-    optTablebox(item, index, type, zi) {
-      // 行情tab选项
-      this.optionalIndex = -1;
-      if (zi) {
-        this.cutIndex = 1;
-        console.log(zi);
-        this.currIndex = "second";
+        this.$refs.tableBox.activeName = "first";
+      }else if (index == 2) {
+        this.$router.push({
+          path: "/transaction",
+          query: {
+            code: "00632R",
+            marketType: 'tw'
+          }
+        });
+        this.$refs.tableBox.activeName = "four";
+      }else if (index == 3) {
+         // 自選
+        // this.cutIndex = 1;
+        // this.currIndex = "second";
         setTimeout(() => {
           this.$refs.tableBox.activeName = "second";
         }, 500);
-        window.activeName1 = "zi";
+        // window.activeName1 = "zi";
         return;
       }
-      this.currIndex = index;
-      this.cutIndex = type;
-      window.activeName1 = item.type;
-      this.$refs.tableBox.activeName = item.type;
+      this.getDetail()
+
+      // this.currIndex = index;
+      // this.cutIndex = type;
+      // window.activeName1 = item.type;
+      // this.$refs.tableBox.activeName = item.type;
+
+      
+      
+    //  this,ChartNewNumber +=1;
+    //  this,ChartNewNumber =this.ChartNewNumber+1;
+
+      // this.$refs.ChartNew.$forceUpdate
       // if(item.type == 'start'){
       // 	this.$refs.tableBox.getlistStart()
       // }
@@ -491,41 +573,41 @@ export default {
         this.activeName = "second";
       }
     },
-    handleOptionsindex(opts) {
-      // 监听平仓状态 指数
-      this.hasChangeSell2 = opts;
-      if (this.hasChangeSell2) {
-        this.activeName = "fours";
-      }
-    },
-    handleOptionsFutures(opts) {
-      // 监听平仓状态 期货
-      this.hasChangeSell3 = opts;
-      if (this.hasChangeSell3) {
-        this.activeName = "six";
-      }
-    },
-    handleOptionsFunds(opts) {
-      // 监听平仓状态 配资
-      this.hasChangeSell4 = opts;
-      if (this.hasChangeSell4) {
-        this.activeName = "eight";
-      }
-    },
-    handleOptions2(opts) {
-      // 监听指数下单状态
-      this.hasGetNewOrder = opts;
-      if (this.hasGetNewOrder) {
-        this.activeName = "first";
-      }
-    },
-    handleOptions3(opts) {
-      // 监听期货下单状态
-      this.hasGetNewOrder3 = opts;
-      if (this.hasGetNewOrder3) {
-        this.activeName = "five";
-      }
-    },
+    // handleOptionsindex(opts) {
+    //   // 监听平仓状态 指数
+    //   this.hasChangeSell2 = opts;
+    //   if (this.hasChangeSell2) {
+    //     this.activeName = "fours";
+    //   }
+    // },
+    // handleOptionsFutures(opts) {
+    //   // 监听平仓状态 期货
+    //   this.hasChangeSell3 = opts;
+    //   if (this.hasChangeSell3) {
+    //     this.activeName = "six";
+    //   }
+    // },
+    // handleOptionsFunds(opts) {
+    //   // 监听平仓状态 配资
+    //   this.hasChangeSell4 = opts;
+    //   if (this.hasChangeSell4) {
+    //     this.activeName = "eight";
+    //   }
+    // },
+    // handleOptions2(opts) {
+    //   // 监听指数下单状态
+    //   this.hasGetNewOrder = opts;
+    //   if (this.hasGetNewOrder) {
+    //     this.activeName = "first";
+    //   }
+    // },
+    // handleOptions3(opts) {
+    //   // 监听期货下单状态
+    //   this.hasGetNewOrder3 = opts;
+    //   if (this.hasGetNewOrder3) {
+    //     this.activeName = "five";
+    //   }
+    // },
     handleOptions4(opts) {
       // 监听配资下单状态
       this.hasGetNewOrder4 = opts;
@@ -533,50 +615,75 @@ export default {
         this.activeName = "seven";
       }
     },
-    handleOptionsindex2(opts) {
-      // 监听下单状态
-      this.hasGetNewOrder2 = opts;
-      if (this.hasGetNewOrder2) {
-        this.activeName = "three";
-      }
-    },
+    // handleOptionsindex2(opts) {
+    //   // 监听下单状态
+    //   this.hasGetNewOrder2 = opts;
+    //   if (this.hasGetNewOrder2) {
+    //     this.activeName = "three";
+    //   }
+    // },
     async getDetail() {
-      if (this.$route.query.code.indexOf("hf_") != -1) {
-        this.isChartOld = true;
-      } else {
-        this.isChartOld = false;
-      }
+      // if (this.$route.query.code.indexOf("hf_") != -1) {
+      //   this.isChartOld = true;
+      // } else {
+      //   this.isChartOld = false;
+      // }
       let opts = {
         code: this.$route.query.code
       };
+      debugger
       this.loading = true;
-      let res1 = await api.getUsStockData(opts.code)
-      let stock = res1.data[0];
-      let stockDetail ={}
-      stockDetail.name = stock["200024"];//股票名稱
-      stockDetail.date = stock["200007"];//最近交易日期
-      // stockDetail.time = stock[""];//最近成交時刻
-      stockDetail.price = stock["6"];//最新價格
-      stockDetail.rate = stock["11"];//漲跌
-      stockDetail.hcrate = stock["56"];//漲跌幅
-      stockDetail.high = stock["12"];//最高價
-      stockDetail.low = stock["13"];//最低價
-      stockDetail.volumn = stock["800001"];//累積成交量
-      stockDetail.amount = stock[""];//成交金額
-      stockDetail.yes = stock["21"];//昨收
-      stockDetail.open = stock["19"];//開盤價
-      
-      if (stockDetail.rate > 0) {
-        stockDetail.color = "upColor";
+      if(this.$route.query.marketType == "usa"){
+          let res1 = await api.getUsStockData(opts.code)
+          let stock = res1.data[0];
+          let stockDetail ={}
+          stockDetail.name = stock["200024"];//股票名稱
+          stockDetail.date = stock["200007"];//最近交易日期
+          // stockDetail.time = stock[""];//最近成交時刻
+          stockDetail.nowPrice = stock["6"];//最新價格
+          stockDetail.rate = stock["11"];//漲跌
+          stockDetail.hcrate = stock["56"];//漲跌幅
+          stockDetail.high = stock["12"];//最高價
+          stockDetail.low = stock["13"];//最低價
+          stockDetail.volumn = stock["800001"];//累積成交量
+          stockDetail.amount = stock[""];//成交金額
+          stockDetail.yes = stock["21"];//昨收
+          stockDetail.open = stock["19"];//開盤價
+          
+          if (stockDetail.rate > 0) {
+            stockDetail.color = "upColor";
+          }
+          if (stockDetail.rate < 0) {
+            stockDetail.color = "lowColor";
+          }
+          this.ucode = opts.code;
+          
+          this.code = opts.code;
+          this.detail = stockDetail;
+      }else{
+        let res1 = await api.getTwStockData(opts.code)
+        let stock = res1.data[0];
+        let stockDetail ={}
+        stockDetail.name = stock["200009"];//股票名稱
+        stockDetail.date = stock["200007"];//最近交易日期
+        stockDetail.nowPrice = stock["6"];//最新價格
+        stockDetail.rate = stock["11"];//漲跌
+        stockDetail.hcrate = stock["56"];//漲跌幅
+        stockDetail.high = stock["12"];//最高價
+        stockDetail.low = stock["13"];//最低價
+        stockDetail.volumn = stock["800001"];//累積成交量
+        stockDetail.amount = stock[""];//成交金額
+        stockDetail.yes = stock["21"];//昨收
+        stockDetail.open = stock["19"];//開盤價
+        this.ucode = opts.code;
+        this.code =  opts.code;
+        this.detail = stockDetail;
       }
-      if (stockDetail.rate < 0) {
-        stockDetail.color = "lowColor";
-      }
-      this.ucode = opts.code;
-      
-      this.code = opts.code;
       this.loading = false;
-      this.detail = stockDetail;
+      // this.$refs.ChartNew.$forceUpdate
+      // this,ChartNewNumber =this.ChartNewNumber+1;
+      // this.$refs.BuyBox.$forceUpdate
+
     },
     toRegister() {
       // 注册
@@ -587,29 +694,29 @@ export default {
       // this.$store.state.loginIsShow = true;
       this.$router.push("/login");
     },
-    async getList() {
-      // 获取表格数据
-      let opt = {
-        pageNum: 1,
-        pageSize: 1
-      };
-      let data = await api.getStock(opt);
-      if (data.status === 0) {
-        // data.data.list.forEach(element => {
-        //     this.list.push(element)
-        // });
-        this.list = data.data.list[0];
-        this.$router.push({
-          path: "/transaction",
-          query: {
-            code: data.data.list[0].code
-          }
-        });
-        // window.location.reload()
-      } else {
-        this.$message.error(data.msg);
-      }
-    },
+    // async getList() {
+    //   // 获取表格数据
+    //   let opt = {
+    //     pageNum: 1,
+    //     pageSize: 1
+    //   };
+    //   let data = await api.getStock(opt);
+    //   if (data.status === 0) {
+    //     // data.data.list.forEach(element => {
+    //     //     this.list.push(element)
+    //     // });
+    //     this.list = data.data.list[0];
+    //     this.$router.push({
+    //       path: "/transaction",
+    //       query: {
+    //         code: data.data.list[0].code
+    //       }
+    //     });
+    //     // window.location.reload()
+    //   } else {
+    //     this.$message.error(data.msg);
+    //   }
+    // },
     async getSettingInfo() {
       // 网站设置信息
       let data = await api.getSetting();
@@ -652,6 +759,23 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.el-menu--horizontal>.el-menu-item{
+    height: 30px !important;
+    line-height: 30px !important;
+}
+.el-menu-item:focus, .el-menu-item:hover {
+  background-color: rgba(0,0,0,0) !important;
+}
+
+.black-bg .el-menu {
+  background-color: #000;
+  color: #fff;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: 10px;
+}
+
+
 .alterWidthLeft {
   width: 18.83333%;
 }

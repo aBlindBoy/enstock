@@ -149,6 +149,10 @@ export default {
         };
       }
     },
+    marketType:{
+        type:String,
+        default:""
+    },
     getData: {
       type: Function,
       default: function() {}
@@ -177,12 +181,13 @@ export default {
       this.getData();
     },
     toTransaction(row, column, event) {
+      console.log(this.marketType);
       debugger
-      // 去交易界面
       this.$router.push({
         path: "/transaction",
         query: {
-          code: row.code
+          code: row.code,
+          marketType:this.marketType
         }
       });
     }

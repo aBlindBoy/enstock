@@ -176,22 +176,23 @@ export default {
       // };
       // this.loading = true;
       // let data = await api.getTwStockPageList(opt);
-      let opt = {
-					pageNum: 1,
-					pageSize: 1
-				};
-				this.loading = true;
-				let data = await api.getStock(opt);
-      if (data.status === 0) {
+      // let opt = {
+			// 		pageNum: 1,
+			// 		pageSize: 1
+			// 	};
+			// 	this.loading = true;
+				// let data = await api.getStock(opt);
+      // if (data.status === 0) {
         this.$router.push({
           path: "/transaction",
           query: {
-            code: data.data.list[0].code,
+            code: "A",
+            marketType:"usa"
           },
         });
-      } else {
-        this.$message.error(data.msg);
-      }
+      // } else {
+      //   this.$message.error(data.msg);
+      // }
     },
     toRegister() {
       // 去注册

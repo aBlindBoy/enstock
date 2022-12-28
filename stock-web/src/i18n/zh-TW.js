@@ -30,6 +30,7 @@ export default  {
         operate : "操作",
         copySuccess : "複製成功！",
         copyError : "複製失敗，請重試！",
+        sheet:"張",
     },
     header:{
         home : "主頁",
@@ -91,7 +92,7 @@ export default  {
     },
     tradingFloor:{
         loadMore : "點擊以加載更多",
-        quotes : "市場",
+        quotes : "美股",
         optional : "自選",
         search : "請輸入股票代碼和股票",
         real : "實时",
@@ -100,7 +101,7 @@ export default  {
         dayLine : "日線",
         weekLine : "周線",
         monthLine : "月線",
-        inOut : "輸入/輸出",
+        inOut : "買入/賣出",
         needToPay : "需要支付",
         buy : "購買",
         or : "或",
@@ -113,7 +114,7 @@ export default  {
         leverageIsNull : "請輸入或選擇杠杆",
         directionIsNull : "請選擇買賣方向",
         financingPosition:"融資庫存",
-        closePosition:"歷史庫存"
+        closePosition:"歷史庫存",
     },
     product:{
         title : "產品說明",

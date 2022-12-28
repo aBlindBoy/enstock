@@ -37,8 +37,20 @@ function formatDay(dat){
   var newDate = year +""+ mon +""+ day
   return newDate;
 }
-
-
+function geturlparam(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+  var r = window.location.hash.split("?")[1].substr(1).match(reg);  //匹配目标参数
+  if (r != null) return unescape(r[2]); return null; //返回参数值
+}
+// function geturlparam(name) {
+//   var query = window.location.search.substring(1);
+//   var vars = query.split("&");
+//   for (var i = 0; i < vars.length; i++) {
+//       var pair = vars[i].split("=");
+//       if (pair[0] == name) { return pair[1]; }
+//   }
+//   return (false);
+// }
 
 //源码调试用
 //import Chart from '../../jscommon/umychart.vue/umychart.vue.js'
@@ -500,17 +512,17 @@ HQData.GetInternalSymbol = function(
   symbol //HQChart内置代码转成东方财富代码
 ) {
   var aryData = symbol.split(".");
-  var symbolUpper = symbol.toUpperCase();
-  var arySymbol = aryData[0].split("_");
-  var market = parseInt(arySymbol[1]);
-  var internalSymbol = arySymbol[0];
+  // var symbolUpper = symbol.toUpperCase();
+  // var arySymbol = aryData[0].split("_");
+  // var market = parseInt(arySymbol[1]);
+  // var internalSymbol = arySymbol[0];
 
-  if (internalSymbol.indexOf("-") > 0) {
-    var aryValue = internalSymbol.split("-");
-    internalSymbol = aryValue[1];
-  }
+  // if (internalSymbol.indexOf("-") > 0) {
+  //   var aryValue = internalSymbol.split("-");
+  //   internalSymbol = aryValue[1];
+  // }
 
-  return { Market: market, Symbol: internalSymbol };
+  return { market: aryData[1], symbol: aryData[0] };
   /*
 
     if (HQChart.Chart.MARKET_SUFFIX_NAME.IsUSA(symbolUpper))    //美股
@@ -1005,68 +1017,68 @@ HQData.GetForeignExchangeData = function(upperSymbol, width) {
 //  美元指数
 //
 ///////////////////////////////////////////////////////////////////////
-HQData.GetETTimeData = function(upperSymbol, minuteStringData) {
-  if (upperSymbol == "UDI_100.ET") {
-    //美元指数 6:00 - 5:59
-    const TIME_SPLIT = [
-      { Start: 600, End: 2359 },
-      { Start: 0, End: 559 }
-    ];
+// HQData.GetETTimeData = function(upperSymbol, minuteStringData) {
+//   if (upperSymbol == "UDI_100.ET") {
+//     //美元指数 6:00 - 5:59
+//     const TIME_SPLIT = [
+//       { Start: 600, End: 2359 },
+//       { Start: 0, End: 559 }
+//     ];
 
-    return minuteStringData.CreateTimeData(TIME_SPLIT);
-  }
-};
+//     return minuteStringData.CreateTimeData(TIME_SPLIT);
+//   }
+// };
 
-HQData.GetETData = function(upperSymbol) {
-  if (upperSymbol == "UDI_100.ET") {
-    const data = {
-      //完整模式
-      Full: [
-        [0, 1, "RGB(200,200,200)", "06:00"],
-        [120, 1, "RGB(200,200,200)", "08:00"],
-        [240, 1, "RGB(200,200,200)", "10:00"],
-        [360, 1, "RGB(200,200,200)", "12:00"],
-        [480, 0, "RGB(200,200,200)", "14:00"],
-        [600, 1, "RGB(200,200,200)", "16:00"],
-        [720, 1, "RGB(200,200,200)", "18:00"],
-        [840, 1, "RGB(200,200,200)", "20:00"],
-        [960, 1, "RGB(200,200,200)", "22:00"],
-        [1080, 1, "RGB(200,200,200)", "0:00"],
-        [1200, 1, "RGB(200,200,200)", "02:00"],
-        [1320, 1, "RGB(200,200,200)", "04:00"],
-        [1439, 1, "RGB(200,200,200)", "05:59"]
-      ],
-      //简洁模式
-      Simple: [
-        [0, 1, "RGB(200,200,200)", "06:00"],
-        [240, 1, "RGB(200,200,200)", "10:00"],
-        [480, 0, "RGB(200,200,200)", "14:00"],
-        [720, 1, "RGB(200,200,200)", "18:00"],
-        [960, 1, "RGB(200,200,200)", "22:00"],
-        [1200, 1, "RGB(200,200,200)", "02:00"],
-        [1439, 1, "RGB(200,200,200)", "05:59"]
-      ],
-      //最小模式
-      Min: [
-        [0, 1, "RGB(200,200,200)", "06:00"],
-        [720, 1, "RGB(200,200,200)", "18:00"],
-        [1439, 1, "RGB(200,200,200)", "05:59"]
-      ],
+// HQData.GetETData = function(upperSymbol) {
+//   if (upperSymbol == "UDI_100.ET") {
+//     const data = {
+//       //完整模式
+//       Full: [
+//         [0, 1, "RGB(200,200,200)", "06:00"],
+//         [120, 1, "RGB(200,200,200)", "08:00"],
+//         [240, 1, "RGB(200,200,200)", "10:00"],
+//         [360, 1, "RGB(200,200,200)", "12:00"],
+//         [480, 0, "RGB(200,200,200)", "14:00"],
+//         [600, 1, "RGB(200,200,200)", "16:00"],
+//         [720, 1, "RGB(200,200,200)", "18:00"],
+//         [840, 1, "RGB(200,200,200)", "20:00"],
+//         [960, 1, "RGB(200,200,200)", "22:00"],
+//         [1080, 1, "RGB(200,200,200)", "0:00"],
+//         [1200, 1, "RGB(200,200,200)", "02:00"],
+//         [1320, 1, "RGB(200,200,200)", "04:00"],
+//         [1439, 1, "RGB(200,200,200)", "05:59"]
+//       ],
+//       //简洁模式
+//       Simple: [
+//         [0, 1, "RGB(200,200,200)", "06:00"],
+//         [240, 1, "RGB(200,200,200)", "10:00"],
+//         [480, 0, "RGB(200,200,200)", "14:00"],
+//         [720, 1, "RGB(200,200,200)", "18:00"],
+//         [960, 1, "RGB(200,200,200)", "22:00"],
+//         [1200, 1, "RGB(200,200,200)", "02:00"],
+//         [1439, 1, "RGB(200,200,200)", "05:59"]
+//       ],
+//       //最小模式
+//       Min: [
+//         [0, 1, "RGB(200,200,200)", "06:00"],
+//         [720, 1, "RGB(200,200,200)", "18:00"],
+//         [1439, 1, "RGB(200,200,200)", "05:59"]
+//       ],
 
-      Count: 1440,
-      MiddleCount: 600,
+//       Count: 1440,
+//       MiddleCount: 600,
 
-      GetData: function(width) {
-        if (width < 200) return this.Min;
-        else if (width < 450) return this.Simple;
+//       GetData: function(width) {
+//         if (width < 200) return this.Min;
+//         else if (width < 450) return this.Simple;
 
-        return this.Full;
-      }
-    };
+//         return this.Full;
+//       }
+//     };
 
-    return data;
-  }
-};
+//     return data;
+//   }
+// };
 
 HQData.GetETDecimal = function(symbol) {
   var upperSymbol = symbol.toUpperCase();
@@ -1103,13 +1115,15 @@ HQData.GetKLineApiUrl = function(symbol, period, right, option) {
   var dayEndAt = parseInt(new Date().getTime()/1000-60*60*24*7*365) 
   var weekEndAt = parseInt( new Date().getTime()/1000-60*60*24*7*365) 
   var monthEndAt = parseInt(new Date().getTime()/1000-60*60*24*7*365) 
-
+  var market=  geturlparam('marketType')=="usa"?"USS":"TWS"
+  // var market=  internalSymbol.market=="USA" ||  internalSymbol.market == "usa"?"USS":"TWS";
+  
   if (period == 0) {
-    url = `/cnyesWs/ws/api/v1/charting/history?resolution=D&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${dayEndAt}`;
+    url = `/cnyesWs/ws/api/v1/charting/history?resolution=D&symbol=${market}:${internalSymbol.symbol}:STOCK&from=${startAt}&to=${dayEndAt}`;
   } else if (period == 1) {
-    url = `/cnyesWs/ws/api/v1/charting/history?resolution=W&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${weekEndAt}`;
+    url = `/cnyesWs/ws/api/v1/charting/history?resolution=W&symbol=${market}:${internalSymbol.symbol}:STOCK&from=${startAt}&to=${weekEndAt}`;
   } else if (period == 2) {
-    url = `/cnyesWs/ws/api/v1/charting/history?resolution=M&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${monthEndAt}`;
+    url = `/cnyesWs/ws/api/v1/charting/history?resolution=M&symbol=${market}:${internalSymbol.symbol}:STOCK&from=${startAt}&to=${monthEndAt}`;
   }
 
   return {
@@ -1123,7 +1137,10 @@ HQData.GetKLineApiUrl = function(symbol, period, right, option) {
 /**实时 */
 HQData.GetMinuteApiUrl = function(symbol, dayCount) {
   var internalSymbol = HQData.GetInternalSymbol(symbol);
-  var url = `/cnyesWs/ws/api/v1/charting/history?resolution=1&symbol=USS:${internalSymbol.Symbol}:STOCK`;
+  // var market=  internalSymbol.market=="USA" ||  internalSymbol.market == "us"?"USS":"TWS";
+  var market=  geturlparam('marketType')=="usa"?"USS":"TWS"
+
+  var url = `/cnyesWs/ws/api/v1/charting/history?resolution=1&symbol=${market}:${internalSymbol.symbol}:STOCK`;
   return {
     Url: url,
     Symbol: symbol,
@@ -1135,24 +1152,18 @@ HQData.GetMinuteApiUrl = function(symbol, dayCount) {
 /**一分 */
 HQData.GetMinuteKLineApiUrl = function(symbol, period, right, option) {
   //https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=0.300059&klt=101&fqt=0
-
   var internalSymbol = HQData.GetInternalSymbol(symbol);
-  var internalPeriod = HQData.GetInternalPeriod(period);
-  var internalRight = HQData.GetInternalRight(right);
+  // var market=  internalSymbol.market=="USA" ||  internalSymbol.market == "usa"?"USS":"TWS";
+  var market=  geturlparam('marketType')=="usa"?"USS":"TWS"
 
-  // if (option && option.Update==true)
-  // {
-  //     var beginDate=option.End;
-  //     var url=`/eastmoney/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=${beginDate}&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol.Market}.${internalSymbol.Symbol}&klt=${internalPeriod}&fqt=${internalRight}`;
-  // }
-  // else
-  // {
-  //     var url=`/eastmoney/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol.Market}.${internalSymbol.Symbol}&klt=${internalPeriod}&fqt=${internalRight}`;
-  // }
-  //https://ws.api.cnyes.com/ws/api/v1/charting/history?resolution=1&symbol=USS:2330:STOCK&from=1668744085&to=1668629349
-  const endAt = getEntAt()
-  const startAt = getStartAt(1000*60*60*24*7)
-  var url = `cnyesWs/ws/api/v1/charting/history?resolution=1&symbol=USS:${internalSymbol.Symbol}:STOCK&from=${startAt}&to=${endAt}`;
+  var endAt = getEntAt()
+  var startAt = getStartAt(1000*60*60*24*30)
+
+  if (market == "TWS") {
+    startAt = parseInt(new Date().getTime()/1000) 
+    endAt = parseInt(new Date().getTime()/1000-60*60*24*7*365) 
+  } 
+  var url = `cnyesWs/ws/api/v1/charting/history?resolution=1&symbol=${market}:${internalSymbol.symbol}:STOCK&from=${startAt}&to=${endAt}`;
   return {
     Url: url,
     Symbol: symbol,
@@ -1325,10 +1336,14 @@ HQData.RequestHistoryMinuteData = function(data, callback) {
 HQData.RecvMinuteData = function(recvData, callback, option) {
   var data = recvData.data;
   var stock = { symbol: option.Obj.Symbol, minute: [] };
-  stock.name = option.Obj.Symbol.split(".")[0]+'.USA'
-  stock.symbol = option.Obj.Symbol.split(".")[0]+'.USA'
-  stock.yclose = parseFloat(data['c'][data['c'].length-1]);
 
+  // var internalSymbol = HQData.GetInternalSymbol(option.Obj.Symbol);
+  // var market=  internalSymbol.market=="USA" ||  internalSymbol.market == "usa"?"USA":"TW";
+  // var market=  geturlparam('marketType')=="usa"?"USS":"TWS"
+
+  stock.name = option.Obj.Symbol.split(".")[0]+"."+ geturlparam('marketType')
+  stock.symbol = option.Obj.Symbol.split(".")[0]+"."+ geturlparam('marketType')
+  stock.yclose = parseFloat(data['c'][data['c'].length-1]);
   for (var i = 0; i < data['c'].length; i++) {
       var stockItem = {
         time: formatMinutes(new Date(data['t'][i]*1000)),
@@ -1355,10 +1370,11 @@ HQData.RecvMinuteData = function(recvData, callback, option) {
 HQData.RecvHistoryMinuteData = function(recvData, callback, option) {
   var data = recvData.data;
   var hqChartData = { symbol: option.Obj.Symbol, data: [] };
+  // var internalSymbol = HQData.GetInternalSymbol(option.Obj.Symbol);
+  // var market=  internalSymbol.market=="USA" ||  internalSymbol.market == "usa"?"USA":"TW";
 
-
-  hqChartData.name = option.Obj.Symbol.split(".")[0]+'.USA'
-  hqChartData.symbol = option.Obj.Symbol.split(".")[0]+'.USA'
+  hqChartData.name = option.Obj.Symbol.split(".")[0]+'.'+geturlparam('marketType')
+  hqChartData.symbol = option.Obj.Symbol.split(".")[0]+'.'+geturlparam('marketType')
   hqChartData.yclose = parseFloat(data['c'][data['c'].length-1]);
   let period =option.Obj.Period
 
@@ -1446,8 +1462,8 @@ HQData.RecvHistoryData = function(recvData, callback, option) {
   // hqChartData.symbol = option.Obj.Symbol;
   // hqChartData.name = data.quote["200024"];
   // var yClose = parseFloat(data.quote["6"]);;
-  hqChartData.name = option.Obj.Symbol.split(".")[0]+'.USA'
-  hqChartData.symbol = option.Obj.Symbol.split(".")[0]+'.USA'
+  hqChartData.name = option.Obj.Symbol.split(".")[0]+'.'+geturlparam('marketType')
+  hqChartData.symbol = option.Obj.Symbol.split(".")[0]+'.'+geturlparam('marketType')
   hqChartData.yclose = parseFloat(data['c'][data['c'].length-1]);
   for (var i = 0; i < data['c'].length; i++) {
     var stockItem = {

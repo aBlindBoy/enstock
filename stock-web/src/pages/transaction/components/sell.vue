@@ -76,6 +76,9 @@
         default: function () {
           return 0
         }
+      },
+      marketType:{
+        type: String,
       }
     },
     data () {
@@ -133,7 +136,7 @@
         let opts = {
           state: 1,
           stockCode: '', // 代码
-          stockSpell: '', // 简拼
+          stockSpell: this.marketType, 
           pageNum: this.pageNum,
           pageSize: this.pageSize
         }

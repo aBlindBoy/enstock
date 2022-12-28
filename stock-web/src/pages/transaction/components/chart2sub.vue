@@ -143,7 +143,7 @@ DefaultData.GetKLineOption = function() {
     ],
 
     Symbol: "000001.sh",
-    IsAutoUpdate: true, //是自动更新数据
+    IsAutoUpdate: false, //是自动更新数据
     AutoUpdateFrequency: 15000,
     IsApiPeriod: true,
     IsShowRightMenu: false, //是否显示右键菜单
@@ -272,7 +272,7 @@ export default {
   props: ["idx", "ucode", "NarBarArry"],
   watch: {
     ucode(newVal) {
-      this.ChangeSymbol(`${newVal}.us`);
+      this.ChangeSymbol(`${newVal}.${ this.$route.query.marketType}`);
     },
     idx(newVal) {
       this.chartType = "kline";
@@ -336,7 +336,7 @@ export default {
     this.$nextTick(() => {
       this.CreateMinuteChart();
       this.CreateKLineChart();
-      this.ChangeSymbol(`${this.ucode}.us`);
+      this.ChangeSymbol(`${this.$route.query.code}.${ this.$route.query.marketType}`);
     });
 
     window.onresize = _.debounce(this.OnSize, 200);
@@ -398,7 +398,6 @@ export default {
       option.NetworkFilter = (data, callback) => {
         this.NetworkFilter(data, callback);
       }; //网络请求回调函数
-
       var chart = HQChart.Chart.JSChart.Init(this.$refs.kline);
       chart.SetOption(option);
       this.Chart = chart;
@@ -430,13 +429,12 @@ export default {
         if (frame.Height > 0) this.VolChartHeight = frame.Height;
         frame.Height = 0;
       }
-
+      
       var period = this.KLineChart.JSChartContainer.Period;
       var isShowRightMenu = EastMoney.HQData.IsEnableRight(period, symbol); //是否显示复权菜单
       this.IsShowRightMenu = isShowRightMenu;
 
       this.Symbol = symbol;
-      debugger
       this.Chart.ChangeSymbol(this.Symbol);
       this.KLineChart.ChangeSymbol(this.Symbol);
     },
@@ -495,12 +493,12 @@ export default {
         case "KLineChartContainer::RequestHistoryData": //日线全量数据下载
           EastMoney.HQData.NetworkFilter(data, callback);
           break;
-        case "KLineChartContainer::RequestRealtimeData": //日线实时数据更新
-          EastMoney.HQData.NetworkFilter(data, callback);
-          break;
-        case "KLineChartContainer::RequestFlowCapitalData": //流通股本
-          EastMoney.HQData.NetworkFilter(data, callback);
-          break;
+        // case "KLineChartContainer::RequestRealtimeData":
+        //   EastMoney.HQData.NetworkFilter(data, callback);
+        //   break;
+        // case "KLineChartContainer::RequestFlowCapitalData": //流通股本
+        //   EastMoney.HQData.NetworkFilter(data, callback);
+        //   break;
         case "KLineChartContainer::ReqeustHistoryMinuteData": //分钟全量数据下载
           EastMoney.HQData.NetworkFilter(data, callback);
           break;

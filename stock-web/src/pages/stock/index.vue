@@ -75,10 +75,11 @@
                 </el-row>
               </div>
               <table-box
-                :key="us"
+                key="usa"
                 :list="list"
                 :getData="getList"
                 :handleOptions="handleOptions"
+                marketType="usa"
               ></table-box>
             </div>
             <div class="table-cont-box" v-if="activeIndex==2">
@@ -102,10 +103,11 @@
                 </el-row>
               </div>
               <table-box
-                :key="tw"
+                key="tw"
                 :list="twList"
                 :getData="getTwStockList"
                 :handleOptions="handleOptions"
+                marketType="tw"
               ></table-box>
             </div>
           </div>
@@ -290,7 +292,9 @@ export default {
  .table-box .page-box {
   margin-top: 50px !important;
 }
-
+.el-menu-item:focus, .el-menu-item:hover {
+  background-color: rgba(0,0,0,0) !important;
+}
 
 
 .red-bg {

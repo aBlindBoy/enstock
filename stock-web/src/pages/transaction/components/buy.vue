@@ -1,10 +1,10 @@
 <template>
 	<div style="height: 216px;">
 		<!-- :style="'?'':'margin-bottom: 20px;'" -->
-		<div class="wrapper buy-table" style="display:flex;justify-content: space-between; width: 100%;" :style="activeName1 == 'three'?'margin-bottom: 30px;':activeName1 == 'five'?'margin-bottom: 25px;':''">
+		<div class="wrapper buy-table" style="display:flex;justify-content: space-between; width: 100%;">
 			<div style="display: flex;justify-content: space-between;width: 100%;">
 				<el-tabs v-model="activeName" class="buy-box-cont" style="width: 100%;">
-					<!-- 兩融交易開始 -->
+					<!-- 美股 -->
 					<el-tab-pane name="first">
 						<!-- 買 -->
 						<div class="buy-box" style="margin-top: 15px;">
@@ -29,7 +29,14 @@
 												<el-input placeholder="" v-model="form.buyNum">
 											
 												</el-input>
-												<span style="position: absolute;right: 6px;top: 0px; font-size: 12px;">{{$t('common.shares')}}</span>
+												<span style="position: absolute;right: 6px;top: 0px; font-size: 12px;">
+													<span v-if="this.marketType == 'usa'">
+														{{$t('common.shares')}}
+													</span>
+													<span v-else>
+														{{$t('common.sheet')}}
+													</span>
+													</span>
 											</el-form-item>
 											<el-form-item prop="buyNum" style="margin-bottom:10px;">
 												<el-input placeholder="lever" v-model="form.lever" class="input-with-select" disabled>
@@ -41,19 +48,19 @@
 											</el-form-item>
 										</div>
 										<p class="prompt clearfix">
-											<el-form-item label="direction" prop="buyType">
+											<el-form-item :label="$t('common.direction')" prop="buyType">
 												<el-radio-group v-model="form.buyType">
-													<el-radio label="bullish" value="0"></el-radio>
-													<el-radio label="bearish" value="1"></el-radio>
+														<el-radio label="0"  value="0">{{ $t('common.bullish') }}</el-radio>
+														<el-radio label="1" value="1">{{ $t('common.bearish') }}</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</p>
 										<el-row class="buy-item" >
-											<el-col :span="12">
-												<span class="baozheng" style="font-size: 13px;">{{$t('common.margin')}}: </span>
+											<el-col :span="8" style="margin-left:60px">
+												<span class="baozheng" style="font-size: 13px;">{{$t('common.margin')}} </span>
 												<span class="price">{{(price/ form.lever).toFixed(2) || 0}}</span>
 											</el-col>
-											<el-col :span="12">
+											<el-col :span="8">
 												<span class="keyong">{{$t('common.totalHandlingFee')}}</span>
 												<span class="price">{{poundage?poundage:0}}</span>
 												<el-tooltip class="item" effect="dark" :content="'Total Fee = Buy Fee ('+ (settingInfo.buyFee*100) + '%）+ Stamp duty（'+ (settingInfo.dutyFee*100) + '%） + Spread fee（'+ (settingSpreadRate.spreadRate*100).toFixed(2) + '%）'"
@@ -62,23 +69,27 @@
 											</el-col>
 										</el-row>
 										 <el-row class="buy-item" >
-											<el-col :span="12">
-												<span class="keyong">{{$t('tradingFloor.needToPay')}}:</span>
+											<el-col :span="8"  style="margin-left:60px">
+												<span class="keyong">{{$t('tradingFloor.needToPay')}}</span>
 												<span class="price">{{total?total:0}}</span>
 											</el-col>
-											<el-col :span="12">
-												<span class="keyong">{{$t('common.availableFunds')}}:{{$store.state.userInfo.enableAmt}}USD</span>
-											</el-col>
+											<el-col :span="8">
+												<span class="keyong">{{$t('common.availableFunds')}}
+													{{$store.state.userInfo.enableAmt}}USD</span>
+												</el-col>
 										</el-row> 
+										<el-button :loading="loadingBtn" class="buy-button ru" type="primary" @click="onSubmit('ruleForm')" style="margin-top:14px">
+											{{ $t('tradingFloor.buy') }}
+										</el-button>
 									</div>
 								</div>
 							</el-form>
 							<div>
-								<el-button :loading="loadingBtn" class="buy-button ru" type="primary" @click="onSubmit('ruleForm')" style="margin-top:14px">Warehousing</el-button>
+								
 							</div>
 						</div>
 					</el-tab-pane>
-					<!-- 兩融交易結束 -->
+					<!-- 美股結束 -->
 
 				</el-tabs>
 				
@@ -97,33 +108,22 @@
 			comNone
 		},
 		props: {
-			detailsCont: {
-
-			},
-			cutIndex: {
-
-			},
 			handleOptions2: {
 				type: Function,
 				default: function() {},
 			},
-			handleOptions3: {
-				type: Function,
-				default: function() {},
-			},
+			detail:{
+				type:Object,
+			}
 		},
 		data() {
 			return {
 				siteInfo:{
 					
 				},
-				activeName1:'first',
-				tabPosition: "left",
-				tradeDialogVisible: false, //
 				loading: false,
-				detail: "", // 当前股票的详情
+				// detail: "", // 当前股票的详情
 				activeName: "first",
-				tradeAgreeText: "",
 				siteLeverList: [],
 				form: {
 					buyNum: "",
@@ -132,32 +132,26 @@
 					subaccountNumber: "",
 				},
 				settingInfo: {}, // 设置信息
-				agree: true, // 协议
 				buyNumber: 0, // 下单次数
 				loadingBtn: false,
 				futuresInfo: {}, // 期货信息
 				settingSpreadRate: {
 					spreadRate: 0,
 				},
-				isqihuo: false,
-				isgupiao: false,
 				exchangeNumber: "",
-				subaccountList: {},
 				pageNum: 1,
-				newsList: [],
 				width: 0,
-				temi: null
 			};
 		},
 		watch: {
-			change(newVal, oldVal) {
-				if (newVal !== oldVal) {
-					this.getDetail(); // 分时数据
-				}
-				if (!newVal) {
-					clearInterval(this.timer);
-				}
-			},
+			// change(newVal, oldVal) {
+			// 	if (newVal !== oldVal) {
+			// 		this.getDetail(); // 分时数据
+			// 	}
+			// 	if (!newVal) {
+			// 		clearInterval(this.timer);
+			// 	}
+			// },
 			
 		},
 		computed: {
@@ -165,7 +159,12 @@
 				//手续费= 买入手续费+印花税+点差费
 				if (this.form.buyNum) {
 					// * 1000
-					let payfee = (this.detail.nowPrice * this.form.buyNum ).toFixed(2);
+					let payfee = 0;
+					if (this.marketType=="usa") {
+						payfee = (this.detail.nowPrice * this.form.buyNum ).toFixed(2);; //  this.form.lever
+					} else {
+						payfee = (this.detail.nowPrice * this.form.buyNum * 1000 ).toFixed(2); //  this.form.lever
+					}
 					return (
 						payfee * this.settingInfo.buyFee +
 						payfee * this.settingInfo.dutyFee +
@@ -178,35 +177,41 @@
 			},
 			total() {
 				if (this.form.buyNum) {
-					if (this.$route.query.code.indexOf("hf_") != -1) {
-						return (
-							(this.detail.depositAmt * this.form.buyNum) /
-							this.form.lever
-						).toFixed(2);
-					} else if (
-						this.$route.query.code.indexOf("sh") != -1 ||
-						this.$route.query.code.indexOf("sz") != -1
-					) {
-						return (
-							(this.detail.depositAmt * this.form.buyNum) /
-							this.form.lever
-						).toFixed(2);
-					} else {
-						if (
-							this.settingSpreadRate == undefined ||
-							this.settingSpreadRate.spreadRate == undefined
-						) {
-							this.settingSpreadRate.spreadRate = 0;
+					// if (this.$route.query.code.indexOf("hf_") != -1) {
+					// 	return (
+					// 		(this.detail.depositAmt * this.form.buyNum) /
+					// 		this.form.lever
+					// 	).toFixed(2);
+					// } else if (
+					// 	this.$route.query.code.indexOf("sh") != -1 ||
+					// 	this.$route.query.code.indexOf("sz") != -1
+					// ) {
+					// 	return (
+					// 		(this.detail.depositAmt * this.form.buyNum) /
+					// 		this.form.lever
+					// 	).toFixed(2);
+					// } else {
+					// 	if (
+					// 		this.settingSpreadRate == undefined ||
+					// 		this.settingSpreadRate.spreadRate == undefined
+					// 	) {
+					// 		this.settingSpreadRate.spreadRate = 0;
+					// 	}
+						let payfee  = 0;
+						if (this.marketType=="usa") {
+							payfee=	(this.detail.nowPrice * this.form.buyNum ) / this.form.lever; //  this.form.lever
+						} else {
+							payfee=(this.detail.nowPrice * this.form.buyNum * 1000 ) / this.form.lever; //  this.form.lever
 						}
-						let payfee =
-							(this.detail.nowPrice * this.form.buyNum ) / this.form.lever; //  this.form.lever
+						// let payfee =
+						
 						return (
 							payfee +
 							payfee * this.settingInfo.buyFee +
 							payfee * this.settingInfo.dutyFee +
 							payfee * this.settingSpreadRate.spreadRate
 						).toFixed(2);
-					}
+					// }
 				} else {
 					return 0;
 				}
@@ -217,8 +222,13 @@
 			// 	return (this.total * this.exchangeNumber).toFixed(2);
 			// },
 			price() {
+				//
 				if (this.form.buyNum) {
-					return (this.detail.nowPrice * this.form.buyNum).toFixed(2);
+					if (this.marketType=="usa") {
+						return (this.detail.nowPrice * this.form.buyNum).toFixed(2);
+					} else {
+						return (this.detail.nowPrice * this.form.buyNum *1000).toFixed(2);
+					}
 				} else {
 					return 0;
 				}
@@ -227,35 +237,35 @@
 			change() {
 				return this.$route.query.code;
 			},
+			marketType(){
+				return this.$route.query.marketType
+			}
 		},
 		created() {
-			this.timer = setInterval(this.getDetail, 10000);
-			setInterval(()=>{
-				this.activeName1 =  window.activeName1 || 'first'
-			},100)
+			// this.timer = setInterval(this.getDetail, 10000);
 		},
 		beforeDestroy() {
 			clearInterval(this.timer);
 		},
 		mounted() {
 
-			this.getDetail();
+			// this.getDetail();
 			this.getSettingInfo();
 			this.getInfoSite();
 
 		
 
-			this.getNoticeList();
+			// this.getNoticeList();
 
-			if(this.$store.state.haslogin){
-				this.getUserSubaccount();
-			}
-			setTimeout(() => {
-				this.runMarquee()
-				// this.$on('changeActiveName',(res)=>{
-				// 	console.log(res)
-				// })
-			}, 1000)
+			// if(this.$store.state.haslogin){
+			// 	this.getUserSubaccount();
+			// }
+			// setTimeout(() => {
+			// 	this.runMarquee()
+			// 	// this.$on('changeActiveName',(res)=>{
+			// 	// 	console.log(res)
+			// 	// })
+			// }, 1000)
 			// this.$nextTick(()=>{
 			// 	// var scrollBoxDOM = document.getElementById('scrollBox')
 			// 	var scrollBoxDOM = this.$refs
@@ -266,25 +276,24 @@
 			// })
 		},
 		beforeDestroy() {
-			clearInterval(this.temi)
 		},
 		methods: {
-			runMarquee() {
-				// 获取文字 计算后宽度
-				var width = this.$refs.marquee[0].getBoundingClientRect().width;
-				var marquee = this.$refs.marqueeBox;
-				var disx = 0; // 位移距离
-				// console.log(width)
-				// //设置位移
-				this.temi = setInterval(() => {
-					disx--; // disx-=1; 滚动步长
-					if (-disx >= width) {
-						disx = 10; // 如果位移超过文字宽度，则回到起点  marquee-list的margin值
-					}
-					// marquee.style.transform = 
-					marquee.style.transform = 'translateX(' + disx + 'px)'
-				}, 30) //滚动速度
-			},
+			// runMarquee() {
+			// 	// 获取文字 计算后宽度
+			// 	var width = this.$refs.marquee[0].getBoundingClientRect().width;
+			// 	var marquee = this.$refs.marqueeBox;
+			// 	var disx = 0; // 位移距离
+			// 	// console.log(width)
+			// 	// //设置位移
+			// 	this.temi = setInterval(() => {
+			// 		disx--; // disx-=1; 滚动步长
+			// 		if (-disx >= width) {
+			// 			disx = 10; // 如果位移超过文字宽度，则回到起点  marquee-list的margin值
+			// 		}
+			// 		// marquee.style.transform = 
+			// 		marquee.style.transform = 'translateX(' + disx + 'px)'
+			// 	}, 30) //滚动速度
+			// },
 			
 			// 时间转换
 			switchData(list, time) {
@@ -296,39 +305,17 @@
 					item[time] = newDate.toLocaleDateString();
 				});
 			},
-			async selectDetails(item, index) {
-				// 选择详情
-
-				var data = await api.getNewsDetailList({
-					id: item.id,
-				});
-				if (data.status == 0) {
-					// this.optionalIndex = item.type
-					var query = {
-						pageNum: 1,
-						pageSize: 15,
-						type: item.type,
-					};
-					// this.newType = item.type
-					// var newsList = await this.getNewsList(query);
-					// this.switchData(newsList, "showTime");
-					this.$emit('selectDetailsItem', data.data)
-				}
-				var data = await api.updateNewsViews({
-					id: item.id,
-				});
-				if (data.status == 0) {}
-			},
-			async getNoticeList() {
-				// 获取交易大厅-中间部分-通知公告
-				let data = await api.getTransactionNoticeList({
-					pageSize: 10,
-				});
-				if (data.status == 0) {
-					this.switchData(data.data.list, "addTime");
-					this.transactionNoticeList = data.data.list;
-				}
-			},
+			
+			// async getNoticeList() {
+			// 	// 获取交易大厅-中间部分-通知公告
+			// 	let data = await api.getTransactionNoticeList({
+			// 		pageSize: 10,
+			// 	});
+			// 	if (data.status == 0) {
+			// 		this.switchData(data.data.list, "addTime");
+			// 		this.transactionNoticeList = data.data.list;
+			// 	}
+			// },
 			cut(type) {
 				var code = this.$route.query.code
 				this.activeName = type;
@@ -364,83 +351,70 @@
 					Toast(data.msg);
 				}
 			},
-			async getDetail() {
-				// if (this.$route.query.code.indexOf("hf_") != -1) {
-				// 	// 期货
-				// 	this.isqihuo = true;
-				// 	this.isgupiao = false;
-				// } else if (
-				// 	this.$route.query.code.indexOf("sh") != -1 ||
-				// 	this.$route.query.code.indexOf("sz") != -1
-				// ) {
-				// 	// 指数
-				// 	this.isqihuo = false;
-				// 	this.isgupiao = false;
-				// } else {
-				// 	// 股票
-				// 	this.isgupiao = true;
-				// 	this.isqihuo = false;
-				// }
-				// if (this.$route.query.futuresInfo != undefined) {
-				// 	this.futuresInfo = this.$route.query.futuresInfo;
-				// 	this.queryExchange(); // 获取当前基币汇率
-				// }
-				let opts = {
-					code: this.$route.query.code,
-				};
-				this.loading = true;
+			// async getDetail() {
+			// 	// if (this.$route.query.futuresInfo != undefined) {
+			// 	// 	this.futuresInfo = this.$route.query.futuresInfo;
+			// 	// 	this.queryExchange(); // 获取当前基币汇率
+			// 	// }
+			// 	let opts = {
+			// 		code: this.$route.query.code,
+			// 	};
+			// 	this.loading = true;
 				
-				let res1 = await api.getUsStockData(opts.code)
-				let stock = res1.data[0];
-				let stockDetail ={}
-				stockDetail.name = stock["200024"];//股票名稱
-				stockDetail.date = stock["200007"];//最近交易日期
-				// stockDetail.time = stock[""];//最近成交時刻
-				stockDetail.nowPrice = stock["6"];//最新價格
-				stockDetail.rate = stock["11"];//漲跌
-				stockDetail.hcrate = stock["56"];//漲跌幅
-				stockDetail.high = stock["12"];//最高價
-				stockDetail.low = stock["13"];//最低價
-				stockDetail.volumn = stock["800001"];//累積成交量
-				stockDetail.amount = stock[""];//成交金額
-				stockDetail.yes = stock["21"];//昨收
-				stockDetail.open = stock["19"];//開盤價
-				
-				if (stockDetail.rate > 0) {
-					stockDetail.color = "upColor";
-				}
-				if (stockDetail.rate < 0) {
-					stockDetail.color = "lowColor";
-				}
-				this.ucode = opts.code;
-				this.loading = false;
-				this.detail = stockDetail;
-			},
+			// 	if (this.marketType == "usa") {
+			// 		let res1 = await api.getUsStockData(opts.code)
+			// 		let stock = res1.data[0];
+			// 		let stockDetail ={}
+			// 		stockDetail.name = stock["200024"];//股票名稱
+			// 		stockDetail.date = stock["200007"];//最近交易日期
+			// 		// stockDetail.time = stock[""];//最近成交時刻
+			// 		stockDetail.nowPrice = stock["6"];//最新價格
+			// 		stockDetail.rate = stock["11"];//漲跌
+			// 		stockDetail.hcrate = stock["56"];//漲跌幅
+			// 		stockDetail.high = stock["12"];//最高價
+			// 		stockDetail.low = stock["13"];//最低價
+			// 		stockDetail.volumn = stock["800001"];//累積成交量
+			// 		stockDetail.amount = stock[""];//成交金額
+			// 		stockDetail.yes = stock["21"];//昨收
+			// 		stockDetail.open = stock["19"];//開盤價
+					
+			// 		if (stockDetail.rate > 0) {
+			// 			stockDetail.color = "upColor";
+			// 		}
+			// 		if (stockDetail.rate < 0) {
+			// 			stockDetail.color = "lowColor";
+			// 		}
+			// 		this.ucode = opts.code;
+			// 		this.detail = stockDetail;
+			// 	} else {
+			// 		let res1 = await api.getTwStockData(opts.code)
+			// 		let stock = res1.data[0];
+			// 		// let stockDetail ={}
+			// 		this.detail.name = stock["200009"];//股票名稱
+			// 		this.detail.date = stock["200007"];//最近交易日期
+			// 		// stockDetail.time = stock[""];//最近成交時刻
+			// 		this.detail.nowPrice = stock["6"];//最新價格
+			// 		this.detail.rate = stock["11"];//漲跌
+			// 		this.detail.hcrate = stock["56"];//漲跌幅
+			// 		this.detail.high = stock["12"];//最高價
+			// 		this.detail.low = stock["13"];//最低價
+			// 		this.detail.volumn = stock["800001"];//累積成交量
+			// 		this.detail.amount = stock[""];//成交金額
+			// 		this.detail.yes = stock["21"];//昨收
+			// 		this.detail.open = stock["19"];//開盤價
+			// 		this.ucode = opts.code;
+			// 		this.code =  opts.code;
+			// 		this.detail = stockDetail;
+
+			// 	}
+			// 	this.loading = false;
+
+			// },
 			async getInfoSite() {
 				// 获取网站信息
 				let result = await api.getInfoSite();
 				if (result.status === 0) {
 					this.siteInfo = result.data;
-					this.tradeAgreeText = this.siteInfo.tradeAgreeText;
-				} else {
-					this.$message.error(result.msg);
-				}
-			},
-			async getUserSubaccount() {
-				// 用户操盘中子账户
-				let result = await api.getUserSubaccount();
-				if (result.status === 0) {
-					if (result.data.list.length > 0) {
-						this.subaccountList = result.data.list;
-						if (
-							this.$route.query.sub != undefined &&
-							this.$route.query.sub != ""
-						) {
-							this.form.subaccountNumber = this.$route.query.sub;
-						} else {
-							this.form.subaccountNumber = this.subaccountList[0].subaccountNumber;
-						}
-					}
 				} else {
 					this.$message.error(result.msg);
 				}
@@ -525,11 +499,6 @@
 							this.$message.error(this.$t('commmon.pleaseLogin'));
 							return;
 						}
-
-						// if (!this.agree) {
-						// 	this.$message.error("Read and agree to the registration agreement to place an order");
-						// 	return;
-						// }
 						var regisKong = /^\s*$/g;
 						if (regisKong.test(this.form.buyNum)) {
 							this.$message.error(this.$t('commmon.sharesIsNull'));
@@ -548,42 +517,50 @@
 						this.loadingBtn = true;
 						// 股票買入
 						var gCode = this.$route.query
-						let res=await api.getUsStockData(gCode.code)
-						let stock = res.data[0];
+						let stock ={}
+						let buyNum = 0
+						if (this.marketType == "usa") {
+							let res1 = await api.getUsStockData(gCode.code)
+							 stock = res1.data[0];
+							buyNum =  this.form.buyNum
+						} else {
+							let res1 = await api.getTwStockData(gCode.code)
+							 stock = res1.data[0];
+							 buyNum =  this.form.buyNum * 1000
+						}
 						let nowPrice = stock["6"];//最新價格
 						let hcrate = stock["56"];//漲跌幅
-						let res2 = await api.getUsOpenClose(gCode.code)
-						let preClose = res2.data["o"][0];//開盤價
 						let opts = {
 							stockId: gCode.code,
-							buyNum: this.form.buyNum ,
-							buyType: this.form.buyType === "bullish" ? 0 : 1,
+							buyNum: buyNum ,
+							buyType: this.form.buyType,
 							lever: this.form.lever,
 							nowPrice,
 							hcrate,
-							preClose
 						};
-						let data = await api.buyUsStock(opts);
+						let data = {}
+						if (this.marketType == "usa") {
+							 data = await api.buyUsStock(opts);
+						} else {
+							 data = await api.buyTwStock(opts);	
+						}
+						this.loadingBtn = false;
 						if (data.status === 0) {
 							this.buyNumber++;
-							this.handleOptions2(this.buyNumber);
+							// this.handleOptions2(this.buyNumber);
 							this.getUserInfo();
 							this.$message.success(data.data);
 							var data = await api.findUserPositionByCode({
 								stockCode: gCode.code
 							})
 							if (data.status == 0) {
-							
 								this.$store.commit('setUserPositionData', data.data.list[0])
 							}
-							
-							
 						} else {
 							this.$message.error(data.msg);
 						}
 					}
 
-					this.loadingBtn = false;
 				});
 			},
 		
