@@ -16,15 +16,21 @@ import RechargeList from '../pages/user/components/table/recharge' // Recharge�
 import Recharge from '../pages/user/components/cash/recharge' //Recharge 
 import Withdraw from '../pages/user/components/cash/withdraw' // 提现
 import ChangeCash from '../pages/user/components/change' // 资产互转
-import HoldPosition from '../pages/user/components/transform/holdposition' // 持仓单
+import UsHoldposition from '../pages/user/components/transform/usHoldposition' // 持仓单
+import UsSell from '../pages/user/components/transform/usSell' // 平仓单
+import TwHoldposition from '../pages/user/components/transform/twHoldposition' // 持仓单
+import TwSell from '../pages/user/components/transform/twSell' // 平仓单
+
 import IndexHoldPosition from '../pages/user/components/transform/indexholdposition' // 持仓单 指数
 import FuturesHoldPosition from '../pages/user/components/transform/futuresholdposition' // 持仓单 指数
-import SellOrder from '../pages/user/components/transform/sellorder' // 平仓单
+
 import IndexSellOrder from '../pages/user/components/transform/indexsellorder' // 平仓单 指数
 import FuturesSellOrder from '../pages/user/components/transform/futuressellorder' // 平仓单 指数
 import Bank from '../pages/user/components/save/bank' // 银行卡
 import Auth from '../pages/user/components/save/auth' // 实名认证
 import ChangePwd from '../pages/user/components/save/changepwd' // 修改银行卡
+import Transfer from '../pages/user/components/cash/transfer' // 资金划转
+
 import Login from '../pages/login/login' // 登录
 import Register from '../pages/login/register' // 注册
 import Forget from '../pages/login/forget' // 忘记密码
@@ -109,7 +115,14 @@ export default new Router({
       name: 'user',
       meta: { title: 'User Center' },
       component: User
-    }, {
+    }, 
+    {
+      path: '/transfer',
+      name: 'transfer',
+      meta: { title: 'Transfer' },
+      component: Transfer
+    }, 
+    {
       path: '/message',
       name: 'message',
       meta: { title: 'Station news' },
@@ -155,16 +168,34 @@ export default new Router({
       meta: { title: 'Asset account transfer' },
       component: ChangeCash
     }, {
-      path: '/holdposition',
-      name: 'holdposition',
+      path: '/usHoldposition',
+      name: 'usHoldposition',
       meta: { title: 'Financing position order Number' },
-      component: HoldPosition
+      component: UsHoldposition
     }, {
+      path: '/usSell',
+      name: 'usSell',
+      meta: { title: 'Closing order' },
+      component: UsSell
+    }, 
+     {
+      path: '/twHoldposition',
+      name: 'twHoldposition',
+      meta: { title: 'Financing position order Number' },
+      component: TwHoldposition
+    },{
+      path: '/twSell',
+      name: 'twSell',
+      meta: { title: 'Closing order' },
+      component: TwSell
+    }, 
+    {
       path: '/indexholdposition',
       name: 'indexholdposition',
       meta: { title: 'Index Position Receipt' },
       component: IndexHoldPosition
-    }, {
+    }, 
+    {
       path: '/futuressell',
       name: 'futuressell',
       meta: { title: 'futures close' },
@@ -174,11 +205,6 @@ export default new Router({
       name: 'futuresholdposition',
       meta: { title: 'Futures Position Receipt' },
       component: FuturesHoldPosition
-    }, {
-      path: '/sell',
-      name: 'sell',
-      meta: { title: 'Closing order' },
-      component: SellOrder
     }, {
       path: '/indexsell',
       name: 'indexsell',

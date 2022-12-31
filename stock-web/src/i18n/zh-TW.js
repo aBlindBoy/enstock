@@ -277,7 +277,7 @@ export default  {
     },
     stationMessage:{
         title : "站點信息",
-        id : "身份證件",
+        id : "編號",
         type : "類型",
         state : "狀態",
         haveRead : "已閱讀",

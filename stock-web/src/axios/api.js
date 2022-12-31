@@ -580,6 +580,17 @@ export function buyUsStock (options) {
 export function sellUsStock (options) {
   return post('/user/sellUsStock.do', options)
 }
+// 查询汇率
+export function getExchangeRate (options) {
+  return post('/api/stock/getExchangeRate.do', options)
+}
+// 查询汇率
+export function transfer (options) {
+  return post('/api/user/transfer.do', options)
+}
+
+
+
 export function getUsOpenClose (stock_code) {
   return new Promise((resolve, reject) => {
     $.ajax({

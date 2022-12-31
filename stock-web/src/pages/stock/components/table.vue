@@ -197,9 +197,9 @@ export default {
 <style lang="less" scoped>
 .table {
   min-height: 500px;
-  /deep/ .el-table{
+  // /deep/ .el-table{
     
-  }
+  // }
   .code {
     color: #6d718b;
     font-size: 12px;

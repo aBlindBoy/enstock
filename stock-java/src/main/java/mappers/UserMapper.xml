@@ -35,14 +35,16 @@
             <arg column="enable_fut_amt" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
             <arg column="withdrawal_Pwd" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="trading_amount" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
-
+            <arg column="tw_user_amt" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+            <arg column="tw_enable_amt" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
     id, agent_id, agent_name, phone, user_pwd, with_pwd, nick_name, real_name, id_card, 
     account_type, user_amt, enable_amt, sum_charge_amt, sum_buy_amt, recom_phone, is_lock, is_login,
     reg_time, reg_ip, reg_address, img1_key, img2_key, img3_key, is_active, auth_msg,
-    user_index_amt, enable_index_amt, user_fut_amt, enable_fut_amt, withdrawal_Pwd, trading_amount
+    user_index_amt, enable_index_amt, user_fut_amt, enable_fut_amt, withdrawal_Pwd, trading_amount,
+    tw_user_amt,tw_enable_amt
   </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -65,7 +67,8 @@
       is_lock,is_login, reg_time, reg_ip,
       reg_address, img1_key, img2_key, 
       img3_key, is_active, auth_msg,
-      user_index_amt, enable_index_amt, user_fut_amt, enable_fut_amt, trading_amount
+      user_index_amt, enable_index_amt, user_fut_amt, enable_fut_amt, trading_amount,
+      tw_user_amt,tw_enable_amt
       )
     values (#{id,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER}, #{agentName,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, #{withPwd,jdbcType=VARCHAR}, 
@@ -76,7 +79,10 @@
       #{regAddress,jdbcType=VARCHAR}, #{img1Key,jdbcType=VARCHAR}, #{img2Key,jdbcType=VARCHAR}, 
       #{img3Key,jdbcType=VARCHAR}, #{isActive,jdbcType=INTEGER}, #{authMsg,jdbcType=VARCHAR},
       #{userIndexAmt,jdbcType=DECIMAL},  #{enableIndexAmt,jdbcType=DECIMAL},
-      #{userFutAmt,jdbcType=DECIMAL}, #{enableFutAmt,jdbcType=DECIMAL}, #{tradingAmount,jdbcType=DECIMAL}
+      #{userFutAmt,jdbcType=DECIMAL}, #{enableFutAmt,jdbcType=DECIMAL},
+        #{tradingAmount,jdbcType=DECIMAL}
+        #{twUserAmt,jdbcType=DECIMAL}
+        #{twUserAmt,jdbcType=DECIMAL}
       )
   </insert>
 
@@ -173,7 +179,12 @@
             <if test="tradingAmount != null">
                 trading_amount,
             </if>
-
+            <if test="twUserAmt != null">
+                tw_user_amt,
+            </if>
+            <if test="twEnableAmt != null">
+                tw_enable_amt,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -264,7 +275,12 @@
             <if test="enableFutAmt != null">
                 #{enableFutAmt,jdbcType=DECIMAL},
             </if>
-
+            <if test="twUserAmt != null">
+                #{twUserAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="twEnableAmt != null">
+                #{twEnableAmt,jdbcType=DECIMAL},
+            </if>
         </trim>
     </insert>
 
@@ -359,7 +375,12 @@
             <if test="tradingAmount != null">
                 trading_amount = #{tradingAmount,jdbcType=DECIMAL},
             </if>
-
+            <if test="twUserAmt != null">
+                tw_user_amt = #{twUserAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="twEnableAmt != null">
+                tw_enable_amt = #{twEnableAmt,jdbcType=DECIMAL},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -393,7 +414,9 @@
       enable_index_amt = #{enableIndexAmt,jdbcType=DECIMAL},
       user_fut_amt = #{userFutAmt,jdbcType=DECIMAL},
       enable_fut_amt = #{enableFutAmt,jdbcType=DECIMAL},
-      trading_amount = #{tradingAmount,jdbcType=DECIMAL}
+      trading_amount = #{tradingAmount,jdbcType=DECIMAL},
+        tw_user_amt = #{twUserAmt,jdbcType=DECIMAL},
+        tw_enable_amt = #{twEnableAmt,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -477,7 +500,7 @@
     </select>
 
     <update id="updateUserAmt">
-    update `user` set user_amt = user_amt + #{user_amt} where id = #{user_id}
+     update `user` set user_amt = user_amt + #{user_amt} where id = #{user_id}
   </update>
 
 </mapper>

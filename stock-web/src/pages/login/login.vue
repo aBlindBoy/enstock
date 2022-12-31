@@ -311,9 +311,9 @@ export default {
   }
 }
 
-.header {
-  // padding: 0 20px;
-}
+// .header {
+//   // padding: 0 20px;
+// }
 
 .login-box .top-box {
   position: absolute;

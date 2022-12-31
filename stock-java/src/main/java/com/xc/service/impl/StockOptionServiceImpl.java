@@ -17,6 +17,7 @@ import com.xc.pojo.Stock;
 
 import com.xc.pojo.StockOption;
 
+import com.xc.pojo.TwStock;
 import com.xc.pojo.User;
 
 import com.xc.service.IStockOptionService;
@@ -25,6 +26,7 @@ import com.xc.service.IUserService;
 
 import com.xc.utils.HttpClientRequest;
 import com.xc.utils.PropertiesUtil;
+import com.xc.utils.stock.TwStockApi;
 import com.xc.utils.stock.UsStockApi;
 import com.xc.utils.stock.sina.SinaStockApi;
 
@@ -70,36 +72,22 @@ public class StockOptionServiceImpl implements IStockOptionService {
         PageHelper.startPage(pageNum, pageSize);
         User user = this.iUserService.getCurrentUser(request);
         List<StockOption> stockOptions = this.stockOptionMapper.findMyOptionByKeywords(user.getId(), keyWords);
-
-//        for (StockOption option : stockOptions) {
-//            queryString += option.getStockGid() + ",";
-//        }
-//        int index=0;
-//        for (StockOption option : stockOptions) {
-//            if(index<stockOptions.size()-1){
-//                queryString += option.getStockCode() + ",";
-//            }else{
-//                queryString += option.getStockCode();
-//            }
-//            index++;
-//        }
-        //String[] httpResults = SinaStockApi.getSinaStockList(queryString);
-        //TODO 代理到dl去获取sina data
-//        String host= PropertiesUtil.getProperty("proxy.host.api");
-//        String[] httpResults = HttpClientRequest.doGet(host+queryString).split(";");
         CountDownLatch countDownLatch = new CountDownLatch(stockOptions.size());
         StockOptionListVO [] stockOptionList = new StockOptionListVO[stockOptions.size()];
-
-//        String queryString = "";
-
         for (int i = 0; i < stockOptions.size(); i++) {
-
             int finalI = i;
             ThreadUtil.execute(()->{
-//                String result= UsStockApi.getStock(stockOptions.get(finalI).getStockCode());
-//                StockListVO stockVO=UsStockApi.assembleStockListVO(result);
-                StockListVO stockVO = UsStockApi.getMoomooStock(stockOptions.get(finalI).getStockCode());
+                String stockGid = stockOptions.get(finalI).getStockGid();
+                StockListVO stockVO = null;
                 StockOptionListVO stockOptionListVO =new StockOptionListVO();
+                if (stockGid.equals("US")){
+                     stockVO = UsStockApi.getMoomooStock(stockOptions.get(finalI).getStockCode());
+                    stockOptionListVO.setStock_type("US");
+                }else{
+                    String twStock = TwStockApi.getTwStock(stockOptions.get(finalI).getStockCode());
+                    stockVO = TwStockApi.assembleStockListVO(twStock);
+                    stockOptionListVO.setStock_type("TW");
+                }
                 stockOptionListVO.setId(stockOptions.get(finalI).getId());
                 stockOptionListVO.setStockName(stockOptions.get(finalI).getStockName());
                 stockOptionListVO.setStockCode(stockOptions.get(finalI).getStockCode());
@@ -108,33 +96,22 @@ public class StockOptionServiceImpl implements IStockOptionService {
                 stockOptionListVO.setHcrate(stockVO.getHcrate().toString());
                 stockOptionListVO.setPreclose_px(stockVO.getPreclose_px());
                 stockOptionListVO.setOpen_px(stockVO.getOpen_px());
-                Stock stock = this.stockMapper.selectByPrimaryKey(stockOptions.get(finalI).getStockId());
-                //stockOptionListVO.setStock_plate(stock.getStockPlate());
-
-                stockOptionListVO.setStock_type(stock.getStockType());
+//                Stock stock = this.stockMapper.selectByPrimaryKey(stockOptions.get(finalI).getStockId());
+//                stockOptionListVO.setStock_type(stock.getStockType());
                 stockOptionListVO.setIsOption("1");
                 stockOptionList[finalI] = stockOptionListVO;
                 countDownLatch.countDown();
             });
-
         }
+
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         List<StockOptionListVO> stockOptionListVOS = Arrays.asList(stockOptionList);
-//        int i = 0;
-//        for (StockOption option : stockOptions) {
-//            StockOptionListVO stockOptionListVO = assembleStockOptionListVO(option, httpResults[i]);
-//            i++;
-//            stockOptionListVO.setIsOption("1");
-//            stockOptionListVOS.add(stockOptionListVO);
-//        }
         PageInfo pageInfo = new PageInfo(stockOptions);
-
         pageInfo.setList(stockOptionListVOS);
-
         return ServerResponse.createBySuccess(pageInfo);
 
     }

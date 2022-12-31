@@ -2,6 +2,8 @@ package com.xc.controller;
 
 import com.xc.common.ServerResponse;
 import com.xc.pojo.Stock;
+import com.xc.pojo.StockCoin;
+import com.xc.service.IStockCoinService;
 import com.xc.service.IStockService;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -32,6 +34,9 @@ public class StockApiController {
 
     @Autowired
     IStockService iStockService;
+
+    @Autowired
+    IStockCoinService iStockCoinService;
 
     //查询 股票指数、大盘指数信息
 //    @RequestMapping({"getMarket.do"})
@@ -103,6 +108,14 @@ public class StockApiController {
         }
         return ServerResponse.createBySuccess(stockList);
 }
+
+    @RequestMapping({"getExchangeRate.do"})
+    @ResponseBody
+    public ServerResponse getExchangeRate(String coinCode)  {
+        StockCoin stockCoin = iStockCoinService.selectCoinByCode(coinCode);
+        return ServerResponse.createBySuccess(stockCoin);
+    }
+
 
 
 //    @RequestMapping({"getMinK.do"})

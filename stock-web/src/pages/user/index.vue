@@ -20,7 +20,7 @@
 <script>
   import HomeHeader from '../../components/HeaderOrder'
   // import HomeFooter from '../../components/Footer'
-  import AccountBox from './components/account'
+  import AccountBox from './components/user'
   import MenuBox from './components/menu'
   import * as api from '../../axios/api'
 
@@ -62,7 +62,7 @@
       }
     },
     created () {
-      this.timer = setInterval(this.getUserInfo, 5000)
+      this.timer = setInterval(this.getUserInfo, 10000)
       this.$store.state.activeIndex = 'user'
     },
     beforeDestroy () {
@@ -78,14 +78,16 @@
         let data = await api.getUserInfo()
         if (data.status === 0) {
           // 判断是否登录
-          if (this.$store.state.userInfo.userAmt !== data.data.userInfo) {
-						console.log(data.data)
-						this.$store.commit('setUserInfo',data.data)
-            this.refresh = true
-          } else {
-            this.refresh = false
-          }
-          this.$store.state.userInfo = data.data
+          // debugger
+          // if (this.$store.state.userInfo.userAmt !== data.data.userInfo) {
+					// 	console.log(data.data)
+					// 	this.$store.commit('setUserInfo',data.data)
+          //   this.refresh = true
+          // } else {
+          //   this.refresh = false
+          // }
+          // this.$store.state.userInfo = data.data
+          this.$store.commit('setUserInfo',data.data)
           this.$store.state.haslogin = true
         } else {
           this.haslogin = false

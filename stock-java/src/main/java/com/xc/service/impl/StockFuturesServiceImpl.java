@@ -555,15 +555,10 @@ public class StockFuturesServiceImpl implements IStockFuturesService {
 
 
     public ServerResponse queryTrans(Integer futuresId) {
-
         StockFutures stockFutures = this.stockFuturesMapper.selectByPrimaryKey(futuresId);
-
         if (1 == stockFutures.getTransState().intValue()) {
-
             return ServerResponse.createBySuccessMsg("可交易");
-
         }
-
         return ServerResponse.createByErrorMsg("不可交易");
 
     }

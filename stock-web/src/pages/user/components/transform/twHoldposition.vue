@@ -35,7 +35,7 @@
             style="width: 100%">
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <el-form label-position="left" inline class="demo-table-expand">
+                <el-form label-position="left" inline class="demo-table-expand" style="margin-left: 50px;" label-width="120px">
                   <el-form-item label="Handling fee">
                     <span>{{ scope.row.orderFee}}</span>
                   </el-form-item>
@@ -191,7 +191,7 @@
         pageNum: 1,
         pageSize: 15,
         stockCode: '', // 代碼
-        stockSpell: '', // 簡拼
+        stockSpell: 'TW', 
         list: {
           list: []
         }
@@ -207,7 +207,7 @@
     },
     mounted () {
       this.getlist()
-      this.$store.state.userMenu = '2-2'
+      this.$store.state.userMenu = '2-4'
     },
     methods: {
       handleSizeChange (size) {

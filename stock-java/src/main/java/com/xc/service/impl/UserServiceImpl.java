@@ -23,6 +23,7 @@ import com.xc.vo.position.PositionProfitVO;
 import com.xc.vo.position.PositionVO;
 import com.xc.vo.user.UserInfoVO;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -53,8 +54,9 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     StockMapper stockMapper;
 
-//    @Autowired
-//    TwStockMapper twStockMapper;
+
+    @Autowired
+    TwStockMapper twStockMapper;
 
     @Autowired
     IUserPositionService iUserPositionService;
@@ -94,6 +96,9 @@ public class UserServiceImpl implements IUserService {
     StockIndexMapper stockIndexMapper;
     @Autowired
     ISiteMessageService iSiteMessageService;
+
+    @Autowired
+    IStockCoinService stockCoinService;
 
     @Override
     public ServerResponse reg(String yzmCode, String agentCode, String phone, String userPwd, HttpServletRequest request) {
@@ -209,69 +214,58 @@ public class UserServiceImpl implements IUserService {
         return this.userMapper.selectByPrimaryKey(user.getId());
     }
 
-    public ServerResponse addOption(String code, HttpServletRequest request) {
+    public ServerResponse addOption(String code,String marketType, HttpServletRequest request) {
         User user = getCurrentUser(request);
-//        String stockcode = code;
-//        if(code.contains("hf")){
-//            stockcode = code.split("_")[1];
-//        }
-//        stockcode = stockcode.replace("sh","").replace("sz","");
-        StockOption dboption = this.stockOptionMapper.findMyOptionIsExistByCode(user.getId(), code);
+        Stock stock = null;
 
-        if (dboption != null) {
-            return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.exists"));
-        }
-//        Stock stock = new Stock();
-//        new TwStock();
-        //期货逻辑
-//        if(code.contains("hf")){
-//            StockFutures stockFutures = this.stockFuturesMapper.selectFuturesByCode(code);
-//            if(stockFutures != null){
-//                stock.setId(stockFutures.getId());
-//                stock.setStockCode(stockFutures.getFuturesCode());
-//                stock.setStockGid(stockFutures.getFuturesGid());
-//                stock.setStockName(stockFutures.getFuturesName());
-//                stock.setIsLock(0);
+
+        if (marketType.equals("US")){
+            stock = this.stockMapper.findStockByCode(code);
+//            if (stock != null) {
+//                return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.exists"));
 //            }
-//        } else if(code.contains("sh") || code.contains("sz")){
-//            StockIndex stockIndex = this.stockIndexMapper.selectIndexByCode(code);
-//            if(stockIndex != null){
-//                stock.setId(stockIndex.getId());
-//                stock.setStockCode(stockIndex.getIndexCode());
-//                stock.setStockGid(stockIndex.getIndexGid());
-//                stock.setStockName(stockIndex.getIndexName());
-//                stock.setIsLock(0);
-//            }
-//        } else {
-        Stock stock = this.stockMapper.findStockByCode(code);
-//        }
-        if (stock == null) {
-            return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.stockNotExists"));
+            if (stock == null) {
+                return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.stockNotExists"));
+            }
+
+            StockOption stockOption = new StockOption();
+            //添加自選股
+            stockOption.setUserId(user.getId());
+            stockOption.setStockId(stock.getId());
+            stockOption.setAddTime(new Date());
+
+            stockOption.setStockCode(stock.getStockCode());
+            stockOption.setStockName(stock.getStockName());
+            stockOption.setStockGid(marketType);
+            stockOption.setIsLock(0);
+
+            int insertCount = this.stockOptionMapper.insert(stockOption);
+            if (insertCount > 0) {
+                return ServerResponse.createBySuccessMsg(MessageUtils.get("option.add.success"));
+            }
+
+        }else if(marketType.equals("TW")) {
+            TwStock twStock = this.twStockMapper.findStockByCode(code);
+
+            if (twStock == null) {
+                return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.stockNotExists"));
+            }
+            StockOption stockOption = new StockOption();
+            //添加自選股
+            stockOption.setUserId(user.getId());
+            stockOption.setStockId(twStock.getId());
+            stockOption.setAddTime(new Date());
+            stockOption.setStockCode(twStock.getStockCode());
+            stockOption.setStockName(twStock.getStockName());
+            stockOption.setStockGid(marketType);
+            stockOption.setIsLock(0);
+            int insertCount = this.stockOptionMapper.insert(stockOption);
+            if (insertCount > 0) {
+                return ServerResponse.createBySuccessMsg(MessageUtils.get("option.add.success"));
+            }
         }
-        StockOption stockOption = new StockOption();
-//        stockOption.setUserId(user.getId());
-//        stockOption.setStockId(stock.getId());
-//        stockOption.setAddTime(new Date());
-//
-//        stockOption.setStockCode(stock.getStockCode());
-//        stockOption.setStockName(stock.getStockName());
-//        stockOption.setStockGid(stock.getStockGid());
-//        stockOption.setIsLock(stock.getIsLock());
 
-        //添加自選股
-        stockOption.setUserId(user.getId());
-        stockOption.setStockId(stock.getId());
-        stockOption.setAddTime(new Date());
 
-        stockOption.setStockCode(stock.getStockCode());
-        stockOption.setStockName(stock.getStockName());
-        //stockOption.setStockGid(stock.getStockGid());
-        stockOption.setIsLock(0);
-
-        int insertCount = this.stockOptionMapper.insert(stockOption);
-        if (insertCount > 0) {
-            return ServerResponse.createBySuccessMsg(MessageUtils.get("option.add.success"));
-        }
         return ServerResponse.createByErrorMsg(MessageUtils.get("option.add.fail"));
     }
 
@@ -1582,7 +1576,8 @@ public class UserServiceImpl implements IUserService {
 
         userInfoVO.setEnableAmt(user.getEnableAmt());
         userInfoVO.setTradingAmount(user.getTradingAmount());
-
+        userInfoVO.setTwUserAmt(user.getTwUserAmt());
+        userInfoVO.setTwEnableAmt(user.getTwEnableAmt());
 
         PositionVO positionVO = this.iUserPositionService.findUserPositionAllProfitAndLose(user.getId());
         userInfoVO.setAllFreezAmt(positionVO.getAllFreezAmt());
@@ -1657,6 +1652,63 @@ public class UserServiceImpl implements IUserService {
     public ServerResponse allOption(HttpServletRequest request) {
         User user = getCurrentUser(request);
         return ServerResponse.createBySuccess(this.iStockOptionService.allOption(user.getId()));
+    }
+
+    @Override
+    @Transactional
+    public ServerResponse transfer(String fromCode, BigDecimal fromAmount, String toCode,HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        StockCoin fromStockCoin = stockCoinService.selectCoinByCode(fromCode);
+        StockCoin toStockCoin = stockCoinService.selectCoinByCode(toCode);
+
+        if (fromStockCoin == null || toStockCoin == null){
+            return ServerResponse.createByErrorMsg("不支持的币种");
+        }
+        String coinCode = fromStockCoin.getCoinCode();
+        User userInfo = userMapper.selectByPrimaryKey(user.getId());
+
+        BigDecimal transferAmount = BigDecimal.ZERO;
+        if (coinCode.equals("USD")) {
+            //美元转新台币
+            BigDecimal defaultRate = toStockCoin.getDefaultRate();
+             transferAmount = fromAmount.multiply(defaultRate);
+            if (fromAmount.compareTo(userInfo.getEnableAmt()) >0 ){
+                return ServerResponse.createBySuccess("美股可用资金不足");
+            }
+            userInfo.setUserAmt(userInfo.getUserAmt().subtract(fromAmount));
+            userInfo.setEnableAmt(userInfo.getEnableAmt().subtract(fromAmount));
+
+            userInfo.setTwUserAmt(userInfo.getTwUserAmt().add(transferAmount));
+            userInfo.setTwEnableAmt(userInfo.getTwEnableAmt().add(transferAmount));
+        }
+        if (coinCode.equals("TWD")) {
+            BigDecimal defaultRate = fromStockCoin.getDefaultRate();
+            //新台币转美元
+             transferAmount = fromAmount.divide(defaultRate,2, RoundingMode.HALF_UP);
+            if (fromAmount.compareTo(userInfo.getTwEnableAmt()) >0 ){
+                return ServerResponse.createBySuccess("台股可用资金不足");
+            }
+            userInfo.setUserAmt(userInfo.getUserAmt().add(transferAmount));
+            userInfo.setEnableAmt(userInfo.getEnableAmt().add(transferAmount));
+
+            userInfo.setTwUserAmt(userInfo.getTwUserAmt().subtract(fromAmount));
+            userInfo.setTwEnableAmt(userInfo.getTwEnableAmt().subtract(fromAmount));
+        }
+
+        SiteMessage siteMessage= new SiteMessage();
+        siteMessage.setAddTime(new Date());
+        siteMessage.setUserId(userInfo.getId());
+        siteMessage.setUserName(userInfo.getRealName());
+        siteMessage.setTypeName("资金兑换");
+        siteMessage.setStatus(1);
+        siteMessage.setContent(String.format("资金兑换成功,%s%s兑换成%s%s",fromAmount,fromCode,
+                transferAmount,toCode));
+        iSiteMessageService.insert(siteMessage);
+        int i = userMapper.updateByPrimaryKey(userInfo);
+        if (i>0){
+            return ServerResponse.createBySuccess("兑换成功");
+        }
+        return ServerResponse.createByErrorMsg("兑换失败");
     }
 
 }

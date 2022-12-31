@@ -608,7 +608,7 @@ export default {
         cursor: pointer;
         span {
           display: inline-flex;
-          width: 64px;
+          // width: 64px;
           height: 15px;
           font-size: 16px;
           font-family: Microsoft YaHei;
@@ -849,7 +849,7 @@ export default {
         cursor: pointer;
         span {
           display: inline-flex;
-          width: 64px;
+          // width: 64px;
           height: 15px;
           font-size: 16px;
           font-family: Microsoft YaHei;

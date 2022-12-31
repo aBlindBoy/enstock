@@ -13,14 +13,9 @@
       </div>
 
       <el-row class="box-account" :gutter="20">
-        <!-- <el-row>
-          <el-col class="progress-box" :span="24">
-            <el-progress :text-inside="true" :stroke-width="10"
-                         :percentage="$store.state.userInfo.userAmt/($store.state.userInfo.userAmt+$store.state.userInfo.userIndexAmt) * 100 > 100?100:$store.state.userInfo.userAmt/($store.state.userInfo.userAmt+$store.state.userInfo.userIndexAmt) * 100 > 100?$store.state.userInfo.userAmt/($store.state.userInfo.userAmt+$store.state.userInfo.userIndexAmt) * 100 > 100?100:$store.state.userInfo.userAmt/($store.state.userInfo.userAmt+$store.state.userInfo.userIndexAmt) * 100:100"></el-progress>
-          </el-col>
-        </el-row>-->
-
-        <el-collapse v-model="accountActiveNames">
+      
+        <!-- 美股账户 -->
+        <el-collapse v-model="usActive">
           <div class="count-r">
             <span class="line">
               （{{$t('account.usStockClosingLine')}}
@@ -32,8 +27,10 @@
                 ).toFixed(2)
               }}</span>
               ）
+              <el-button  size="small" type="primary" round @click="toTransfer(1)">资金兑换</el-button>
             </span>
           </div>
+         
           <el-collapse-item :title="$t('account.usStockAccount')" name="1">
             <el-col :span="24">
               <el-row class="Assets-box" :gutter="20">
@@ -47,15 +44,6 @@
                           ? "****"
                           : $store.state.userInfo.userAmt
                       }}
-                    </p>
-                  </div>
-                </el-col>
-                <el-col :span="5">
-                  <div class="box box1">
-                    <i class="color3 iconfont icon-yingkuixuanzhong"></i>
-                    <p class="title">{{$t('account.newSharesFreeze')}}:</p>
-                    <p :class="refresh ? 'number heartBeat' : 'number'">
-                      {{ shengoudj.djzj }}
                     </p>
                   </div>
                 </el-col>
@@ -89,6 +77,102 @@
                   <div class="box box1">
                     <i class="color4 iconfont icon-yingkuixuanzhong"></i>
                     <p class="title">{{$t('account.totalProfitAndLoss')}}:</p>
+                    <p :class="refresh ? 'heartBeat' : ''">
+                      <span
+                        :class="
+                          $store.state.userInfo.allProfitAndLose > 0
+                            ? 'red number'
+                            : $store.state.userInfo.allProfitAndLose < 0
+                            ? 'green number'
+                            : 'number'
+                        "
+                        >{{
+                          $store.state.hide
+                            ? "****"
+                            : $store.state.userInfo.allProfitAndLose
+                        }}</span
+                      >
+                    </p>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-collapse-item>
+        </el-collapse>
+
+        <!-- 台股账户 -->
+        <el-collapse v-model="twActive">
+          <div class="count-r">
+            <span class="line">
+              （您的台股强制平仓线为 
+              <span class="num">{{
+                (
+                  ($store.state.userInfo.twEnableAmt +
+                    $store.state.userInfo.allFreezAmt) *
+                  settingInfo.forceStopPercent
+                ).toFixed(2)
+              }}</span>
+              ）
+              <el-button size="small" type="primary" round @click="toTransfer(2)">资金兑换</el-button>
+
+            </span>
+
+          </div>
+          <el-collapse-item title="台股账户" name="1">
+            <el-col :span="24">
+              <el-row class="Assets-box" :gutter="20">
+                <el-col :span="6">
+                  <div class="box box1">
+                    <i class="color3 iconfont icon-yingkuixuanzhong"></i>
+                    <p class="title">台股账户:</p>
+                    <p :class="refresh ? 'number heartBeat' : 'number'">
+                      {{
+                        $store.state.hide
+                          ? "****"
+                          : $store.state.userInfo.twUserAmt
+                      }}
+                    </p>
+                  </div>
+                </el-col>
+                <!-- <el-col :span="5">
+                  <div class="box box1">
+                    <i class="color3 iconfont icon-yingkuixuanzhong"></i>
+                    <p class="title">台股新股冻结:</p>
+                    <p :class="refresh ? 'number heartBeat' : 'number'">
+                      {{ shengoudj.djzj }}
+                    </p>
+                  </div>
+                </el-col> -->
+                <el-col :span="5">
+                  <div class="box box1">
+                    <i class="color1 iconfont icon-dongjiezijin"></i>
+                    <p class="title">台股冻结保证金:</p>
+                    <p>
+                      <span class="number">{{
+                        $store.state.hide
+                          ? "****"
+                          : $store.state.userInfo.allFreezAmt
+                      }}</span>
+                    </p>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="box box1">
+                    <i class="color2 iconfont  icon-yingkuixuanzhong"></i>
+                    <p class="title">台股可用资金:</p>
+                    <p class="number">
+                      {{
+                        $store.state.hide
+                          ? "****"
+                          : $store.state.userInfo.twEnableAmt
+                      }}
+                    </p>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="box box1">
+                    <i class="color4 iconfont icon-yingkuixuanzhong"></i>
+                    <p class="title">台股总损益总额:</p>
                     <p :class="refresh ? 'heartBeat' : ''">
                       <span
                         :class="
@@ -400,15 +484,15 @@
 
 <script>
 import * as api from "../../../axios/api";
-import ChartBox from "./chart";
+// import ChartBox from "./chart";
 import DetailTable from "./table/detail";
-import echarts from "echarts";
+// import echarts from "echarts";
 import layout from "@/components/layout";
 // import DetailTable from './table/detail'
 
 export default {
   components: {
-    ChartBox,
+    // ChartBox,
     DetailTable,
     layout
   },
@@ -444,7 +528,9 @@ export default {
       indexSettingInfo: {},
       futuresSettingInfo: {},
       bankInfo: {},
-      accountActiveNames: ["1"],
+      // accountActiveNames: ["1","2"],
+      usActive:"1",
+      twActive:"2",
       shengoudj: ""
     };
   },
@@ -474,8 +560,8 @@ export default {
   created() {
     this.getCardDetail();
     this.getSettingInfo();
-    this.getIndexSetting();
-    this.getFuturesSetting();
+    // this.getIndexSetting();
+    // this.getFuturesSetting();
     // this.getprice();
     if (this.$store.state.userInfo.isActive === 2) {
       this.hasAuth = true;
@@ -497,15 +583,14 @@ export default {
       window.drawLine = this.drawLine;
      
       var data =  this.$t('account.usStockAccount') +"  "+ this.$store.state.userInfo.userAmt;
-      var data1 = "Index Account:" + this.$store.state.userInfo.userIndexAmt;
-      var data2 = "Futures Account: " + this.$store.state.userInfo.userFuturesAmt;
+      var data1 = "台股账户"+"  " + this.$store.state.userInfo.twUserAmt;
+      // var data2 = "Futures Account: " + this.$store.state.userInfo.userFuturesAmt;
 
       var alldata =
         "" +
         (
           Number(this.$store.state.userInfo.userAmt) +
-          Number(this.$store.state.userInfo.userIndexAmt) +
-          Number(this.$store.state.userInfo.userFuturesAmt)
+          Number(this.$store.state.userInfo.twUserAmt)
         ).toFixed(2);
       // console.log(data);
       // 基于准備好的dom，初始化echarts實例
@@ -522,8 +607,8 @@ export default {
           orient: "vertical",
           right: 0,
           top: 50,
-          // , data1, data2
-          data: [data],
+          // , , data2
+          data: [data,data1],
           textStyle: {
             fontSize: 10,
             color: color
@@ -582,13 +667,14 @@ export default {
                 name: data
               },
               {
-                value: this.$store.state.userInfo.userIndexAmt,
+                value: this.$store.state.userInfo.twUserAmt,
                 name: data1
-              },
-              {
-                value: this.$store.state.userInfo.userFuturesAmt,
-                name: data2
               }
+              // ,
+              // {
+              //   value: this.$store.state.userInfo.userFuturesAmt,
+              //   name: data2
+              // }
             ],
             rich: {
               total: {
@@ -678,6 +764,15 @@ export default {
     toWithdraw() {
       // Withdrawal
       this.$router.push("/withdraw");
+    },
+    toTransfer(type){
+      this.$router.push({
+       path: "/transfer",
+        query:{
+            type:type
+        }
+      });
+
     }
   }
 };

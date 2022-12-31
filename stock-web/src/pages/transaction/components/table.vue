@@ -412,7 +412,8 @@ export default {
     },
     async tianjiaOptions(row) {
       let data = await api.addOption({
-        code: row.code
+        code: row.code,
+        marketType:this.$route.query.marketType =="usa"?"US":"TW"
       });
 
       if (data.status === 0) {
@@ -636,9 +637,11 @@ export default {
         path: "/transaction",
         query: {
           code: row.stockCode == undefined ? row.code : row.stockCode,
-          marketType: this.$route.query.marketType
+          // marketType: this.$route.query.marketType
+          marketType:row.stock_type=="tw" || row.stock_type=="TW"?"tw":"usa"
         }
       });
+      debugger
       this.$emit("toTransaction", row);
     },
     // // 期货2.0

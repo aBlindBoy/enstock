@@ -1048,7 +1048,7 @@
   background-color: #fff;
 }
 .red-bg .account .pull-right {
-  margin-right: 150px;
+  margin-right: 50px;
   margin-top: 80px;
 }
 .red-bg .account .pull-right button {
@@ -1076,7 +1076,8 @@
 .red-bg .account .line {
   position: absolute;
   left: 175px;
-  top: 25px;
+  /* top: 25px; */
+  line-height: 50px;
   color: #222;
   z-index: 100;
 }

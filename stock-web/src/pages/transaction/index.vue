@@ -805,9 +805,9 @@ export default {
   width: 68px;
 }
 
-/deep/ .tab-box .el-tabs__content {
-  // height: 250px !important;
-}
+// /deep/ .tab-box .el-tabs__content {
+//   // height: 250px !important;
+// }
 
 .header-btn-new {
   text-align: center;

@@ -1059,7 +1059,7 @@
   background-color: #171A25;
 }
 .black-bg .account .pull-right {
-  margin-right: 150px;
+  margin-right: 50px;
   margin-top: 80px;
 }
 .black-bg .account .pull-right button {
@@ -1087,7 +1087,8 @@
 .black-bg .account .line {
   position: absolute;
   left: 175px;
-  top: 25px;
+  /* top: 25px; */
+  line-height: 50px;
   color: #fff;
   z-index: 100;
 }

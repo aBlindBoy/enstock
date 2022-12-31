@@ -480,7 +480,7 @@ export default {
 /deep/ .cell {
   color: #fff !important;
 }
-/deep/ .aaaa .el-tabs__item {
+/deep/  .el-tabs__item {
   color: #d8d8d8 !important;
 }
 /deep/ .el-tabs__item.is-active {
@@ -489,6 +489,7 @@ export default {
 /deep/ .black-bg .futuresholdposition .el-table th .cell {
   color: #fff !important;
 }
+
 .red {
   color: red !important;
 }

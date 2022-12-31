@@ -35,7 +35,7 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="coinGid"
             label="基币gid">
           </el-table-column>
@@ -45,7 +45,7 @@
             <template slot-scope="scope">
               <span class="red">{{scope.row.nowPrice }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="defaultRate"
             label="默认汇率">

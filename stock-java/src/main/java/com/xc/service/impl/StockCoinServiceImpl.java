@@ -44,29 +44,17 @@ public class StockCoinServiceImpl implements IStockCoinService {
     IStockFuturesService iStockFuturesService;
 
 
-    public ServerResponse<PageInfo> listByAdmin(String coinName, String coinCode, int pageNum, int pageSize) {
-
+    public ServerResponse<PageInfo> listByAdmin(String coinName, String coinCode,
+                                                int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-
         List<StockCoin> stockCoins = this.stockCoinMapper.listByAdmin(coinName, coinCode);
-
-
-        List<CoinAdminListVO> coinAdminListVOS = Lists.newArrayList();
-
-        for (StockCoin stockCoin : stockCoins) {
-
-            CoinAdminListVO coinAdminListVO = assembleCoinAdminListVO(stockCoin);
-
-            coinAdminListVOS.add(coinAdminListVO);
-
-        }
-
-
+//        List<CoinAdminListVO> coinAdminListVOS = Lists.newArrayList();
+//        for (StockCoin stockCoin : stockCoins) {
+//            CoinAdminListVO coinAdminListVO = assembleCoinAdminListVO(stockCoin);
+//            coinAdminListVOS.add(coinAdminListVO);
+//        }
         PageInfo pageInfo = new PageInfo(stockCoins);
-
-        pageInfo.setList(coinAdminListVOS);
-
-
+        pageInfo.setList(stockCoins);
         return ServerResponse.createBySuccess(pageInfo);
 
     }

@@ -94,7 +94,7 @@
             <router-link to="/funds/account" tag="li">
               <el-menu-item index="12-5">交易账户管理</el-menu-item>
             </router-link> 
-            <router-link to="/funds/apply?type=0" tag="li">
+            <!-- <router-link to="/funds/apply?type=0" tag="li">
               <el-menu-item index="12-6">待审核配资</el-menu-item>
             </router-link> 
             <router-link to="/funds/apply?type=1" tag="li">
@@ -132,7 +132,7 @@
             </router-link> 
             <router-link to="/funds/end?type=1" tag="li">
               <el-menu-item index="12-17">终止操盘记录</el-menu-item>
-            </router-link>
+            </router-link> -->
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">
@@ -145,17 +145,18 @@
               <el-menu-item index="4-1">台湾股票</el-menu-item>
             </router-link>
             <router-link to="/product/stock" tag="li">
-              <el-menu-item index="4-2">股票产品</el-menu-item>
+              <el-menu-item index="4-2">美国股票</el-menu-item>
             </router-link>
-            <router-link to="/product/index" tag="li">
+            <!-- <router-link to="/product/index" tag="li">
               <el-menu-item index="4-3">指数产品</el-menu-item>
+            </router-link> -->
+            <router-link to="/product/coin" tag="li">
+              <el-menu-item index="4-5">汇率管理</el-menu-item>
             </router-link>
           </el-menu-item-group>
           <el-submenu index="4-4">
             <span slot="title">外盘期货</span>
-            <router-link to="/product/coin" tag="li">
-              <el-menu-item index="4-5">基币管理</el-menu-item>
-            </router-link>
+           
             <router-link to="/product/futures" tag="li">
               <el-menu-item index="4-6">期货产品</el-menu-item>
             </router-link>
@@ -306,9 +307,9 @@
             <router-link to="/set/art" tag="li">
               <el-menu-item index="11-2">公告设置</el-menu-item>
             </router-link>
-            <router-link to="/set/banner" tag="li">
+            <!-- <router-link to="/set/banner" tag="li">
               <el-menu-item index="11-3">banner设置</el-menu-item>
-            </router-link>
+            </router-link> -->
             <router-link to="/set/paychannel" tag="li">
               <el-menu-item index="11-4">支付渠道设置</el-menu-item>
             </router-link>

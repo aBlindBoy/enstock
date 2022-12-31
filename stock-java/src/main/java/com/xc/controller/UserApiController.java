@@ -155,5 +155,20 @@ public class UserApiController {
         String sina_result = HttpClientRequest.doGet(SINA_URL + request.getParameter("list"));
         return sina_result;
     }
+
+    /**
+     * 资金兑换
+     */
+    @RequestMapping(value={"transfer.do"},method = {RequestMethod.POST})
+    @ResponseBody
+    public ServerResponse transfer(
+           @RequestParam(value="fromCode",required = true) String fromCode,
+           @RequestParam(value="fromAmount",required = true)  BigDecimal fromAmount,
+           @RequestParam(value="toCode",required = true)  String toCode,
+            HttpServletRequest request) {
+        return  this.iUserService.transfer(fromCode,fromAmount,toCode,request);
+    }
+
+
 }
 

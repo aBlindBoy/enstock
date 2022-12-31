@@ -17,7 +17,7 @@ public interface IUserService {
 
   User getCurrentRefreshUser(HttpServletRequest paramHttpServletRequest);
 
-  ServerResponse addOption(String paramString, HttpServletRequest paramHttpServletRequest);
+  ServerResponse addOption(String paramString,String marketType, HttpServletRequest paramHttpServletRequest);
 
   ServerResponse delOption(String paramString, HttpServletRequest paramHttpServletRequest);
 
@@ -83,4 +83,6 @@ public interface IUserService {
   List<User>   listByAgentId(Integer agentId);
 
     ServerResponse allOption(HttpServletRequest request);
+
+  ServerResponse transfer(String fromCode, BigDecimal fromAmount, String toCode,HttpServletRequest request);
 }

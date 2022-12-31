@@ -50,8 +50,10 @@ public class UserController {
     //添加到自選股
     @RequestMapping({"addOption.do"})
     @ResponseBody
-    public ServerResponse addOption(@RequestParam("code") String code, HttpServletRequest request) {
-        return this.iUserService.addOption(code, request);
+    public ServerResponse addOption(@RequestParam("code") String code,
+                                    @RequestParam("marketType") String marketType,
+                                    HttpServletRequest request) {
+        return this.iUserService.addOption(code, marketType,request);
     }
 
     //刪除自選股

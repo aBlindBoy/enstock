@@ -74,8 +74,12 @@
 												<span class="price">{{total?total:0}}</span>
 											</el-col>
 											<el-col :span="8">
-												<span class="keyong">{{$t('common.availableFunds')}}
-													{{$store.state.userInfo.enableAmt}}USD</span>
+												<span v-if="this.marketType=='usa'" class="keyong">{{$t('common.availableFunds')}}
+													{{$store.state.userInfo.enableAmt}} 
+													USD</span>
+												<span v-if="this.marketType=='tw'" class="keyong">{{$t('common.availableFunds')}}
+													{{$store.state.userInfo.twEnableAmt}}  TWD
+													</span>
 												</el-col>
 										</el-row> 
 										<el-button :loading="loadingBtn" class="buy-button ru" type="primary" @click="onSubmit('ruleForm')" style="margin-top:14px">
@@ -89,7 +93,7 @@
 							</div>
 						</div>
 					</el-tab-pane>
-					<!-- 美股結束 -->
+					<!-- 美股/台股結束 -->
 
 				</el-tabs>
 				
@@ -501,16 +505,16 @@
 						}
 						var regisKong = /^\s*$/g;
 						if (regisKong.test(this.form.buyNum)) {
-							this.$message.error(this.$t('commmon.sharesIsNull'));
+							this.$message.error(this.$t('tradingFloor.sharesIsNull'));
 							return
 						}
 						if (regisKong.test(this.form.lever)) {
-							this.$message.error(this.$t('commmon.leverageIsNull'));
+							this.$message.error(this.$t('tradingFloor.leverageIsNull'));
 							return
 						}
 						if (regisKong.test(this.form.buyType)) {
 
-							this.$message.error(this.$t('commmon.directionIsNull'));
+							this.$message.error(this.$t('tradingFloor.directionIsNull'));
 							return
 						}
 
@@ -704,9 +708,9 @@
 		height: 25px;
 	}
 
-	.buy-box .buy-item[data-v-27e7503f] {
-		// margin-bottom: 10px;
-	}
+	// .buy-box .buy-item[data-v-27e7503f] {
+	// 	// margin-bottom: 10px;
+	// }
 
 	.el-form-item--mini.el-form-item,
 	.el-form-item--small.el-form-item {

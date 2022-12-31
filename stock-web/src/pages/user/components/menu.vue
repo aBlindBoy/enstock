@@ -11,6 +11,9 @@
         <el-menu-item index="2-1">
           <span class="iconfont icon-yuandianxiao"></span>    {{$t('persionnalMenu.accountAssets')}}</el-menu-item>
       </router-link>
+      <router-link to="/transfer" tag="li">
+        <el-menu-item index="2-12"><span class="iconfont icon-yuandianxiao"></span>资金兑换</el-menu-item>
+      </router-link>
       <router-link to="/message" tag="li">
         <el-menu-item index="2-13">
           <div class="el-badge item-mark">
@@ -48,14 +51,21 @@
      
 
       <el-menu-item class="banner-menu" index="disabled" disabled>
-        <i class="iconfont icon-jiaoyi1"></i>
-        {{$t('persionnalMenu.trade')}}
+        <i class="iconfont icon-jiaoyi"></i>
+        <!-- {{$t('persionnalMenu.trade')}} -->
+        交易
       </el-menu-item>
-      <router-link to="/holdposition" tag="li">
-        <el-menu-item index="2-2"><span class="iconfont icon-yuandianxiao"></span>   {{$t('persionnalMenu.usHoldings')}}</el-menu-item>
+      <router-link to="/usHoldposition" tag="li">
+        <el-menu-item index="2-2"><span class="iconfont icon-yuandianxiao"></span>美股持仓 </el-menu-item>
       </router-link>
-      <router-link to="/sell" tag="li">
-        <el-menu-item index="2-3"><span class="iconfont icon-yuandianxiao"></span> {{$t('persionnalMenu.usClose')}}</el-menu-item>
+      <router-link to="/usSell" tag="li">
+        <el-menu-item index="2-3"><span class="iconfont icon-yuandianxiao"></span>美股历史库存</el-menu-item>
+      </router-link>
+      <router-link to="/twHoldposition" tag="li">
+        <el-menu-item index="2-4"><span class="iconfont icon-yuandianxiao"></span>台股持仓</el-menu-item>
+      </router-link>
+      <router-link to="/twSell" tag="li">
+        <el-menu-item index="2-5"><span class="iconfont icon-yuandianxiao"></span>台股历史库存</el-menu-item>
       </router-link>
       <!-- <router-link v-show="indexDisplay" to="/indexholdposition" tag="li">
         <el-menu-item index="indexhold"><span class="iconfont icon-yuandianxiao"></span>Index positions</el-menu-item>
@@ -110,6 +120,7 @@
       <router-link to="/changepwd" tag="li">
         <el-menu-item index="2-11"><span class="iconfont icon-yuandianxiao"></span>{{$t('persionnalMenu.changePassword')}}</el-menu-item>
       </router-link>
+
       <!-- <el-menu-item class="book" index="2-12">
         <a style="margin-left:-40px;"  href="javascript:;" @click="tradeDialogVisible = true">{{$store.state.siteInfo.tradeAgreeTitle}}</a>
       </el-menu-item> -->
@@ -153,7 +164,7 @@
         unreadCount: 0,
         tradeDialogVisible: false,
         // indexDisplay:this. $store.state.productSetting.indexDisplay,
-        futuresDisplay:$store.state.productSetting.futuresDisplay
+        futuresDisplay:this.$store.state.productSetting.futuresDisplay
       }
     },
     watch: {},

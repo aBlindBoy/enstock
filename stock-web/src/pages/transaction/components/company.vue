@@ -429,9 +429,9 @@ export default {
 		border-radius: 3px;
 	}
 
-	.box-buy-list>div {
-		// width: 33.5%;
-	}
+	// .box-buy-list>div {
+	// 	// width: 33.5%;
+	// }
 
 	.buy-item-teshu {
 		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -454,7 +454,7 @@ export default {
 			color: #4A4A4E;
 		}
 
-		.buy-list-title>div {}
+		// .buy-list-title>div {}
 	}
 
 	.buy-xian {

@@ -441,7 +441,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         if (siteProduct.getRealNameDisplay() && (StringUtils.isBlank(user.getRealName()) || StringUtils.isBlank(user.getIdCard()))) {
             return ServerResponse.createByErrorMsg("下單失敗，請先實名認證");
         }
-        BigDecimal user_enable_amt = user.getEnableAmt();
+        BigDecimal user_enable_amt = user.getTwEnableAmt();
         log.info("用戶 {} 下單，股票id = {} ，数量 = {} , 方向 = {} , 杠杆 = {}", new Object[]{user
                 .getId(), stockId, buyNum, buyType, lever});
         if (siteProduct.getRealNameDisplay() && user.getIsLock().intValue() == 1) {
@@ -456,7 +456,6 @@ public class UserPositionServiceImpl implements IUserPositionService {
             log.error("下單出错，网站設置表不存在");
             return ServerResponse.createByErrorMsg("下單失敗，系统設置錯誤");
         }
-
         String am_begin = siteSetting.getTransAmBegin();
         String am_end = siteSetting.getTransAmEnd();
         String pm_begin = siteSetting.getTransPmBegin();
@@ -543,7 +542,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         log.info("用戶可用金额 = {}  实际購買金额 =  {}", user_enable_amt, buy_amt_autual);
         log.info("比较 用戶金额 和 实际 購買金额 =  {}", Integer.valueOf(compareUserAmtInt));
         if (compareUserAmtInt < 0) {
-            return ServerResponse.createByErrorMsg("下單失敗，融資可用金额小於 " + buy_amt_autual + " 新臺幣");
+            return ServerResponse.createByErrorMsg("下單失敗，台股可用資金小於 " + buy_amt_autual + " 新臺幣");
         }
 
 //        if (user.getUserIndexAmt().compareTo(new BigDecimal("0")) == -1) {
@@ -619,7 +618,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
             //BigDecimal reckon_enable = user_enable_amt.subtract(buy_amt_autual).subtract(buy_fee_amt).subtract(buy_yhs_amt).subtract(spread_rate_amt);
             //修改用戶可用余额= 當前余额-下單总金额
             BigDecimal reckon_enable = user_enable_amt.subtract(buy_amt_autual);
-            user.setEnableAmt(reckon_enable);
+            user.setTwEnableAmt(reckon_enable);
             int updateUserCount = this.userMapper.updateByPrimaryKeySelective(user);
             if (updateUserCount > 0) {
                 log.info("【用戶交易下單】修改用戶金额成功");
@@ -638,10 +637,6 @@ public class UserPositionServiceImpl implements IUserPositionService {
         return ServerResponse.createBySuccess("下單成功");
     }
 
-    @Override
-    public ServerResponse sellTwStock(String paramString, int paramInt) throws Exception {
-        return null;
-    }
 
    /* public ServerResponse sell(String positionSn, int doType) throws Exception {
         log.info("【用戶交易平倉】 positionSn = {} ， dotype = {}", positionSn, Integer.valueOf(doType));
@@ -833,198 +828,198 @@ public class UserPositionServiceImpl implements IUserPositionService {
         return ServerResponse.createBySuccessMsg("平倉成功！");
     }*/
 
-//    @Transactional
-//    public ServerResponse sellTwStock(String positionSn, int doType) throws Exception {
-//        log.info("【用戶交易平倉】 positionSn = {} ， dotype = {}", positionSn, Integer.valueOf(doType));
-//
-//        SiteSetting siteSetting = this.iSiteSettingService.getSiteSetting();
-//        if (siteSetting == null) {
-//            log.error("平倉出错，网站設置表不存在");
-//            return ServerResponse.createByErrorMsg("下單失敗，系统設置錯誤");
-//        }
-//        SiteProduct siteProduct = iSiteProductService.getProductSetting();
-//
-//        if (doType != 0) {
-//            String am_begin = siteSetting.getTransAmBegin();
-//            String am_end = siteSetting.getTransAmEnd();
-//            String pm_begin = siteSetting.getTransPmBegin();
-//            String pm_end = siteSetting.getTransPmEnd();
-//            boolean am_flag = BuyAndSellUtils.isTransTime(am_begin, am_end);
-//            boolean pm_flag = BuyAndSellUtils.isTransTime(pm_begin, pm_end);
-//            log.info("是否在上午交易時间 = {} 是否在下午交易時间 = {}", Boolean.valueOf(am_flag), Boolean.valueOf(pm_flag));
-//            if (!am_flag && !pm_flag) {
-//                return ServerResponse.createByErrorMsg("平倉失敗，不在交易時段内");
-//            }
-//
-//            if (siteProduct.getHolidayDisplay()) {
-//                return ServerResponse.createByErrorMsg("週末或節假日不能交易！");
-//            }
-//
-//        }
-//
-//        UserPosition userPosition = this.userPositionMapper.findPositionBySn(positionSn);
-//        if (userPosition == null) {
-//            return ServerResponse.createByErrorMsg("平倉失敗，訂單不存在");
-//        }
-//
-//        User user = this.userMapper.selectByPrimaryKey(userPosition.getUserId());
-//        /*實名認證开关开启*/
-//
-//        if (siteProduct.getRealNameDisplay() && user.getIsLock() == 1) {
-//            return ServerResponse.createByErrorMsg("平倉失敗，用戶已被锁定");
-//        }
-//
-//
-//        if (userPosition.getSellOrderId() != null) {
-//            return ServerResponse.createByErrorMsg("平倉失敗，此訂單已平倉");
-//        }
-//
-////        if (1 == userPosition.getIsLock().intValue()) {
-//////            return ServerResponse.createByErrorMsg("平倉失敗 " + userPosition.getLockMsg());
-//////        }
-//
-//        if (!DateTimeUtil.isCanSell(userPosition.getBuyOrderTime(), siteSetting.getCantSellTimes())) {
-//            return ServerResponse.createByErrorMsg(siteSetting.getCantSellTimes() + "分鐘内不能平倉");
-//        }
-//
-////        if (DateTimeUtil.sameDate(DateTimeUtil.getCurrentDate(),userPosition.getBuyOrderTime())) {
-////            return ServerResponse.createByErrorMsg("当天入倉的股票需要隔天才能出倉");
+    @Transactional
+    public ServerResponse sellTwStock(String positionSn, int doType) throws Exception {
+        log.info("【用戶交易平倉】 positionSn = {} ， dotype = {}", positionSn, Integer.valueOf(doType));
+
+        SiteSetting siteSetting = this.iSiteSettingService.getSiteSetting();
+        if (siteSetting == null) {
+            log.error("平倉出错，网站設置表不存在");
+            return ServerResponse.createByErrorMsg("下單失敗，系统設置錯誤");
+        }
+        SiteProduct siteProduct = iSiteProductService.getProductSetting();
+
+        if (doType != 0) {
+            String am_begin = siteSetting.getTransAmBegin();
+            String am_end = siteSetting.getTransAmEnd();
+            String pm_begin = siteSetting.getTransPmBegin();
+            String pm_end = siteSetting.getTransPmEnd();
+            boolean am_flag = BuyAndSellUtils.isTransTime(am_begin, am_end);
+            boolean pm_flag = BuyAndSellUtils.isTransTime(pm_begin, pm_end);
+            log.info("是否在上午交易時间 = {} 是否在下午交易時间 = {}", Boolean.valueOf(am_flag), Boolean.valueOf(pm_flag));
+            if (!am_flag && !pm_flag) {
+                return ServerResponse.createByErrorMsg("平倉失敗，不在交易時段内");
+            }
+
+            if (siteProduct.getHolidayDisplay()) {
+                return ServerResponse.createByErrorMsg("週末或節假日不能交易！");
+            }
+
+        }
+
+        UserPosition userPosition = this.userPositionMapper.findPositionBySn(positionSn);
+        if (userPosition == null) {
+            return ServerResponse.createByErrorMsg("平倉失敗，訂單不存在");
+        }
+
+        User user = this.userMapper.selectByPrimaryKey(userPosition.getUserId());
+        /*實名認證开关开启*/
+
+        if (siteProduct.getRealNameDisplay() && user.getIsLock() == 1) {
+            return ServerResponse.createByErrorMsg("平倉失敗，用戶已被锁定");
+        }
+
+
+        if (userPosition.getSellOrderId() != null) {
+            return ServerResponse.createByErrorMsg("平倉失敗，此訂單已平倉");
+        }
+
+//        if (1 == userPosition.getIsLock().intValue()) {
+////            return ServerResponse.createByErrorMsg("平倉失敗 " + userPosition.getLockMsg());
 ////        }
-//
-//        String resultStr=UsStockApi.getTwStock(userPosition.getStockCode());
-//        StockListVO stockListVO = UsStockApi.assembleStockListVO(resultStr);
-//
-//        BigDecimal now_price = new BigDecimal(stockListVO.getNowPrice());
-//        if (now_price.compareTo(new BigDecimal("0")) != 1) {
-//            log.error("股票 = {} 收到报价 = {}", userPosition.getStockName(), now_price);
-//            return ServerResponse.createByErrorMsg("报价0，平倉失敗，請稍后再试");
+
+        if (!DateTimeUtil.isCanSell(userPosition.getBuyOrderTime(), siteSetting.getCantSellTimes())) {
+            return ServerResponse.createByErrorMsg(siteSetting.getCantSellTimes() + "分鐘内不能平倉");
+        }
+
+//        if (DateTimeUtil.sameDate(DateTimeUtil.getCurrentDate(),userPosition.getBuyOrderTime())) {
+//            return ServerResponse.createByErrorMsg("当天入倉的股票需要隔天才能出倉");
 //        }
-//
-//        double stock_crease = stockListVO.getHcrate().doubleValue();
-//
-//        BigDecimal zsPrice = new BigDecimal(stockListVO.getPreclose_px());
-//
-//        BigDecimal ztPrice = zsPrice.multiply(new BigDecimal("0.1")).add(zsPrice);
-//        ztPrice = ztPrice.setScale(2, 4);
-//        BigDecimal chaPrice = ztPrice.subtract(zsPrice);
-//
-//        BigDecimal ztRate = chaPrice.multiply(new BigDecimal("100")).divide(zsPrice, 2, 4);
-//
-//        ztRate = ztRate.negate();
-//        log.info("股票當前涨跌幅 = {} 跌停幅度 = {}", stock_crease, ztRate);
-//        if ((new BigDecimal(String.valueOf(stock_crease))).compareTo(ztRate) == 0 && "看涨"
-//                .equals(userPosition.getOrderDirection())) {
-//            return ServerResponse.createByErrorMsg("當前股票已跌停不能卖出");
-//        }
-//
-//        Integer buy_num = userPosition.getOrderNum();
-//
-//        BigDecimal all_buy_amt = userPosition.getOrderTotalPrice();
-//        //BigDecimal all_sell_amt = now_price.multiply(new BigDecimal(buy_num.intValue())).divide(new BigDecimal(userPosition.getOrderLever())).setScale(2,4);
-//        BigDecimal all_sell_amt = now_price.multiply(new BigDecimal(buy_num.intValue()));
-//
-//        BigDecimal profitLoss = new BigDecimal("0");
-//        if ("看涨".equals(userPosition.getOrderDirection())) {
-//            log.info("买卖方向：{}", "涨");
-//            profitLoss = all_sell_amt.subtract(all_buy_amt);
-//        } else {
-//            log.info("买卖方向：{}", "跌");
-//            profitLoss = all_buy_amt.subtract(all_sell_amt);
-//        }
-//        log.info("买入总金额 = {} , 卖出总金额 = {} , 盈虧 = {}", new Object[]{all_buy_amt, all_sell_amt, profitLoss});
-//
-//        BigDecimal user_all_amt = user.getUserAmt();
-//        BigDecimal user_enable_amt = user.getEnableAmt();
-//        log.info("用戶原本总資金 = {} , 可用 = {}", user_all_amt, user_enable_amt);
-//
-//        BigDecimal buy_fee_amt = userPosition.getOrderFee();
-//        log.info("买入手续费 = {}", buy_fee_amt);
-//
-//        BigDecimal orderSpread = userPosition.getOrderSpread();
-//        log.info("印花税 = {}", orderSpread);
-//
-//        BigDecimal orderStayFee = userPosition.getOrderStayFee();
-//        log.info("遞延費 = {}", orderStayFee);
-//
-//        BigDecimal spreadRatePrice = userPosition.getSpreadRatePrice();
-//        log.info("点差费 = {}", spreadRatePrice);
-//
-//        BigDecimal sell_fee_amt = all_sell_amt.multiply(siteSetting.getSellFee()).setScale(2, 4);
-//        log.info("卖出手续费 = {}", sell_fee_amt);
-//
-//        //總手續費= 买入手续费+卖出手续费+印花税+遞延費+点差费
-//        BigDecimal all_fee_amt = buy_fee_amt.add(sell_fee_amt).add(orderSpread).add(orderStayFee).add(spreadRatePrice);
-//        log.info("总的手续费费用 = {}", all_fee_amt);
-//
-//        userPosition.setSellOrderId(GeneratePosition.getPositionId());
-//        userPosition.setSellOrderPrice(now_price);
-//        userPosition.setSellOrderTime(new Date());
-//
-//        //修改orderFee
-//        BigDecimal order_fee_all = buy_fee_amt.add(sell_fee_amt);
-//        //order_fee最后修改為平倉手续费
-//        userPosition.setOrderFee(sell_fee_amt);
-//
-//        userPosition.setProfitAndLose(profitLoss);
-//
-//        BigDecimal all_profit = profitLoss.subtract(all_fee_amt);
-//        userPosition.setAllProfitAndLose(all_profit);
-//
-//        int updatePositionCount = this.userPositionMapper.updateByPrimaryKeySelective(userPosition);
-//        if (updatePositionCount > 0) {
-//            log.info("【用戶平倉】修改浮动盈虧記錄成功");
-//        } else {
-//            log.error("用戶平倉】修改浮动盈虧記錄出错");
-//            throw new Exception("用戶平倉】修改浮动盈虧記錄出错");
-//        }
-//
-//        BigDecimal freez_amt = all_buy_amt.divide(new BigDecimal(userPosition.getOrderLever().intValue()), 2, 4);
-//        //BigDecimal freez_amt = all_buy_amt;
-//
-//        BigDecimal reckon_all = user_all_amt.add(all_profit);
-//        //修改用戶可用余额=當前可用余额+總盈虧+买入总金额+追加保证金
-//        BigDecimal reckon_enable = user_enable_amt.add(all_profit);//.add(freez_amt).add(userPosition.getMarginAdd()).add(userPosition.getOrderTotalPrice());
-//        reckon_enable = reckon_enable.add(freez_amt);
-//        reckon_enable = reckon_enable.add(userPosition.getMarginAdd());
-//       // reckon_enable = reckon_enable.add(userPosition.getOrderTotalPrice().divide(BigDecimal.valueOf(userPosition.getOrderLever())));
-//        log.info("用戶平倉后的总資金  = {} , 可用資金 = {}", reckon_all, reckon_enable);
-//        user.setUserAmt(reckon_all);
-//        user.setEnableAmt(reckon_enable);
-//        int updateUserCount = this.userMapper.updateByPrimaryKeySelective(user);
-//        if (updateUserCount > 0) {
-//            log.info("【用戶平倉】修改用戶金额成功");
-//        } else {
-//            log.error("用戶平倉】修改用戶金额出错");
-//            throw new Exception("用戶平倉】修改用戶金额出错");
-//        }
-//
-//        UserCashDetail ucd = new UserCashDetail();
-//        ucd.setPositionId(userPosition.getId());
-//        ucd.setAgentId(user.getAgentId());
-//        ucd.setAgentName(user.getAgentName());
-//        ucd.setUserId(user.getId());
-//        ucd.setUserName(user.getRealName());
-//        ucd.setDeType("總盈虧");
-//        ucd.setDeAmt(all_profit);
-////        ucd.setDeSummary("賣出股票，" + userPosition.getStockCode() + "/" + userPosition.getStockName() + ",佔用本金：" + freez_amt + ",總手續費：" + all_fee_amt + ",建倉費：" + buy_fee_amt + ",遞延費：" + orderStayFee + ",印花税：" + orderSpread + ",盈虧：" + profitLoss + "，總盈虧：" + all_profit);
-//        ucd.setDeSummary("賣出股票，" + userPosition.getStockCode() + "/" + userPosition.getStockName() + ",佔用本金：" + freez_amt + ",總手續費：" + all_fee_amt + ",建倉費：" + buy_fee_amt + ",遞延費：" + orderStayFee + ",盈虧：" + profitLoss + "，總盈虧：" + all_profit);
-//        ucd.setAddTime(new Date());
-//        ucd.setIsRead(Integer.valueOf(0));
-//
-//        int insertSxfCount = this.userCashDetailMapper.insert(ucd);
-//        if (insertSxfCount > 0) {
-//            //核算代理收入-平倉手续费
-//            iAgentAgencyFeeService.AgencyFeeIncome(2, userPosition.getPositionSn());
-//            //核算代理收入-分红
-//            iAgentAgencyFeeService.AgencyFeeIncome(4, userPosition.getPositionSn());
-//            log.info("【用戶平倉】保存明细記錄成功");
-//        } else {
-//            log.error("用戶平倉】保存明细記錄出错");
-//            throw new Exception("用戶平倉】保存明细記錄出错");
-//        }
-//
-//        return ServerResponse.createBySuccessMsg("平倉成功！");
-//    }
+
+        String resultStr=TwStockApi.getTwStock(userPosition.getStockCode());
+        StockListVO stockListVO = UsStockApi.assembleStockListVO(resultStr);
+
+        BigDecimal now_price = new BigDecimal(stockListVO.getNowPrice());
+        if (now_price.compareTo(new BigDecimal("0")) != 1) {
+            log.error("股票 = {} 收到报价 = {}", userPosition.getStockName(), now_price);
+            return ServerResponse.createByErrorMsg("报价0，平倉失敗，請稍后再试");
+        }
+
+        double stock_crease = stockListVO.getHcrate().doubleValue();
+
+        BigDecimal zsPrice = new BigDecimal(stockListVO.getPreclose_px());
+
+        BigDecimal ztPrice = zsPrice.multiply(new BigDecimal("0.1")).add(zsPrice);
+        ztPrice = ztPrice.setScale(2, 4);
+        BigDecimal chaPrice = ztPrice.subtract(zsPrice);
+
+        BigDecimal ztRate = chaPrice.multiply(new BigDecimal("100")).divide(zsPrice, 2, 4);
+
+        ztRate = ztRate.negate();
+        log.info("股票當前涨跌幅 = {} 跌停幅度 = {}", stock_crease, ztRate);
+        if ((new BigDecimal(String.valueOf(stock_crease))).compareTo(ztRate) == 0 && "看涨"
+                .equals(userPosition.getOrderDirection())) {
+            return ServerResponse.createByErrorMsg("當前股票已跌停不能卖出");
+        }
+
+        Integer buy_num = userPosition.getOrderNum();
+
+        BigDecimal all_buy_amt = userPosition.getOrderTotalPrice();
+        //BigDecimal all_sell_amt = now_price.multiply(new BigDecimal(buy_num.intValue())).divide(new BigDecimal(userPosition.getOrderLever())).setScale(2,4);
+        BigDecimal all_sell_amt = now_price.multiply(new BigDecimal(buy_num.intValue()));
+
+        BigDecimal profitLoss = new BigDecimal("0");
+        if ("看涨".equals(userPosition.getOrderDirection())) {
+            log.info("买卖方向：{}", "涨");
+            profitLoss = all_sell_amt.subtract(all_buy_amt);
+        } else {
+            log.info("买卖方向：{}", "跌");
+            profitLoss = all_buy_amt.subtract(all_sell_amt);
+        }
+        log.info("买入总金额 = {} , 卖出总金额 = {} , 盈虧 = {}", new Object[]{all_buy_amt, all_sell_amt, profitLoss});
+
+        BigDecimal user_all_amt = user.getTwUserAmt();
+        BigDecimal user_enable_amt = user.getTwEnableAmt();
+        log.info("用戶原本总資金 = {} , 可用 = {}", user_all_amt, user_enable_amt);
+
+        BigDecimal buy_fee_amt = userPosition.getOrderFee();
+        log.info("买入手续费 = {}", buy_fee_amt);
+
+        BigDecimal orderSpread = userPosition.getOrderSpread();
+        log.info("印花税 = {}", orderSpread);
+
+        BigDecimal orderStayFee = userPosition.getOrderStayFee();
+        log.info("遞延費 = {}", orderStayFee);
+
+        BigDecimal spreadRatePrice = userPosition.getSpreadRatePrice();
+        log.info("点差费 = {}", spreadRatePrice);
+
+        BigDecimal sell_fee_amt = all_sell_amt.multiply(siteSetting.getSellFee()).setScale(2, 4);
+        log.info("卖出手续费 = {}", sell_fee_amt);
+
+        //總手續費= 买入手续费+卖出手续费+印花税+遞延費+点差费
+        BigDecimal all_fee_amt = buy_fee_amt.add(sell_fee_amt).add(orderSpread).add(orderStayFee).add(spreadRatePrice);
+        log.info("总的手续费费用 = {}", all_fee_amt);
+
+        userPosition.setSellOrderId(GeneratePosition.getPositionId());
+        userPosition.setSellOrderPrice(now_price);
+        userPosition.setSellOrderTime(new Date());
+
+        //修改orderFee
+        BigDecimal order_fee_all = buy_fee_amt.add(sell_fee_amt);
+        //order_fee最后修改為平倉手续费
+        userPosition.setOrderFee(sell_fee_amt);
+
+        userPosition.setProfitAndLose(profitLoss);
+
+        BigDecimal all_profit = profitLoss.subtract(all_fee_amt);
+        userPosition.setAllProfitAndLose(all_profit);
+
+        int updatePositionCount = this.userPositionMapper.updateByPrimaryKeySelective(userPosition);
+        if (updatePositionCount > 0) {
+            log.info("【用戶平倉】修改浮动盈虧記錄成功");
+        } else {
+            log.error("用戶平倉】修改浮动盈虧記錄出错");
+            throw new Exception("用戶平倉】修改浮动盈虧記錄出错");
+        }
+
+        BigDecimal freez_amt = all_buy_amt.divide(new BigDecimal(userPosition.getOrderLever().intValue()), 2, 4);
+        //BigDecimal freez_amt = all_buy_amt;
+
+        BigDecimal reckon_all = user_all_amt.add(all_profit);
+        //修改用戶可用余额=當前可用余额+總盈虧+买入总金额+追加保证金
+        BigDecimal reckon_enable = user_enable_amt.add(all_profit);//.add(freez_amt).add(userPosition.getMarginAdd()).add(userPosition.getOrderTotalPrice());
+        reckon_enable = reckon_enable.add(freez_amt);
+        reckon_enable = reckon_enable.add(userPosition.getMarginAdd());
+       // reckon_enable = reckon_enable.add(userPosition.getOrderTotalPrice().divide(BigDecimal.valueOf(userPosition.getOrderLever())));
+        log.info("用戶平倉后的总資金  = {} , 可用資金 = {}", reckon_all, reckon_enable);
+        user.setTwUserAmt(reckon_all);
+        user.setTwEnableAmt(reckon_enable);
+        int updateUserCount = this.userMapper.updateByPrimaryKeySelective(user);
+        if (updateUserCount > 0) {
+            log.info("【用戶平倉】修改用戶金额成功");
+        } else {
+            log.error("用戶平倉】修改用戶金额出错");
+            throw new Exception("用戶平倉】修改用戶金额出错");
+        }
+
+        UserCashDetail ucd = new UserCashDetail();
+        ucd.setPositionId(userPosition.getId());
+        ucd.setAgentId(user.getAgentId());
+        ucd.setAgentName(user.getAgentName());
+        ucd.setUserId(user.getId());
+        ucd.setUserName(user.getRealName());
+        ucd.setDeType("總盈虧");
+        ucd.setDeAmt(all_profit);
+//        ucd.setDeSummary("賣出股票，" + userPosition.getStockCode() + "/" + userPosition.getStockName() + ",佔用本金：" + freez_amt + ",總手續費：" + all_fee_amt + ",建倉費：" + buy_fee_amt + ",遞延費：" + orderStayFee + ",印花税：" + orderSpread + ",盈虧：" + profitLoss + "，總盈虧：" + all_profit);
+        ucd.setDeSummary("賣出股票，" + userPosition.getStockCode() + "/" + userPosition.getStockName() + ",佔用本金：" + freez_amt + ",總手續費：" + all_fee_amt + ",建倉費：" + buy_fee_amt + ",遞延費：" + orderStayFee + ",盈虧：" + profitLoss + "，總盈虧：" + all_profit);
+        ucd.setAddTime(new Date());
+        ucd.setIsRead(Integer.valueOf(0));
+
+        int insertSxfCount = this.userCashDetailMapper.insert(ucd);
+        if (insertSxfCount > 0) {
+            //核算代理收入-平倉手续费
+            iAgentAgencyFeeService.AgencyFeeIncome(2, userPosition.getPositionSn());
+            //核算代理收入-分红
+            iAgentAgencyFeeService.AgencyFeeIncome(4, userPosition.getPositionSn());
+            log.info("【用戶平倉】保存明细記錄成功");
+        } else {
+            log.error("用戶平倉】保存明细記錄出错");
+            throw new Exception("用戶平倉】保存明细記錄出错");
+        }
+
+        return ServerResponse.createBySuccessMsg("平倉成功！");
+    }
 
     //用戶追加保证金操作
     public ServerResponse addmargin(String positionSn, int doType, BigDecimal marginAdd) throws Exception {
@@ -1036,7 +1031,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
             return ServerResponse.createByErrorMsg("追加失敗，系统設置錯誤");
         }
 
-        if (doType != 0) {
+//        if (doType != 0) {
             /*String am_begin = siteSetting.getTransAmBegin();
             String am_end = siteSetting.getTransAmEnd();
             String pm_begin = siteSetting.getTransPmBegin();
@@ -1047,7 +1042,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
             if (!am_flag && !pm_flag) {
                 return ServerResponse.createByErrorMsg("追加失敗，不在交易時段内");
             }*/
-        }
+//        }
 
         UserPosition userPosition = this.userPositionMapper.findPositionBySn(positionSn);
         if (userPosition == null) {
@@ -1079,7 +1074,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         log.info("用戶可用金额 = {}  追加金额 =  {}", user_enable_amt, marginAdd);
         log.info("比较 用戶金额 和 实际 購買金额 =  {}", Integer.valueOf(compareUserAmtInt));
         if (compareUserAmtInt == -1) {
-            return ServerResponse.createByErrorMsg("追加失敗，融資可用金额小於" + marginAdd + "元");
+            return ServerResponse.createByErrorMsg("追加失敗，台股可用資金小於" + marginAdd + "元");
         }
 
 
@@ -1937,7 +1932,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         String pm_end = siteSetting.getTransPmEnd();
         boolean am_flag = BuyAndSellUtils.isTransTime(am_begin, am_end);
         boolean pm_flag = BuyAndSellUtils.isTransTime(pm_begin, pm_end);
-        log.info("是否在上午交易時间 = {} 是否在下午交易時间 = {}", Boolean.valueOf(am_flag), Boolean.valueOf(pm_flag));
+        log.info("是否在上午交易時间 = {} 是否在下午交易時间 = {}", am_flag, pm_flag);
 
         if (!am_flag && !pm_flag) {
             return ServerResponse.createByErrorMsg(MessageUtils.get("position.fail.tradingHours"));
