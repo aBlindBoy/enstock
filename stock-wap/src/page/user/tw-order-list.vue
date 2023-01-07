@@ -1,18 +1,28 @@
-<!-- <template>
+<template>
   <div class="wrapper">
-
+    <!-- <mt-header fixed  title="我的持���">
+        <router-link to="/" slot="left">
+            <mt-button icon="back"></mt-button>
+        </router-link>
+    </mt-header> -->
     <mt-navbar class="sub-navbar" v-model="selected">
-      <mt-tab-item id="3">期貨持仓</mt-tab-item>
-      <mt-tab-item id="4">期貨平倉</mt-tab-item>
+      <mt-tab-item id="1">{{$t('position.holding')}}</mt-tab-item>
+      <mt-tab-item id="2">{{$t('position.historical')}}</mt-tab-item>
     </mt-navbar>
     <mt-tab-container class="order-list" v-model="selected">
-      <mt-tab-container-item id="3">
-     
-        <holdPosition :selectedNumber='selectedNumber' :handleOptions='handleOptions2'/>
+      <mt-tab-container-item id="1">
+        <!-- <div class="text-center">
+          <mt-button @click="toSearchName" type="default">根據股票簡拼查詢訂單</mt-button>
+          <mt-button @click="toSearchCode" type="default" style="width:90%">Query orders by ticker</mt-button>
+        </div> -->
+        <twHoldPosition :selectedNumber='selectedNumber' :handleOptions='handleOptions'/>
       </mt-tab-container-item>
-      <mt-tab-container-item id="4">
-  
-        <HistoryList :selectedNumber='selectedNumber' :hasChangeSell="hasChangeSell2" :handleOptions='handleOptions2'/>
+      <mt-tab-container-item id="2">
+        <!-- <div class="text-center">
+          <mt-button @click="toSearchName2" type="default">Query orders based on stock briefs</mt-button>
+          <mt-button @click="toSearchCode2" type="default">Query orders by ticker</mt-button>
+        </div> -->
+        <twHistoryList :selectedNumber='selectedNumber' :hasChangeSell="hasChangeSell" :handleOptions='handleOptions'/>
       </mt-tab-container-item>
     </mt-tab-container>
     <foot></foot>
@@ -22,15 +32,19 @@
 <script>
 import foot from '@/components/foot/foot'
 // import '@/assets/style/common.less'
-import holdPosition from './ordercon/futureshold-list'
-import HistoryList from './ordercon/futureshistory-list'
+import twHoldPosition from './compontents/tw-hold-position'
+import twHistoryList from './compontents/tw-history-list'
+// import indexHoldPosition from './compontents/indexhold-position'
+// import indexHistoryList from './compontents/indexhistory-list'
 // import * as api from '@/axios/api'
 
 export default {
   components: {
     foot,
-    holdPosition,
-    HistoryList
+    twHoldPosition,
+    twHistoryList,
+    // indexHoldPosition,
+    // indexHistoryList
   },
   props: {
     selectedNumber: {
@@ -39,8 +53,8 @@ export default {
   },
   data () {
     return {
-      selected: '3', // 選中
-      list: [], // 持倉
+      selected: '1', // 選中
+      list: [], // 持仓
       form: {
         pageNum: 1,
         pageSize: 10,
@@ -81,7 +95,7 @@ export default {
       this.$router.push({
         path: '/holdorderlist2',
         query: {
-          type: 1 
+          type: 1 // 查詢類型 1--> name 2--> code
         }
       })
     },
@@ -90,7 +104,7 @@ export default {
       this.$router.push({
         path: '/holdorderlist',
         query: {
-          type: 2 
+          type: 2 // 查詢類型 1--> name 2--> code
         }
       })
     },
@@ -99,7 +113,7 @@ export default {
       this.$router.push({
         path: '/sellorderlist2',
         query: {
-          type: 1 
+          type: 1 // 查詢類型 1--> name 2--> code
         }
       })
     },
@@ -108,7 +122,7 @@ export default {
       this.$router.push({
         path: '/sellorderlist',
         query: {
-          type: 2
+          type: 2 // 查詢類型 1--> name 2--> code
         }
       })
     }
@@ -125,7 +139,6 @@ export default {
   }
 
   .mint-navbar .mint-tab-item.is-selected {
-    // color: #d50000;
     border-bottom: 2px solid #d50000;
     text-decoration: none;
   }
@@ -168,7 +181,7 @@ export default {
       }
     }
   }
-    .sub-navbar {
+  .sub-navbar {
     background-color: #16171D !important;
     height: .7rem;
     justify-content: center;
@@ -178,7 +191,6 @@ export default {
         font-size: .24rem;
       }
     .mint-tab-item {
-      background-color: #16171D;
       position: relative;
       flex-grow: 0;
       flex-shrink:1;
@@ -199,8 +211,7 @@ export default {
       }
     }
   }
-
-    #app.red-theme {
+  #app.red-theme {
     .sub-navbar {
       background-color: #E9E9E9 !important;
       .mint-tab-item {
@@ -214,4 +225,4 @@ export default {
     }
     
   }
-</style> -->
+</style>

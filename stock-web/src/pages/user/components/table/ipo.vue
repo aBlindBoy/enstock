@@ -299,7 +299,7 @@ export default {
         this.form = row
     },
     formartAmount(amount){
-        return numeral(amount).format('0,0')
+      return numeral(amount).format('0,0.00')
     },
     formatDate(date){
         return dayjs(date).format('YYYY/MM/DD')

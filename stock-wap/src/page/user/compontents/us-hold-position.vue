@@ -177,7 +177,7 @@ export default {
       let opt = {
         state: 0,
         stockCode: '', // 代碼
-        stockSpell: '', // 簡拼
+        stockSpell: 'US', 
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }
@@ -204,7 +204,7 @@ export default {
       let opt = {
         state: 0,
         stockCode: '', // 代碼
-        stockSpell: '', // 簡拼
+        stockSpell:'US', // 簡拼
         pageNum: 1,
         pageSize: this.currentNum
       }

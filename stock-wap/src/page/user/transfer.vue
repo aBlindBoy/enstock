@@ -7,30 +7,48 @@
         </router-link>
       </mt-header>
     </div>
-    <mt-navbar v-model="selected">
-      <mt-tab-item v-if="this.$store.state.settingForm.indexDisplay" id="1">Financing to Index</mt-tab-item>
-      <mt-tab-item v-if="this.$store.state.settingForm.indexDisplay" id="2">Index refinancing</mt-tab-item>
-      <mt-tab-item v-if="this.$store.state.settingForm.futuresDisplay" id="3">Financing to futures</mt-tab-item>
-      <mt-tab-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">Futures refinancing</mt-tab-item>
-    </mt-navbar>
-    <mt-tab-container class="order-list" v-model="selected">
+
+    <div class="form-block">
+    
+      <mt-field label="" type="number" @input="inputFrom"  v-model="fromAmount">
+                <!-- <span @click="selectAll1">all</span> -->
+                <mt-picker :slots="slots" @change="formCoinCodeChange" :disableClear=true ></mt-picker>
+        </mt-field>
+    </div>
+    <div class="form-block">
+      <mt-field label="" name="amt" v-model="toAmount" disabled readonly type="number">
+        <!-- <span @click="selectAll1">all</span> -->
+        <span style="font-size: .36rem;    margin-right: 0.2rem;">{{toCoinCode}}</span>
+      </mt-field>
+    </div>
+    <div style="text-align:center;margin-top: .5rem;">
+      <p >美股可用资金 <span class="assets">{{ formartAmount($store.state.userInfo.enableAmt) }}</span> </p>
+      <p style="margin-top:.2rem">台股可用资金 <span class="assets">{{ formartAmount($store.state.userInfo.twEnableAmt) }}</span> </p>
+    </div>
+
+    <div class="btnbox">
+      <span class="text-center btnok loginout" @click="submit">兑换</span>
+    </div>
+
+    <div class="rule-box">
+      <div class="title">友情提示</div>
+      <ul>
+        <li style="">
+          <div class="number">1</div>
+          当前美元和新台币的汇率1:{{exchangeRate.defaultRate}}</li>
+        <li>  <div class="number">2</div> 资金兑换,免手续费,立即到账</li>
+        <li><div class="number">3 </div> 兑换成功转入到对应的股票账户</li>
+      </ul>
+    </div>
+    <!-- <mt-navbar v-model="selected">
+      <mt-tab-item id="1">Financing to Index</mt-tab-item>
+      <mt-tab-item id="2">Index refinancing</mt-tab-item>
+      <mt-tab-item  id="3">Financing to futures</mt-tab-item>
+      <mt-tab-item id="4">Futures refinancing</mt-tab-item>
+    </mt-navbar> -->
+    <!-- <mt-tab-container class="order-list" v-model="selected">
       <mt-tab-container-item id="1">
-        <div class="form-block">
-          <mt-field label="transferable amount" placeholder="transferable amount" type="text" disabled
-                    v-model="this.$store.state.userInfo.enableAmt"></mt-field>
-        </div>
-        <div class="form-block">
-          <mt-field label="Transfer amount" name="amt" v-model="form.account1" placeholder="Please enter the transfer amount" type="text">
-            <span @click="selectAll1">all</span>
-          </mt-field>
-        </div>
-        <!-- <div class="form-block">
-            <mt-field label="資金密碼" placeholder="資金密碼" type="password" v-model="form.password"></mt-field>
-        </div>
-        <p class="prompt">資金密碼預設為登入密碼</p> -->
-        <div class="btnbox">
-          <span class="text-center btnok loginout" @click="tosubmit">Confirm transfer to index account</span>
-        </div>
+        
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
         <div class="form-block">
@@ -74,7 +92,7 @@
           <span class="text-center btnok loginout" @click="tosubmit">Confirm transfer to financing account</span>
         </div>
       </mt-tab-container-item>
-    </mt-tab-container>
+    </mt-tab-container> -->
   </div>
 </template>
 
@@ -84,6 +102,8 @@ import foot from '@/components/foot/foot'
 import * as api from '@/axios/api'
 import { Toast } from 'mint-ui'
 
+import numeral from 'numeral'
+
 export default {
   components: {
     foot
@@ -91,22 +111,37 @@ export default {
   data () {
     return {
       selected: '1', // 選中
-      form: {
-        account1: '',
-        account2: '',
-        account3: '',
-        account4: '',
-        password: ''
-      },
+      // form: {
+      //   toAmount: 0,
+      //   account2: '',
+      //   account3: '',
+      //   account4: '',
+      //   password: ''
+      // },
       userInfo: {
         realName: ''
-      }
+      },
+      slots: [
+        {
+          flex: 1,
+          values: ['USD', 'TWD'],
+          className: 'slot1',
+          textAlign: 'left'
+        }, 
+      ],
+      sheetVisible:true,
+      clickIconFlag:false,
+      formCoinCode: 'USD',
+      toCoinCode:'TWD',
+      fromAmount:0,
+      toAmount:0,
+      exchangeRate:{},
     }
   },
   watch: {},
   computed: {},
   created () {
-    this.getProductSetting()
+    this.getExchangeRate()
   },
   mounted () {
     if (this.$route.query.type) {
@@ -115,33 +150,88 @@ export default {
     this.getUserInfo()
   },
   methods: {
-    async getProductSetting () {
-      let data = await api.getProductSetting()
-      if (data.status === 0) {
-        this.$store.state.settingForm = data.data
-        if (!this.$store.state.settingForm.indexDisplay) {
-          this.selected = '3'
+    
+    formartAmount(amount){
+        return numeral(amount).format('0,0.00')
+      },
+    async getExchangeRate(){
+        let params={
+          coinCode:"TWD"
         }
-      } else {
-        this.$message.error(data.msg)
-      }
-    },
-    selectAll1 () {
-      // 選擇全部
-      this.form.account1 = this.$store.state.userInfo.enableAmt
-    },
-    selectAll2 () {
-      // 選擇全部
-      this.form.account2 = this.$store.state.userInfo.enableIndexAmt
-    },
-    selectAll3 () {
-      // 選擇全部
-      this.form.account3 = this.$store.state.userInfo.enableAmt
-    },
-    selectAll4 () {
-      // 選擇全部
-      this.form.account4 = this.$store.state.userInfo.enableFuturesAmt
-    },
+        let data = await api.getExchangeRate(params);
+        if (data.status === 0) {
+          this.exchangeRate  = data.data;
+        } 
+      },
+      formCoinCodeChange(picker, values) {
+          this.formCoinCode  = values[0];
+          this.toCoinCode = this.formCoinCode=="TWD"?"USD":"TWD"
+          this.inputFrom()
+     },
+     inputFrom(){
+        if (this.fromAmount == 0) {
+          return
+        }
+        if (this.formCoinCode=="USD") {
+          this.toAmount =(this.fromAmount * this.exchangeRate.defaultRate).toFixed(2)
+        } else {
+          this.toAmount =(this.fromAmount / this.exchangeRate.defaultRate).toFixed(2)
+        }
+      },
+    // changeFromCoin(){
+    //     this.clickIconFlag = true
+    //     setTimeout(()=>{
+    //       this.clickIconFlag = false
+    //     },1000)
+    //     let formCoinCode = this.formCoinCode 
+    //     let toCoinCode =   this.toCoinCode 
+    //     this.formCoinCode = toCoinCode
+    //     this.toCoinCode = formCoinCode
+    //     this.inputFrom()
+    // },
+    // async getProductSetting () {
+    //   let data = await api.getProductSetting()
+    //   if (data.status === 0) {
+    //     this.$store.state.settingForm = data.data
+    //     if (!this.$store.state.settingForm.indexDisplay) {
+    //       this.selected = '3'
+    //     }
+    //   } else {
+    //     this.$message.error(data.msg)
+    //   }
+    // },
+
+    async submit(){
+        let params ={
+          fromCode:this.formCoinCode,
+          fromAmount:this.fromAmount,
+          toCode:this.toCoinCode
+        }
+        let data = await api.transfer(params);
+        if (data.status === 0) {  
+          this.getUserInfo()
+          Toast(data.data)
+        } else {
+          Toast(data.data)
+        }
+      },
+  
+    // selectAll1 () {
+    //   // 選擇全部
+    //   this.form.account1 = this.$store.state.userInfo.enableAmt
+    // },
+    // selectAll2 () {
+    //   // 選擇全部
+    //   this.form.account2 = this.$store.state.userInfo.enableIndexAmt
+    // },
+    // selectAll3 () {
+    //   // 選擇全部
+    //   this.form.account3 = this.$store.state.userInfo.enableAmt
+    // },
+    // selectAll4 () {
+    //   // 選擇全部
+    //   this.form.account4 = this.$store.state.userInfo.enableFuturesAmt
+    // },
     async tosubmit () {
       // 融資轉指數
       let opt = {
@@ -186,5 +276,51 @@ export default {
 
   .prompt {
     padding: 0.3rem 0 0.2rem 0.7rem;
+  }
+
+  .rule-box {
+    padding: 0.2rem 0.3rem;
+
+    .title {
+      font-size: 0.3rem;
+      height: 0.5rem;
+      line-height: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    ul {
+      li {
+        color: #999;
+        line-height: 0.5rem;
+        display:flex;
+        align-items: center;
+        .number{
+          border: 1px solid rgb(233 21 21);
+          width: 0.3rem;
+          height: 0.3rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 0.15rem;
+          color: brown;
+          margin-right: .1rem;
+          font-style:italic;
+        }
+      }
+    }
+  }
+
+  .clickIcon{
+      animation:fadenum 1s infinite;
+  }
+  @keyframes fadenum{
+    100%{transform:rotate(180deg);}
+  }
+
+  .assets{
+    color: #b60c0d;
+    font-size: 0.4rem;
+    font-weight: 600;
+    font-family: lightnumber;
   }
 </style>

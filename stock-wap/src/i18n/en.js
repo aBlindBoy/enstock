@@ -46,6 +46,7 @@ export default  {
         storageFee:"Storage fee",
         daysToStay:"Days to stay",
         buy:"Buy",
+        boardLot:"Board Lot",
     },
     home:{
         quotes:"Quotes",

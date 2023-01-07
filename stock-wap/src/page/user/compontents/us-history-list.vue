@@ -119,8 +119,8 @@ export default {
     async getListDetail () {
       let opt = {
         state: 1,
-        stockCode: '', // 代碼
-        stockSpell: '', // 簡拼
+        stockCode: '', 
+        stockSpell: 'US', 
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }

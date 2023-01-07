@@ -1,29 +1,28 @@
 <template>
   <div class="wrapper">
-    <!-- <mt-header fixed  title="我的持仓">
+    <!-- <mt-header fixed  title="我的持���">
         <router-link to="/" slot="left">
             <mt-button icon="back"></mt-button>
         </router-link>
     </mt-header> -->
     <mt-navbar class="sub-navbar" v-model="selected">
-      <mt-tab-item id="3">Index positions</mt-tab-item>
-      <mt-tab-item id="4">Index close</mt-tab-item>
+      <mt-tab-item id="1">{{$t('position.holding')}}</mt-tab-item>
+      <mt-tab-item id="2">{{$t('position.historical')}}</mt-tab-item>
     </mt-navbar>
     <mt-tab-container class="order-list" v-model="selected">
-      <mt-tab-container-item id="3">
+      <mt-tab-container-item id="1">
         <!-- <div class="text-center">
-            <mt-button @click="toSearchName2" type="default">根據股票簡拼查詢訂單</mt-button>
-            <mt-button @click="toSearchCode2" type="default">根據股票代碼查詢訂單</mt-button>
+          <mt-button @click="toSearchName" type="default">根據股票簡拼查詢訂單</mt-button>
+          <mt-button @click="toSearchCode" type="default" style="width:90%">Query orders by ticker</mt-button>
         </div> -->
-        <indexHoldPosition :selectedNumber='selectedNumber' :handleOptions='handleOptions2'/>
+        <usHoldPosition :selectedNumber='selectedNumber' :handleOptions='handleOptions'/>
       </mt-tab-container-item>
-      <mt-tab-container-item id="4">
+      <mt-tab-container-item id="2">
         <!-- <div class="text-center">
-            <mt-button @click="toSearchName2" type="default">根據股票簡拼查詢訂單</mt-button>
-            <mt-button @click="toSearchCode2" type="default">根據股票代碼查詢訂單</mt-button>
+          <mt-button @click="toSearchName2" type="default">Query orders based on stock briefs</mt-button>
+          <mt-button @click="toSearchCode2" type="default">Query orders by ticker</mt-button>
         </div> -->
-        <indexHistoryList :selectedNumber='selectedNumber' :hasChangeSell="hasChangeSell2"
-                          :handleOptions='handleOptions2'/>
+        <usHistoryList :selectedNumber='selectedNumber' :hasChangeSell="hasChangeSell" :handleOptions='handleOptions'/>
       </mt-tab-container-item>
     </mt-tab-container>
     <foot></foot>
@@ -33,19 +32,19 @@
 <script>
 import foot from '@/components/foot/foot'
 // import '@/assets/style/common.less'
-import holdPosition from './compontents/hold-position'
-import HistoryList from './compontents/history-list'
-import indexHoldPosition from './compontents/indexhold-position'
-import indexHistoryList from './compontents/indexhistory-list'
+import usHoldPosition from './compontents/us-hold-position'
+import usHistoryList from './compontents/us-history-list'
+// import indexHoldPosition from './compontents/indexhold-position'
+// import indexHistoryList from './compontents/indexhistory-list'
 // import * as api from '@/axios/api'
 
 export default {
   components: {
     foot,
-    holdPosition,
-    HistoryList,
-    indexHoldPosition,
-    indexHistoryList
+    usHoldPosition,
+    usHistoryList,
+    // indexHoldPosition,
+    // indexHistoryList
   },
   props: {
     selectedNumber: {
@@ -54,7 +53,7 @@ export default {
   },
   data () {
     return {
-      selected: '3', // 選中
+      selected: '1', // 選中
       list: [], // 持仓
       form: {
         pageNum: 1,
@@ -92,7 +91,7 @@ export default {
       }
     },
     toSearchName () {
-      // 按���持倉名稱查持倉訂單
+      // 按照持倉名稱查持倉訂單
       this.$router.push({
         path: '/holdorderlist2',
         query: {
@@ -131,6 +130,18 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+  .is-selected .mint-tab-item-label:hover {
+    text-decoration: none;
+  }
+
+  .wrapper /deep/ .mint-tab-item-label {
+    font-size: 0.264rem;
+  }
+
+  .mint-navbar .mint-tab-item.is-selected {
+    border-bottom: 2px solid #d50000;
+    text-decoration: none;
+  }
 
   .mint-tab-container-item {
     // padding-top: 1.2rem;
@@ -180,7 +191,6 @@ export default {
         font-size: .24rem;
       }
     .mint-tab-item {
-      background-color: #16171D;
       position: relative;
       flex-grow: 0;
       flex-shrink:1;
@@ -201,8 +211,7 @@ export default {
       }
     }
   }
-
-    #app.red-theme {
+  #app.red-theme {
     .sub-navbar {
       background-color: #E9E9E9 !important;
       .mint-tab-item {

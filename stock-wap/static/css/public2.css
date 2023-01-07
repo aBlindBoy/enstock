@@ -12413,7 +12413,7 @@ button.close {
 }
 
 .picker-item.picker-selected {
-  color: #000;
+  color: inherit;
   transform: translateZ(0) rotateX(0)
 }
 
@@ -12979,11 +12979,11 @@ input::-ms-input-placeholder {
   }
 }
 
-.mint-checkbox-core, .mint-radio-core {
+/* .mint-checkbox-core, .mint-radio-core {
   background: url(/static/img/car/car-nosel.png) no-repeat #fff;
   border-color: #fff;
   background-size: 100% 100%
-}
+} */
 
 /* .mint-checkbox-input:checked + .mint-checkbox-core, .mint-radio-input:checked + .mint-radio-core {
   background: url(/static/img/car/car-sel.png) no-repeat #fff;
@@ -30437,6 +30437,7 @@ body {
 }
 
 .el-timeline .el-timeline-item:last-child .el-timeline-item__tail {
+
   display: none
 }
 
@@ -30453,7 +30454,7 @@ body {
 
 .el-timeline-item__tail {
   position: absolute;
-  left: 4px;
+  left: 5px;
   height: 100%;
   border-left: 2px solid #e4e7ed
 }

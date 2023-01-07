@@ -567,6 +567,7 @@ public class UserPositionServiceImpl implements IUserPositionService {
         userPosition.setBuyOrderPrice(now_price);
         userPosition.setOrderDirection((buyType.intValue() == 0) ? "看涨" : "看跌");
         userPosition.setStockSpell("TW");
+        userPosition.setStockGid("TW");
         userPosition.setOrderNum(buyNum);
         userPosition.setOrderLever(lever);
         userPosition.setOrderTotalPrice(buy_amt);

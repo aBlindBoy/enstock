@@ -21,6 +21,8 @@ import en from './i18n/en'
 import zhTW from './i18n/zh-TW'
 import VueI18n from 'vue-i18n'
 // import VueTouch from 'vue-touch'
+import { Actionsheet } from 'mint-ui';
+Vue.component(Actionsheet.name, Actionsheet);
 
 Vue.use(animated)
 Vue.use(ElementUI)

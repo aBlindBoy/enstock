@@ -417,7 +417,7 @@ export function queryFuturesByCode (options) {
 
 // 查询新闻
 export function queryNewsList () {
-  return get(`/api/news/getNewsList.do?pageNum=1&pageSize=15`, {})
+  return get(`/api/news/getNewsList.do?pageNum=1&pageSize=5`, {})
 }
 // 查询新闻详情
 export function getNewDetail(id) {
@@ -612,3 +612,178 @@ export function allOption (options) {
   return post('/user/allOption.do', options)
 }
 
+
+
+
+/**台股新闻 */
+export function getTwNews() {
+  const endAt = parseInt(new Date().getTime()/1000)
+  const startAt = endAt-1*60*60*24*7
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesApi/media/api/v1/newslist/category/tw_stock?startAt=${startAt}&endAt=${endAt}&isIndexHeadline=0&isCategoryHeadline=0&limit=5`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+/**焦点新闻 */
+export function getEsgNews() {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesApi/api/v1/news/esg/tw_stock_news?page=1&limit=5&rkw_add=ESG共同推動`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+/** 盘前必读 */
+export function getBeforeNews() {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesApi/media/api/v2/search?q=台股盤前`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+/** 台股盘中 */
+export function getLiveNews() {
+  const endAt = parseInt(new Date().getTime()/1000)
+  const startAt = endAt-1*60*60*24*7
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesApi/media/api/v1/newslist/category/tw_live?startAt=${startAt}&endAt=${endAt}&isIndexHeadline=0&isCategoryHeadline=0&limit=5`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+function getEntAt(){
+  var myDate = new Date();
+  var year = myDate.getFullYear();//获取年
+  var month = myDate.getMonth() + 1;//获取月，默认从0开始，所以要加一
+  var date = myDate.getDate();//获取日
+  return year+'-'+month+'-'+date;
+}
+function getStartAt(){
+  var myDate = new Date(new Date().getTime()-1000*60*60*24*7);
+  var year = myDate.getFullYear();//获取年
+  var month = myDate.getMonth() + 1;//获取月，默认从0开始，所以要加一
+  var date = myDate.getDate();//获取日
+  return year+'-'+month+'-'+date;
+}
+/** 趨勢分析 */
+export function getAnalysisNews() {
+  const endAt = getEntAt()
+  const startAt = getStartAt()
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesApi/media/api/v2/searchAllMatch?q=%E6%B0%B8%E8%B1%90%E9%87%91%E8%AD%89%E5%88%B8,%E8%B6%A8%E5%8B%A2%E5%88%86%E6%9E%90&page=1&startAt=${startAt}&endAt=${endAt}`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+
+/**
+ * 漲，跌，成交量排行榜
+ * sort ：volume成交量，up漲，down跌
+ * exchange： OTC上櫃，TSE上市
+ */
+export function getTwRanking (sort,exchange) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesWs/ws/api/v1/quote/ranking?sort=${sort}&exchange=${exchange}&range=5&market=TWS`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+//平仓
+export function sellTwStock (options) {
+  return post('/user/sellTwStock.do', options)
+}
+
+// 兑换
+export function transfer (options) {
+  return post('/api/user/transfer.do', options)
+}
+
+// 查询汇率
+export function getExchangeRate (options) {
+  return post('/api/stock/getExchangeRate.do', options)
+}
+
+
+// 股票tw最新价格
+export function getTwStockData (stock_code) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesWs/ws/api/v1/quote/quotes/TWS:${stock_code}:STOCK?column=I`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+// 五檔
+export function getTwStockExchange(code) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `/cnyesWs//ws/api/v1/quote/quotes/TWS:${code}:STOCK?column=K`,
+      type: "GET",
+      success: function(recvData) {
+        resolve(recvData)
+      },
+      error:function(error){
+        reject(error)
+      }
+    });
+  })
+}
+
+// 下单台灣股票
+export function buyTwStock (options) {
+  return post('/user/buyTwStock.do', options)
+}

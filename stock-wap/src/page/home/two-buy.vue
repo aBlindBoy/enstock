@@ -132,8 +132,17 @@
       </div>
       <div class="tab-con">
         <ul class="radio-group clearfix">
-          <li
-            v-for="item in numberList"
+          <li v-if="marketType=='us'"
+            v-for="item in usNumberList"
+            :key="item.key"
+            @click="selectNumberFun(item.value)"
+          >
+            <div :class="[selectNumber == item.value ? 'on' : '']">
+              {{ item.label }}
+            </div>
+          </li>
+          <li v-if="marketType=='tw'"
+            v-for="item in twNumberList"
             :key="item.key"
             @click="selectNumberFun(item.value)"
           >
@@ -230,8 +239,11 @@
         <p class="pay">
           {{$t('trade.payMargin')}}  <span class="protem">{{ total ? total : 0 }}</span>
         </p>
-        <p class="account">
+        <p v-if="marketType == 'us'" class="account" >
           ({{$t('trade.accountBalance')}}:{{ $store.state.userInfo.enableAmt }} USD)
+        </p>
+        <p v-else  class="account">
+          ({{$t('trade.accountBalance')}}:{{ $store.state.userInfo.twEnableAmt }} TWD)
         </p>
       </div>
       <!-- <mt-button :disabled="buying" class="btn-red" size="small" type="danger" @click="toInquiry">下單</mt-button> -->
@@ -307,24 +319,42 @@ export default {
       timer: null,
       buying: false,
       focePromptPopup: false, // 總手續費提示框
-      settingSpreadRate: { spreadRate: 0 }
+      settingSpreadRate: { spreadRate: 0 },
+      marketType:"",
     };
+  },
+  created() {
+    this.marketType = this.$route.query.stock_type;
+    // this.timer = setInterval(this.getDetail, 5000)
   },
   watch: {},
   computed: {
     poundage() {
       //手續費= 買入手續費+Stamp duty+Spread fee
       if (this.autoNumber) {
-        let payfee = (this.detail.nowPrice * this.autoNumber).toFixed(2); // / this.selectCycle
+        let payfee = 0
+        if (this.marketType == "us") {
+           payfee = (this.detail.nowPrice * this.autoNumber).toFixed(2); // / this.selectCycle
+        }else{
+           payfee = (this.detail.nowPrice * this.autoNumber*1000).toFixed(2); // / this.selectCycle
+        }
         return (
           payfee * this.settingInfo.buyFee +
           payfee * this.settingInfo.dutyFee +
           payfee * this.settingSpreadRate.spreadRate
         ).toFixed(2);
       } else if (this.selectNumber) {
-        let payfee = (this.detail.nowPrice * this.selectNumber ).toFixed(
-          2
-        );
+
+        let payfee = 0
+        if (this.marketType == "us") {
+           payfee = (this.detail.nowPrice * this.selectNumber).toFixed(2); // / this.selectCycle
+        }else{
+           payfee = (this.detail.nowPrice * this.selectNumber*1000).toFixed(2); // / this.selectCycle
+        }
+
+        // let payfee = (this.detail.nowPrice * this.selectNumber ).toFixed(
+        //   2
+        // );
         return (
           payfee * this.settingInfo.buyFee +
           payfee * this.settingInfo.dutyFee +
@@ -342,8 +372,14 @@ export default {
         this.settingSpreadRate.spreadRate = 0;
       }
       if (this.autoNumber) {
-        let payfee =
+        
+        let payfee = 0
+        if (this.marketType == "us") {
           (this.detail.nowPrice * this.autoNumber) / this.selectCycle;
+        }else{
+          (this.detail.nowPrice * this.autoNumber * 1000) / this.selectCycle;
+        }
+
         return (
           payfee +
           payfee * this.settingInfo.buyFee +
@@ -353,8 +389,15 @@ export default {
         //return (this.detail.nowPrice * this.autoNumber * 100 / this.selectCycle).toFixed(2)
       } else if (this.selectNumber) {
         // alert("bb"+this.detail.nowPrice+"cc==="+this.selectNumber+"ff==="+this.selectCycle+"==="+this.settingSpreadRate.spreadRate)
-        let payfee =
-          (this.detail.nowPrice * this.selectNumber) / this.selectCycle;
+        // let payfee =
+        //   (this.detail.nowPrice * this.selectNumber) / this.selectCycle;
+        let payfee = 0
+        if (this.marketType == "us") {
+          payfee =  (this.detail.nowPrice * this.selectNumber) / this.selectCycle;
+        }else{
+          payfee =  (this.detail.nowPrice * this.selectNumber * 1000) / this.selectCycle;
+        }
+
         return (
           payfee +
           payfee * this.settingInfo.buyFee +
@@ -369,15 +412,23 @@ export default {
     },
     price() {
       if (this.autoNumber) {
-        return (this.detail.nowPrice * this.autoNumber).toFixed(2);
+        if (this.marketType == "us") {
+          return (this.detail.nowPrice * this.autoNumber).toFixed(2);
+        }else{
+          return (this.detail.nowPrice * this.autoNumber * 1000).toFixed(2);
+        }
       } else if (this.selectNumber) {
-        return (this.detail.nowPrice * this.selectNumber).toFixed(2);
+        if (this.marketType == "us") {
+          return (this.detail.nowPrice * this.selectNumber).toFixed(2);
+        }else{
+          return (this.detail.nowPrice * this.selectNumber * 1000).toFixed(2);
+          }
       } else {
         return 0;
       }
       // 市值價 = Current price * 股（1手 = 100股）
     },
-    numberList(){
+    usNumberList(){
       return [
         { label: "100 "+ this.$t('common.shares'), value: "100" },
         { label: "200 "+this.$t('common.shares'), value: "200" },
@@ -387,18 +438,27 @@ export default {
         { label: "5000 "+this.$t('common.shares'), value: "5000" },
         { label: "Input", value: "" }
       ]
+    },
+    twNumberList(){
+      return [
+        { label: "1 "+ this.$t('common.boardLot'), value: "1" },
+        { label: "10 "+this.$t('common.boardLot'), value: "10" },
+        { label: "20 "+this.$t('common.boardLot'), value: "20" },
+        { label: "50 "+this.$t('common.boardLot'), value: "50" },
+        { label: "100 "+this.$t('common.boardLot'), value: "100" },
+        { label: "200 "+this.$t('common.boardLot'), value: "200" },
+        { label: "自定義", value: "" }
+      ]
     }
   },
-  created() {
-    // this.timer = setInterval(this.getDetail, 5000)
-  },
+
   beforeDestroy() {
     clearInterval(this.timer);
   },
   mounted() {
     this.getDetail();
     this.selectNumber = 0;
-    this.getSettingIndexInfo();
+    // this.getSettingIndexInfo();
     this.getSettingInfo();
     if (!this.$store.state.userInfo.enableAmt) {
       this.getUserInfo();
@@ -439,7 +499,7 @@ export default {
           this.siteLeverList = [];
           for (let i = 0; i < data.data.siteLever.split("/").length; i++) {
             let val = data.data.siteLever.split("/")[i];
-            let item = { label: val + "multiple", value: val };
+            let item = { label: val + " multiple", value: val };
             this.siteLeverList.push(item);
           }
         } else {
@@ -447,7 +507,7 @@ export default {
           this.siteLeverList = [];
           for (let i = 0; i < data.data.siteLever.split("/").length; i++) {
             let val = data.data.siteLever.split("/")[i];
-            let item = { label: val + "multiple", value: val };
+            let item = { label: val + " multiple", value: val };
             this.siteLeverList.push(item);
           }
         }
@@ -473,11 +533,11 @@ export default {
         this.$message.error(data.msg);
       }
     },
-    isAgree() {
-      let i = false;
-      let j = true;
-      this.agree = this.agree ? i : j;
-    },
+    // isAgree() {
+    //   let i = false;
+    //   let j = true;
+    //   this.agree = this.agree ? i : j;
+    // },
     totrageUrl() {
       this.$router.push("/trade");
     },
@@ -496,76 +556,49 @@ export default {
       let opts = {
         code: this.$route.query.code
       };
-
-      // let [res1, res2] = await Promise.all([
-      //   api.getTwStockData(opts.code),
-      //   api.getTwStockExchange(opts.code)
-      // ]);
-
-      // let data = {};
-      // let data1 = res1.data[0];
-      // let data2 = res2.data[0]["五檔"];
-      // data.name = data1["股票名稱"];
-      // data.code = opts.code;
-      // data.spell = "";
-      // data.gid = opts.code;
-      // data.nowPrice = data1["當盤成交價"];
-      // data.hcrate = data1["Quote change"];
-      // data.today_max = data1["最高價"];
-      // data.today_min = data1["最低價"];
-      // data.business_balance = data1["成交金額"];
-      // data.business_amount = data1["當盤成交量"];
-      // data.preclose_px =
-      //   parseFloat(data1["開盤價"]) + parseFloat(data1["漲跌"]);
-      // data.open_px = data1["開盤價"];
-      // data.buy1 = data2["買價1"].substring(1).replace(/\s+/g, "");
-      // data.buy2 = data2["買價2"].substring(1).replace(/\s+/g, "");
-      // data.buy3 = data2["買價3"].substring(1).replace(/\s+/g, "");
-      // data.buy4 = data2["買價4"].substring(1).replace(/\s+/g, "");
-      // data.buy5 = data2["買價5"].substring(1).replace(/\s+/g, "");
-      // data.sell1 = data2["Selling price1"].substring(1).replace(/\s+/g, "");
-      // data.sell2 = data2["Selling price2"].substring(1).replace(/\s+/g, "");
-      // data.sell3 = data2["Selling price3"].substring(1).replace(/\s+/g, "");
-      // data.sell4 = data2["Selling price4"].substring(1).replace(/\s+/g, "");
-      // data.sell5 = data2["Selling price5"].substring(1).replace(/\s+/g, "");
-      // data.buy1_num = data2["買量1"];
-      // data.buy2_num = data2["買量2"];
-      // data.buy3_num = data2["買量3"];
-      // data.buy4_num = data2["買量4"];
-      // data.buy5_num = data2["買量5"];
-      // data.sell1_num = data2["賣量1"];
-      // data.sell2_num = data2["賣量2"];
-      // data.sell3_num = data2["賣量3"];
-      // data.sell4_num = data2["賣量4"];
-      // data.sell5_num = data2["賣量5"];
-      let res1 = await api.getUsStockData(opts.code)
-      let stock = res1.data[0];
-      let stockDetail ={}
-      stockDetail.code =  opts.code
-      stockDetail.name = stock["200024"];//股票名稱
-      stockDetail.date = stock["200007"];//最近交易日期
-      // stockDetail.time = stock[""];//最近成交時刻
-      stockDetail.nowPrice = stock["6"];//最新價格
-      stockDetail.rate = stock["11"];//漲跌
-      stockDetail.hcrate = stock["56"];//漲跌幅
-      stockDetail.today_max = stock["12"];//最高價
-      stockDetail.today_min = stock["13"];//最低價
-      stockDetail.volumn = stock["800001"];//累積成交量
-      stockDetail.amount = stock[""];//成交金額
-      stockDetail.yes = stock["21"];//昨收
-      stockDetail.open = stock["19"];//開盤價
-
-
-      if (stockDetail.rate > 0) {
-        stockDetail.color = "upColor";
+      if (this.marketType=="us") {
+        let res1 = await api.getUsStockData(opts.code)
+        let stock = res1.data[0];
+        let stockDetail ={}
+        stockDetail.code = opts.code
+        stockDetail.name = stock["200024"];//股票名稱
+        stockDetail.date = stock["200007"];//最近交易日期
+        // stockDetail.time = stock[""];//最近成交時刻
+        stockDetail.nowPrice = stock["6"];//最新價格
+        stockDetail.rate = stock["11"];//漲跌
+        stockDetail.hcrate = stock["56"];//漲跌幅
+        stockDetail.high = stock["12"];//最高價
+        stockDetail.low = stock["13"];//最低價
+        stockDetail.volumn = stock["800001"];//累積成交量
+        stockDetail.amount = stock[""];//成交金額
+        stockDetail.yes = stock["21"];//昨收
+        stockDetail.open = stock["19"];//開盤價
+        if (stockDetail.rate > 0) {
+          stockDetail.color = "upColor";
+        }
+        if (stockDetail.rate < 0) {
+          stockDetail.color = "lowColor";
+        }
+        this.detail = stockDetail;
+      } else {
+        let res1 = await api.getTwStockData(opts.code)
+        let stock = res1.data[0];
+        let stockDetail ={}
+        stockDetail.code = opts.code
+        stockDetail.name = stock["200009"];//股票名稱
+        stockDetail.date = stock["200007"];//最近交易日期
+        stockDetail.nowPrice = stock["6"];//最新價格
+        stockDetail.rate = stock["11"];//漲跌
+        stockDetail.hcrate = stock["56"];//漲跌幅
+        stockDetail.high = stock["12"];//最高價
+        stockDetail.low = stock["13"];//最低價
+        stockDetail.volumn = stock["800001"];//累積成交量
+        stockDetail.amount = stock[""];//成交金額
+        stockDetail.yes = stock["21"];//昨收
+        stockDetail.open = stock["19"];//開盤價
+        this.detail = stockDetail;
       }
-      if (stockDetail.rate < 0) {
-        stockDetail.color = "lowColor";
-      }
-      // let code = data.code;
-      this.ucode = opts.code;
-
-      this.detail = stockDetail;
+      
       this.findSpreadRateOne();
     },
     selectCycleFun(value) {
@@ -624,25 +657,41 @@ export default {
       } else {
         this.buying = true;
         var gCode = this.$route.query;
-        let res1 = await api.getUsStockData(gCode.code)
-        let stock = res1.data[0];
+        // let res1 = await api.getUsStockData(gCode.code)
+        // let stock = res1.data[0];
+        var gCode = this.$route.query
+        let stock ={}
+        let buyNum = 0
+      if (this.marketType == "usa") {
+            let res1 = await api.getUsStockData(gCode.code)
+              stock = res1.data[0];
+            buyNum =  this.selectNumber == ''?this.autoNumber:this.selectNumber
+          } else {
+            let res1 = await api.getTwStockData(gCode.code)
+              stock = res1.data[0];
+              buyNum =  this.selectNumber == ''?this.autoNumber:this.selectNumber * 1000
+          }
         let nowPrice = stock["6"];//最新價格
         let hcrate = stock["56"];//漲跌幅
+        // let res2 = await api.getUsOpenClose(gCode.code)
+        // let preClose = res2.data["o"][0];//開盤價
 
-        let res2 = await api.getUsOpenClose(gCode.code)
-        let preClose = res2.data["o"][0];//開盤價
-
-        
         let opts = {
           stockId: gCode.code,
-          buyNum: this.selectNumber == ''?this.autoNumber:this.selectNumber,
+          buyNum: buyNum,
           buyType: this.selectType,
           lever: this.selectCycle ? this.selectCycle : 0,
           nowPrice,
           hcrate,
-          preClose
         };
-        let data = await api.buyUsStock(opts);
+
+        let data = {}
+        if (this.marketType == "usa") {
+            data = await api.buyUsStock(opts);
+        } else {
+            data = await api.buyTwStock(opts);	
+        }
+        // let data = await api.buyUsStock(opts);
         this.buying = false;
         if (data.status === 0) {
           Toast(data.data);

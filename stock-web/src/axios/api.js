@@ -584,7 +584,7 @@ export function sellUsStock (options) {
 export function getExchangeRate (options) {
   return post('/api/stock/getExchangeRate.do', options)
 }
-// 查询汇率
+// 兑换
 export function transfer (options) {
   return post('/api/user/transfer.do', options)
 }

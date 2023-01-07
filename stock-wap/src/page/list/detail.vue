@@ -3,7 +3,6 @@
 
     <stockHq />
     <news/>
-  
     <div class="btn-list">
       <div class="btn btn1" @click="addOptions">
         <img :src="btnIcon1" alt="">
@@ -84,16 +83,10 @@ export default {
       isOptionOpt: false, // 是否已經添加自選
       timer: null,
       loading: false,
-      // 新聞
-      news:'tab_0',
       btnIcon1: require('../../../static/img/detail/zixuan-icon.png'),
       btnIcon2: require('../../../static/img/detail/liangrong-icon.png'),
       btnIcon3: require('../../../static/img/detail/fencang-icon.png'),
-      newsContent1: [], // 財經要聞
-      newsContent2: [], // 經濟數據
-      newsContent3: [], // 全球股市
-      newsContent4: [], // 7*24全球
-      newsContent5: [] // 商品資訊
+      marketType:"",
     };
   },
   watch: {},
@@ -127,7 +120,8 @@ export default {
       this.$router.push({
         path: '/twoBuy',
         query: {
-          code: this.detail.code
+          code: this.detail.code,
+          stock_type:this.detail.stockType
         }
       })
     },
@@ -136,7 +130,8 @@ export default {
       this.$router.push({
         path: '/subWarehouseBuy',
         query: {
-          code: this.detail.code
+          code: this.detail.code,
+
         }
       })
     },
@@ -193,7 +188,10 @@ export default {
       //     });
       //     return
       //   }
-      let data = await api.addOption({ code: this.detail.code });
+      let data = await api.addOption({
+         code: this.detail.code,
+         marketType:this.detail.stockType=="us"?"US":"TW"
+      });
       if (data.status === 0) {
         Toast("添加自選成功");
         this.isOptionOpt = true;
@@ -358,8 +356,9 @@ export default {
   position: fixed;
   bottom: 0;
   background-color: #16171d;
+  justify-content: space-around;
   .btn{
-    width: 2.4rem;
+    width: 3rem;
     height: 0.76rem;
     border-radius: 1rem;
     display: flex;
@@ -374,7 +373,7 @@ export default {
       margin-right: 0.1rem;
     }
     &.btn1{
-      width: 1.85rem;
+      width:2.85rem;
       background-color: #D63535;
       margin-right: 0.2rem;
     }

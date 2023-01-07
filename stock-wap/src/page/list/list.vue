@@ -13,38 +13,64 @@
       >
       </mt-search>
       <!-- :fixed="selected != '2'?true:false" -->
-    <mt-navbar class="top-navbar" v-model="selected">
-      <!-- <mt-tab-item id="0">全部</mt-tab-item> -->
-      <!-- <mt-tab-item v-if="this.$store.state.settingForm.indexDisplay" id="1">指數</mt-tab-item> -->
-      <!--  v-if="this.$store.state.settingForm.stockDisplay" -->
-      <!--  -->
-      <!-- <mt-tab-item id="1" > <div @click="clickTab('1')">Hot Stocks</div> </mt-tab-item> -->
-      <mt-tab-item id="6" > <div @click="clickTab('6')">NYSE</div> </mt-tab-item>
-      <!-- <mt-tab-item v-if="this.$store.state.settingForm.kcStockDisplay" id="3">科創</mt-tab-item>
-      <mt-tab-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">期貨</mt-tab-item> -->
-      <!--   -->
-      <mt-tab-item  id="7"> <div  @click="clickTab('7')">AMEX</div> </mt-tab-item>
-      <mt-tab-item  id="8"> <div  @click="clickTab('8')">NASDAQ</div> </mt-tab-item>
-
+    <mt-navbar class="top-navbar" v-model="currSelectd">
+      <mt-tab-item id="1" > <div @click="clickCurrTab('1')">美股排行</div> </mt-tab-item>
+      <mt-tab-item  id="2"> <div  @click="clickCurrTab('2')">台股排行</div> </mt-tab-item>
     </mt-navbar>
-    <mt-tab-container class="order-list" v-model="selected">
-      <!-- <mt-tab-container-item id="0">
-          <List0 :changeNavOptions='changeNavOptions'/>
-      </mt-tab-container-item> -->
-      <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.indexDisplay" id="1">
-        <List1 :selectedNumber='selected'/>
-      </mt-tab-container-item> -->
-      <!-- v-if="this.$store.state.settingForm.stockDisplay"  -->
-      <mt-tab-container-item   :id="['6','7','8'].includes(selected)?selected:''">
-        <listStock ref="listStock" :selectedNumber='selected'/>
-      </mt-tab-container-item>
-      <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.kcStockDisplay" id="3">
-        <List3 :selectedNumber='selected'/>
-      </mt-tab-container-item>
-      <mt-tab-container-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">
-        <List4 :selectedNumber='selected'/>
-      </mt-tab-container-item> -->
+      <mt-tab-container class="order-list" v-model="currSelectd" >
+        <mt-tab-container-item   :id="['1'].includes(currSelectd)?currSelectd:''">
+          <mt-navbar  v-model="selected" style="margin-top:.1rem">
+            <mt-tab-item id="6" > <div @click="clickTab('6')">NYSE</div> </mt-tab-item>
+            <mt-tab-item  id="7"> <div  @click="clickTab('7')">AMEX</div> </mt-tab-item>
+            <mt-tab-item  id="8"> <div  @click="clickTab('8')">NASDAQ</div> </mt-tab-item>
+          </mt-navbar>
+          <mt-tab-container v-model="selected">
+              <!-- <mt-tab-container-item id="0">
+                  <List0 :changeNavOptions='changeNavOptions'/>
+              </mt-tab-container-item> -->
+              <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.indexDisplay" id="1">
+                <List1 :selectedNumber='selected'/>
+              </mt-tab-container-item> -->
+              <!-- v-if="this.$store.state.settingForm.stockDisplay"  -->
+              <mt-tab-container-item   :id="['6','7','8'].includes(selected)?selected:''">
+                <listUsStock ref="listUsStock" :selectedNumber='selected'/>
+              </mt-tab-container-item>
+              <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.kcStockDisplay" id="3">
+                <List3 :selectedNumber='selected'/>
+              </mt-tab-container-item>
+              <mt-tab-container-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">
+                <List4 :selectedNumber='selected'/>
+              </mt-tab-container-item> -->
+            </mt-tab-container>
+        </mt-tab-container-item>
+
+        <mt-tab-container-item   :id="['2'].includes(currSelectd)?currSelectd:''">
+          <mt-navbar v-model="twSelected" style="margin-top:.1rem">
+            <mt-tab-item id="TSE"> <div>上市排行</div> </mt-tab-item>
+            <mt-tab-item  id="OTC"> <div >上櫃排行</div> </mt-tab-item>
+          </mt-navbar>
+          <mt-tab-container  v-model="twSelected">
+              <!-- <mt-tab-container-item id="0">
+                  <List0 :changeNavOptions='changeNavOptions'/>
+              </mt-tab-container-item> -->
+              <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.indexDisplay" id="1">
+                <List1 :selectedNumber='selected'/>
+              </mt-tab-container-item> -->
+              <!-- v-if="this.$store.state.settingForm.stockDisplay"  -->
+              <mt-tab-container-item   :id="['TSE','OTC'].includes(twSelected)?twSelected:''">
+                <listTwStock ref="listTwStock" :selectedNumber='twSelected'/>
+              </mt-tab-container-item>
+              <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.kcStockDisplay" id="3">
+                <List3 :selectedNumber='selected'/>
+              </mt-tab-container-item>
+              <mt-tab-container-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">
+                <List4 :selectedNumber='selected'/>
+              </mt-tab-container-item> -->
+            </mt-tab-container>
+        </mt-tab-container-item>
     </mt-tab-container>
+   
+   
     <foot></foot>
   </div>
 </template>
@@ -54,7 +80,8 @@ import foot from '@/components/foot/foot'
 // import '@/assets/style/common.less'
 // import List0 from './list-all'
 // import List1 from './list-index'
-import listStock from './list-stock'
+import listUsStock from './list-us-stock'
+import listTwStock from './list-tw-stock'
 // import List3 from './list-kechuang'
 // import List4 from './list-futures'
 import * as api from '@/axios/api'
@@ -65,14 +92,17 @@ export default {
     foot,
     // List0,
     // List1,
-    listStock,
+    listUsStock,
+    listTwStock
     // List3,
     // List4
   },
   props: {},
   data () {
     return {
-      selected: '6' // 選中
+      selected: '6', // 選中,
+      currSelectd:"1",
+      twSelected:"TSE",
     }
   },
   watch: {
@@ -98,12 +128,10 @@ export default {
   methods: {
     clickTab(newVal){
       console.log(newVal);
-      this.$refs.listStock.getStock();
-      // if (newVal === "2" ) {
-       
-      // } else if(newVal ==='5'){
-      //   this.$refs.listStock.getStock('OTC');
-      // }
+      // this.$refs.listStock.getStock();
+    },
+    clickCurrTab(newVal){
+      this.currSelectd = newVal
     },
     toSearch () {
       this.$router.push('/searchlist')

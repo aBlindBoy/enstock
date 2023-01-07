@@ -3,7 +3,10 @@
     <mt-navbar class="top-navbar" v-model="selected" fixed>
       <mt-tab-item
       class="top-nav-item"
-      v-if="this.$store.state.settingForm.stockDisplay" id="1">{{$t('position.usStock')}}</mt-tab-item>
+      id="1">{{$t('position.usStock')}}</mt-tab-item>
+      <mt-tab-item
+      class="top-nav-item"
+      id="2">台股庫存</mt-tab-item>
       <!-- <mt-tab-item
       class="top-nav-item"
       v-if="this.$store.state.settingForm.indexDisplay" id="2">index account</mt-tab-item> -->
@@ -13,18 +16,23 @@
       v-if="this.$store.state.settingForm.futuresDisplay" id="4">futures account</mt-tab-item> -->
     </mt-navbar>
     <mt-tab-container class="order-list" v-model="selected">
-      <mt-tab-container-item v-if="this.$store.state.settingForm.stockDisplay" id="1">
-        <List1 :selectedNumber='selected' :key="comKey"/>
+      <mt-tab-container-item id="1">
+        <UsOrderList :selectedNumber='selected' :key="comKey"/>
       </mt-tab-container-item>
-      <mt-tab-container-item v-if="this.$store.state.settingForm.indexDisplay" id="2">
+      <mt-tab-container-item id="2">
+        <TwOrderList :selectedNumber='selected' :key="comKey"/>
+      </mt-tab-container-item>
+
+
+      <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.indexDisplay" id="2">
         <List2 :selectedNumber='selected'/>
-      </mt-tab-container-item>
+      </mt-tab-container-item> -->
       <!-- <mt-tab-container-item id="3">
           <List3 :handleOptions='handleOptions2'/>
       </mt-tab-container-item> -->
-      <mt-tab-container-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">
+      <!-- <mt-tab-container-item v-if="this.$store.state.settingForm.futuresDisplay" id="4">
         <List4 :selectedNumber='selected'/>
-      </mt-tab-container-item>
+      </mt-tab-container-item> -->
     </mt-tab-container>
     <foot></foot>
   </div>
@@ -33,8 +41,10 @@
 <script>
 import foot from '@/components/foot/foot'
 // import '@/assets/style/common.less'
-import List1 from './order-list1'
-import List2 from './order-list2'
+import UsOrderList from './us-order-list'
+import TwOrderList from './tw-order-list'
+
+// import List2 from './order-list2'
 // import List3 from './order-list3'
 // import List4 from './order-list4'
 import * as api from '@/axios/api'
@@ -43,8 +53,9 @@ import { Toast } from 'mint-ui'
 export default {
   components: {
     foot,
-    List1,
-    List2,
+    UsOrderList,
+    TwOrderList,
+    // List2,
     // List3,
     // List4
   },

@@ -339,7 +339,7 @@
         <div id="kline" v-show="Kline.IsShow"></div>
 
         <!-- 分时图右侧内容 -->
-        <div class="rightMinute" v-show="!IsIndex && Minute.IsShow">
+        <div class="rightMinute" v-show="Minute.IsShow">
           <ul class="minute-tab clear tabsTitle">
             <li
               class="tableSell active-minute"
@@ -865,10 +865,10 @@ export default {
         minutePeriod: 4 //分钟周期
       },
       isOptionOpt: false, // 是否已经添加自选
-      stockDetail: {}
+      stockDetail: {},
+      stockType:""
       // KLineOption:null
     };
-
     return data;
   },
 
@@ -876,6 +876,8 @@ export default {
 
   created() {
     // this.timer = setInterval(this.refreshList, 5000)
+    this.stockType = this.$route.query.stock_type;
+
     this.Symbol =
       this.$parent.detail.code + "." + this.$parent.detail.stockType;
 
@@ -891,7 +893,7 @@ export default {
     JSCommon.JSChart.GetResource().FrameLogo.Text = null;
     this.JSStock = JSCommonStock.JSStockInit();
     //this.InitalStock()
-    this.getStockDeatil(this.$parent.detail.code);
+    // this.getStockDeatil(this.$parent.detail.code);
 
     this.JSStock.RequestData();
 
@@ -953,30 +955,30 @@ export default {
   },
 
   methods: {
-    async getStockDeatil(code) {
-      let res1 = await api.getUsStockData(code)
-      let stock = res1.data[0];
-      let stockDetail ={}
-      stockDetail.name = stock["200024"];//股票名稱
-      stockDetail.date = stock["200007"];//最近交易日期
-      // stockDetail.time = stock[""];//最近成交時刻
-      stockDetail.price = stock["6"];//最新價格
-      stockDetail.rate = stock["11"];//漲跌
-      stockDetail.hcrate = stock["56"];//漲跌幅
-      stockDetail.high = stock["12"];//最高價
-      stockDetail.low = stock["13"];//最低價
-      stockDetail.volumn = stock["800001"];//累積成交量
-      stockDetail.amount = stock[""];//成交金額
-      stockDetail.yes = stock["21"];//昨收
-      stockDetail.open = stock["19"];//開盤價
-      if (stockDetail.rate > 0) {
-        stockDetail.color = "upColor";
-      }
-      if (stockDetail.rate < 0) {
-        stockDetail.color = "lowColor";
-      }
-      this.stockDetail = stockDetail;
-    },
+    // async getStockDeatil(code) {
+    //   let res1 = await api.getUsStockData(code)
+    //   let stock = res1.data[0];
+    //   let stockDetail ={}
+    //   stockDetail.name = stock["200024"];//股票名稱
+    //   stockDetail.date = stock["200007"];//最近交易日期
+    //   // stockDetail.time = stock[""];//最近成交時刻
+    //   stockDetail.price = stock["6"];//最新價格
+    //   stockDetail.rate = stock["11"];//漲跌
+    //   stockDetail.hcrate = stock["56"];//漲跌幅
+    //   stockDetail.high = stock["12"];//最高價
+    //   stockDetail.low = stock["13"];//最低價
+    //   stockDetail.volumn = stock["800001"];//累積成交量
+    //   stockDetail.amount = stock[""];//成交金額
+    //   stockDetail.yes = stock["21"];//昨收
+    //   stockDetail.open = stock["19"];//開盤價
+    //   if (stockDetail.rate > 0) {
+    //     stockDetail.color = "upColor";
+    //   }
+    //   if (stockDetail.rate < 0) {
+    //     stockDetail.color = "lowColor";
+    //   }
+    //   this.stockDetail = stockDetail;
+    // },
     NetworkFilter(
       data,
       callback //第3方数据替换接口
@@ -1009,7 +1011,6 @@ export default {
       }
     },
 
-    //下单部分
     async getUserInfo() {
       // 获取用户信息
       let data = await api.getUserInfo();
@@ -1040,51 +1041,55 @@ export default {
       }
     },
     async getDetail() {
-      if (this.$route.query.code.indexOf("hf_") != -1) {
-        this.isqihuo = true;
-        this.isgupiao = false;
-      } else if (
-        this.$route.query.code.indexOf("sh") != -1 ||
-        this.$route.query.code.indexOf("sz") != -1
-      ) {
-        this.isqihuo = false;
-        this.isgupiao = false;
-      } else {
-        this.isgupiao = true;
-        this.isqihuo = false;
-      }
-      if (this.$route.query.futuresInfo != undefined) {
-        this.futuresInfo = this.$route.query.futuresInfo;
-        this.queryExchange(); // 获取当前基币汇率
-      }
       let opts = {
         code: this.$route.query.code
       };
       this.loading = true;
       //let data = await api.getSingleStock(opts);
-
-      let res1 = await api.getUsStockData(opts.code)
-      let stock = res1.data[0];
-      let stockDetail ={}
-      stockDetail.name = stock["200024"];//股票名稱
-      stockDetail.date = stock["200007"];//最近交易日期
-      // stockDetail.time = stock[""];//最近成交時刻
-      stockDetail.price = stock["6"];//最新價格
-      stockDetail.rate = stock["11"];//漲跌
-      stockDetail.hcrate = stock["56"];//漲跌幅
-      stockDetail.high = stock["12"];//最高價
-      stockDetail.low = stock["13"];//最低價
-      stockDetail.volumn = stock["800001"];//累積成交量
-      stockDetail.amount = stock[""];//成交金額
-      stockDetail.yes = stock["21"];//昨收
-      stockDetail.open = stock["19"];//開盤價
-      if (stockDetail.rate > 0) {
-        stockDetail.color = "upColor";
+      
+      if (this.marketType=="us") {
+        let res1 = await api.getUsStockData(opts.code)
+        let stock = res1.data[0];
+        let stockDetail ={}
+        stockDetail.name = stock["200024"];//股票名稱
+        stockDetail.date = stock["200007"];//最近交易日期
+        // stockDetail.time = stock[""];//最近成交時刻
+        stockDetail.price = stock["6"];//最新價格
+        stockDetail.rate = stock["11"];//漲跌
+        stockDetail.hcrate = stock["56"];//漲跌幅
+        stockDetail.high = stock["12"];//最高價
+        stockDetail.low = stock["13"];//最低價
+        stockDetail.volumn = stock["800001"];//累積成交量
+        stockDetail.amount = stock[""];//成交金額
+        stockDetail.yes = stock["21"];//昨收
+        stockDetail.open = stock["19"];//開盤價
+        if (stockDetail.rate > 0) {
+          stockDetail.color = "upColor";
+        }
+        if (stockDetail.rate < 0) {
+          stockDetail.color = "lowColor";
+        }
+        this.stockDetail = stockDetail;
+      } else {
+        let res1 = await api.getTwStockData(opts.code)
+        let stock = res1.data[0];
+        let stockDetail ={}
+        stockDetail.name = stock["200009"];//股票名稱
+        stockDetail.date = stock["200007"];//最近交易日期
+        stockDetail.price = stock["6"];//最新價格
+        stockDetail.rate = stock["11"];//漲跌
+        stockDetail.hcrate = stock["56"];//漲跌幅
+        stockDetail.high = stock["12"];//最高價
+        stockDetail.low = stock["13"];//最低價
+        stockDetail.volumn = stock["800001"];//累積成交量
+        stockDetail.amount = stock[""];//成交金額
+        stockDetail.yes = stock["21"];//昨收
+        stockDetail.open = stock["19"];//開盤價
+        this.ucode = opts.code;
+        this.code =  opts.code;
+        this.stockDetail = stockDetail;
       }
-      if (stockDetail.rate < 0) {
-        stockDetail.color = "lowColor";
-      }
-      this.stockDetail = stockDetail;
+      
     },
     async addOptions() {
       //   if(!this.$store.state.userInfo.phone){

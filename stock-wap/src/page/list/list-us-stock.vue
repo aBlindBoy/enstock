@@ -44,7 +44,7 @@
         class="table-list table-list-body"
         infinite-scroll-distance="10"
       >
-        <li class="list-body" v-for="item in dataList" :key="item.key">
+        <li class="list-body" v-for="(item,index) in dataList" :key="index">
           <div>
             <ul
               class="clearfix green"
@@ -160,18 +160,9 @@ export default {
     };
   },
   watch: {
-    // selectedNumber(val) {
-    //   if (val === "2" ) {
-    //     // let opt={pageNum:1}
-    //     this.getStock('TSE');
-    //     // this.timer = setInterval(this.refreshList, 5000);
-    //   } else  if(val =='5'){
-    //     this.getStock('OTC');
-    //   }
-    //   else {
-    //     clearInterval(this.timer);
-    //   }
-    // }
+    selectedNumber(val) {
+      this.getStock()
+    }
   },
   computed: {
 
@@ -191,7 +182,7 @@ export default {
     //   this.$forceUpdate()
     // },
     async addOptions(val) {
-      let data = await api.addOption({ code: val.stockCode });
+      let data = await api.addOption({ code: val.stockCode,marketType:"US"  });
       if (data.status === 0) {
         val.isOption=true
         Toast(data.msg);
@@ -212,24 +203,22 @@ export default {
    
     async getStock() {
       this.dataList = []
-       let allOptionResult = await  api.allOption();
-       let allOption = allOptionResult.data
-
-      let res =   await api.getRanking(this.selectedNumber);
+      let allOptionResult = await  api.allOption();
+      let allOption = allOptionResult.data
+      let res = await api.getRanking(this.selectedNumber);
+      let tempDataList = [] 
       for (let index = 0; index < res.data.length; index++) {
           let item = res.data[index]
           item.code = res.data.stockCode
           item.isOption = allOption.some(option=>{
             return option.stockCode == item.stockCode
           })
-          this.dataList.push(item)
+          tempDataList.push(item)
       }
-     
-   
+      this.dataList = tempDataList
     },
     async refreshList() {
       this.getStock();
-     
     },
     async loadMore() {
       if (this.list.length < 10 || this.pageNum * this.pageSize >= this.total) {
@@ -249,8 +238,7 @@ export default {
         path: "/listdetail",
         query: {
           code: val.stockCode,
-          stock_type: val.stock_type
-          // name: val.name
+          stock_type: "us"
         }
       });
     },
